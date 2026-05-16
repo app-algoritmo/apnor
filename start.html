@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estratégia Noruega 2026 | Escritório Regulatório</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy:        #0f1c2e;
+            --navy-mid:    #16283d;
+            --navy-light:  #1e3550;
+            --blue-brand:  #2563eb;
+            --blue-light:  #3b82f6;
+            --blue-glow:   #60a5fa;
+            --gold:        #c9a84c;
+            --gold-light:  #e4c97b;
+            --text-main:   #e8eef6;
+            --text-muted:  #7fa4c4;
+            --text-dim:    #4a6b87;
+            --border:      rgba(37,99,235,.22);
+            --border-hover:rgba(96,165,250,.45);
+            --card-bg:     rgba(22,40,61,.7);
+            --card-hover:  rgba(30,53,80,.85);
+            --sidebar-w:   260px;
+            --radius:      14px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--navy);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ─── SIDEBAR ─── */
+        #sidebar {
+            width: var(--sidebar-w);
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0b1622 0%, #0f1c2e 100%);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 28px 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-logo .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--blue-brand), var(--blue-glow));
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: .03em;
+            color: var(--text-main);
+        }
+        .logo-sub {
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            margin-top: 2px;
+        }
+
+        .sidebar-section {
+            padding: 18px 16px 8px;
+            font-size: 9.5px;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: .1em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            margin: 2px 8px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all .2s ease;
+            font-size: 13.5px;
+            color: var(--text-muted);
+            font-weight: 400;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+        .nav-item:hover {
+            background: var(--navy-mid);
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(37,99,235,.25), rgba(96,165,250,.12));
+            color: var(--blue-glow);
+            border-color: rgba(37,99,235,.4);
+            font-weight: 500;
+        }
+        .nav-item i { width: 18px; text-align: center; font-size: 13px; }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px 16px;
+            border-top: 1px solid var(--border);
+        }
+        .client-badge {
+            background: rgba(201,168,76,.08);
+            border: 1px solid rgba(201,168,76,.2);
+            border-radius: 9px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .client-avatar {
+            width: 34px; height: 34px;
+            background: linear-gradient(135deg, var(--gold), #a0782e);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: #0f1c2e;
+            flex-shrink: 0;
+        }
+        .client-name { font-size: 12px; font-weight: 600; color: var(--gold-light); }
+        .client-role { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+        /* ─── MAIN ─── */
+        #main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── TOP BAR ─── */
+        #topbar {
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10,16,28,.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0; z-index: 50;
+        }
+        .topbar-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        .topbar-breadcrumb span { color: var(--text-muted); }
+        .topbar-breadcrumb .sep { color: var(--text-dim); }
+        .topbar-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34,197,94,.08);
+            border: 1px solid rgba(34,197,94,.25);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            color: #4ade80;
+            font-family: 'DM Mono', monospace;
+        }
+        .status-dot {
+            width: 6px; height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0%,100% { opacity: 1; }
+            50% { opacity: .4; }
+        }
+        .date-badge {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: 'DM Mono', monospace;
+        }
+
+        /* ─── CONTENT ─── */
+        #content {
+            padding: 44px 40px 60px;
+            max-width: 1100px;
+        }
+
+        .page-header {
+            margin-bottom: 36px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+        .page-header p {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 580px;
+        }
+        .page-header .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-family: 'DM Mono', monospace;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+        .meta-pill.blue {
+            background: rgba(37,99,235,.1);
+            border-color: rgba(37,99,235,.3);
+            color: var(--blue-glow);
+        }
+        .meta-pill.gold {
+            background: rgba(201,168,76,.08);
+            border-color: rgba(201,168,76,.25);
+            color: var(--gold-light);
+        }
+
+        /* ─── PHASE SEPARATOR ─── */
+        .phase-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 32px 0 16px;
+        }
+        .phase-label span {
+            font-size: 10.5px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+        .phase-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ─── CARDS GRID ─── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .doc-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            cursor: pointer;
+            transition: all .25s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue-brand), var(--blue-glow));
+            opacity: 0;
+            transition: opacity .25s;
+        }
+        .doc-card:hover {
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,.35), 0 0 0 1px rgba(96,165,250,.1);
+        }
+        .doc-card:hover::before { opacity: 1; }
+        .doc-card.featured {
+            border-color: rgba(201,168,76,.3);
+            background: linear-gradient(135deg, rgba(201,168,76,.06), rgba(22,40,61,.7));
+        }
+        .doc-card.featured::before {
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            opacity: .6;
+        }
+        .doc-card.featured:hover {
+            border-color: rgba(201,168,76,.5);
+        }
+
+        .card-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+        }
+        .icon-blue   { background: rgba(37,99,235,.15); color: var(--blue-glow); border: 1px solid rgba(37,99,235,.25); }
+        .icon-green  { background: rgba(34,197,94,.1);  color: #4ade80;          border: 1px solid rgba(34,197,94,.2); }
+        .icon-gold   { background: rgba(201,168,76,.12);color: var(--gold-light); border: 1px solid rgba(201,168,76,.25); }
+        .icon-purple { background: rgba(167,139,250,.1);color: #c4b5fd;          border: 1px solid rgba(167,139,250,.2); }
+        .icon-red    { background: rgba(248,113,113,.1);color: #fca5a5;          border: 1px solid rgba(248,113,113,.2); }
+        .icon-teal   { background: rgba(45,212,191,.1); color: #5eead4;          border: 1px solid rgba(45,212,191,.2); }
+
+        .card-title {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 7px;
+            letter-spacing: -.01em;
+        }
+        .card-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.65;
+            margin-bottom: 16px;
+        }
+        .card-tags {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            padding: 4px 9px;
+            border-radius: 5px;
+            letter-spacing: .04em;
+            cursor: pointer;
+            transition: all .15s;
+            text-transform: uppercase;
+        }
+        .tag-pt   { background: rgba(37,99,235,.15); color: var(--blue-glow);  border: 1px solid rgba(37,99,235,.3); }
+        .tag-en   { background: rgba(34,197,94,.1);  color: #4ade80;           border: 1px solid rgba(34,197,94,.25); }
+        .tag-no   { background: rgba(201,168,76,.1); color: var(--gold-light); border: 1px solid rgba(201,168,76,.25); }
+        .tag:hover { opacity: .75; transform: scale(.97); }
+
+        .card-phase-badge {
+            position: absolute;
+            top: 16px; right: 16px;
+            font-size: 9.5px;
+            font-family: 'DM Mono', monospace;
+            color: var(--text-dim);
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 2px 7px;
+            letter-spacing: .06em;
+        }
+
+        /* ─── SUMMARY BAR ─── */
+        .summary-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 18px 20px;
+            backdrop-filter: blur(8px);
+        }
+        .stat-label {
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 6px;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -.02em;
+            line-height: 1;
+        }
+        .stat-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .stat-card.highlight .stat-value { color: var(--blue-glow); }
+        .stat-card.gold-card .stat-value  { color: var(--gold-light); }
+        .stat-card.green-card .stat-value { color: #4ade80; }
+
+        /* ─── MODAL ─── */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5,10,20,.8);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        #modal-overlay.open { display: flex; }
+        #modal-box {
+            background: linear-gradient(145deg, #13243a, #0f1c2e);
+            border: 1px solid var(--border-hover);
+            border-radius: 18px;
+            width: 92%;
+            max-width: 680px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 36px;
+            position: relative;
+            box-shadow: 0 32px 80px rgba(0,0,0,.6);
+            animation: modal-in .25s ease;
+        }
+        @keyframes modal-in {
+            from { opacity: 0; transform: scale(.95) translateY(8px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        #modal-close {
+            position: absolute;
+            top: 18px; right: 18px;
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .15s;
+        }
+        #modal-close:hover { background: rgba(255,255,255,.12); color: var(--text-main); }
+
+        #modal-body h2 { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; letter-spacing: -.02em; }
+        #modal-body .modal-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+        #modal-body hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+        #modal-body h3 { font-size: 13px; font-weight: 600; color: var(--blue-glow); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .06em; font-family: 'DM Mono', monospace; }
+        #modal-body ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+        #modal-body ul li {
+            display: flex; align-items: flex-start; gap: 10px;
+            font-size: 13px; color: var(--text-muted); line-height: 1.5;
+        }
+        #modal-body ul li::before { content: '→'; color: var(--blue-brand); flex-shrink: 0; margin-top: 1px; }
+        #modal-body table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        #modal-body table th {
+            background: rgba(37,99,235,.15);
+            color: var(--blue-glow);
+            font-size: 11px;
+            font-family: 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        #modal-body table td {
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(37,99,235,.08);
+        }
+        #modal-body table tr:hover td { background: rgba(37,99,235,.05); }
+        #modal-body .highlight-row td { color: #4ade80; font-weight: 500; }
+        .modal-tags { display: flex; gap: 8px; margin-top: 20px; }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-badge">
+            <div class="logo-icon">🇳🇴</div>
+            <div class="logo-text">Noreg Strategy</div>
+        </div>
+        <div class="logo-sub">Escritório Regulatório · 2026</div>
+    </div>
+
+    <div class="sidebar-section">Visão Geral</div>
+    <a class="nav-item active" href="#">
+        <i class="fa-solid fa-layer-group"></i> Documentação Completa
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-chart-line"></i> Resumo Executivo
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-map-location-dot"></i> Mapa de Mercado
+    </a>
+
+    <div class="sidebar-section">Estrutura Legal</div>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-building-columns"></i> Forma Societária
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-file-contract"></i> Documentos NUF/AS
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-receipt"></i> Obrigações Fiscais
+    </a>
+
+    <div class="sidebar-section">Operacional</div>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-calendar-check"></i> Cronograma 90 dias
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-shield-halved"></i> Gestão de Riscos
+    </a>
+    <a class="nav-item" href="#">
+        <i class="fa-solid fa-gear"></i> Configurações
+    </a>
+
+    <div class="sidebar-footer">
+        <div class="client-badge">
+            <div class="client-avatar">B</div>
+            <div>
+                <div class="client-name">Paulo Barros</div>
+                <div class="client-role">Strategic Consultant · barros.no</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div id="main">
+
+    <!-- TOP BAR -->
+    <div id="topbar">
+        <div class="topbar-breadcrumb">
+            <i class="fa-solid fa-folder-open" style="color:var(--blue-brand)"></i>
+            <span>Estratégia Noruega</span>
+            <span class="sep">/</span>
+            <span>Documentação Completa</span>
+        </div>
+        <div class="topbar-status">
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                CONFIDENCIAL
+            </div>
+            <div class="date-badge">Maio 2026</div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="content">
+
+        <div class="page-header">
+            <h1>Escritório Regulatório na Noruega</h1>
+            <p>Elevação de status institucional com fabricação no Brasil. Todos os documentos e análises estratégicas para apresentação à diretoria.</p>
+            <div class="meta-row">
+                <span class="meta-pill blue"><i class="fa-solid fa-flag"></i> Oslo · Noruega</span>
+                <span class="meta-pill gold"><i class="fa-solid fa-star"></i> Empresa AS Recomendada</span>
+                <span class="meta-pill"><i class="fa-solid fa-clock"></i> 90 dias de implementação</span>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="summary-bar">
+            <div class="stat-card highlight">
+                <div class="stat-label">Investimento Ano 1</div>
+                <div class="stat-value">1,45M</div>
+                <div class="stat-sub">NOK · Modelo AS lean</div>
+            </div>
+            <div class="stat-card gold-card">
+                <div class="stat-label">ROI Estimado</div>
+                <div class="stat-value">2.5–6×</div>
+                <div class="stat-sub">Retorno indireto Ano 1</div>
+            </div>
+            <div class="stat-card green-card">
+                <div class="stat-label">Mercado Snus NO</div>
+                <div class="stat-value">10,7B</div>
+                <div class="stat-sub">NOK · 880K usuários</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Benefícios Indiretos</div>
+                <div class="stat-value">11,9M</div>
+                <div class="stat-sub">NOK/ano · estimativa máx.</div>
+            </div>
+        </div>
+
+        <!-- PHASE 1 -->
+        <div class="phase-label"><span>Fase 01 · Análise e Estratégia</span></div>
+        <div class="cards-grid">
+
+            <div class="doc-card" onclick="openModal('resumo')">
+                <span class="card-phase-badge">F01-01</span>
+                <div class="card-icon icon-blue"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="card-title">Resumo Executivo & Entendimento do Projeto</div>
+                <div class="card-desc">Contexto completo do projeto: objetivo de status institucional, fabricação 100% Brasil, mix 80% nacional / 20% internacional e metas de expansão via escritório regulatório puro.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('mercado')">
+                <span class="card-phase-badge">F01-02</span>
+                <div class="card-icon icon-teal"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <div class="card-title">Análise do Mercado Norueguês (2026)</div>
+                <div class="card-desc">Panorama do setor tabaqueiro norueguês: snus domina 64%, 880K usuários adultos, mercado de NOK 10,7 bilhões e influência nórdica em políticas de redução de danos da UE.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('regulatorio')">
+                <span class="card-phase-badge">F01-03</span>
+                <div class="card-icon icon-purple"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="card-title">Ambiente Regulatório Atual (Março 2026)</div>
+                <div class="card-desc">Tobaksskadeloven + TPD 2014/40/EU integrada. Relatórios EU-CEG obrigatórios, novas advertências de saúde, proibição de vendas online e proposta de limite de nicotina a 12 mg/g.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+            <div class="doc-card featured" onclick="openModal('vantagens')">
+                <span class="card-phase-badge">F01-04</span>
+                <div class="card-icon icon-gold"><i class="fa-solid fa-trophy"></i></div>
+                <div class="card-title">Por que a Noruega? Vantagens Estratégicas</div>
+                <div class="card-desc">Líder mundial em redução de danos, influência em políticas da UE e internacionais, acesso ao ecossistema nórdico e posicionamento da marca como parceiro técnico responsável.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PHASE 2 -->
+        <div class="phase-label"><span>Fase 02 · Estrutura Legal e Orçamento</span></div>
+        <div class="cards-grid">
+
+            <div class="doc-card featured" onclick="openModal('estrutura')">
+                <span class="card-phase-badge">F02-01</span>
+                <div class="card-icon icon-gold"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="card-title">Estrutura Recomendada: NUF vs. AS vs. ASA</div>
+                <div class="card-desc">Comparativo das três formas societárias. AS (Aksjeselskap) é a escolha ideal — capital de 30.000 NOK, personalidade jurídica norueguesa plena e maior credibilidade institucional.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('orcamento')">
+                <span class="card-phase-badge">F02-02</span>
+                <div class="card-icon icon-green"><i class="fa-solid fa-coins"></i></div>
+                <div class="card-title">Orçamento Detalhado — Empresa AS (Ano 1)</div>
+                <div class="card-desc">Capital social 30K NOK · Registro 22–33K · Salário PhD + encargos 1,027–1,3M · Escritório virtual + TI + contabilidade 43–78K. Total: 1,1–1,45 milhão NOK.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('documentos')">
+                <span class="card-phase-badge">F02-03</span>
+                <div class="card-icon icon-blue"><i class="fa-solid fa-file-lines"></i></div>
+                <div class="card-title">Documentos Necessários para Registro</div>
+                <div class="card-desc">Lista completa de documentos da matriz e da PhD para registro via Altinn. Com PhD já documentada localmente, o processo é 100% digital e leva apenas 2–4 semanas.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('impostos')">
+                <span class="card-phase-badge">F02-04</span>
+                <div class="card-icon icon-purple"><i class="fa-solid fa-percent"></i></div>
+                <div class="card-title">Impostos e Obrigações Fiscais (2026)</div>
+                <div class="card-desc">Imposto corporativo 22% sobre lucros · VAT 25% (registro se faturamento >50K NOK) · Contribuição empregador 14,1% (Oslo). Carga tributária mínima no modelo lean não-operacional.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PHASE 3 -->
+        <div class="phase-label"><span>Fase 03 · Benefícios Econômicos e ROI</span></div>
+        <div class="cards-grid">
+
+            <div class="doc-card featured" onclick="openModal('roi')">
+                <span class="card-phase-badge">F03-01</span>
+                <div class="card-icon icon-gold"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                <div class="card-title">Benefícios Econômicos Indiretos — ROI Detalhado</div>
+                <div class="card-desc">Análise completa dos retornos indiretos: mitigação de riscos regulatórios, economia em compliance global, valorização de marca e inteligência de mercado. Total estimado: 3,9–11,9M NOK/ano.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('internacionalizacao')">
+                <span class="card-phase-badge">F03-02</span>
+                <div class="card-icon icon-teal"><i class="fa-solid fa-globe"></i></div>
+                <div class="card-title">Internacionalização — Shift 80/20 → 50/50</div>
+                <div class="card-desc">O escritório em Oslo amplifica os 20% internacionais atuais sem alterar a cadeia produtiva brasileira. Projeção: share internacional superior a 50% em 12–24 meses.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PHASE 4 -->
+        <div class="phase-label"><span>Fase 04 · Implementação e Gestão de Riscos</span></div>
+        <div class="cards-grid">
+
+            <div class="doc-card" onclick="openModal('cronograma')">
+                <span class="card-phase-badge">F04-01</span>
+                <div class="card-icon icon-blue"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="card-title">Cronograma de Implementação — 90 Dias</div>
+                <div class="card-desc">Semanas 1–3: Registro da AS via Altinn · Semanas 4–6: Conta bancária e capital · Semanas 7–8: Contratação da PhD e setup · Mês 3: Início das atividades regulatórias em Oslo.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('phd')">
+                <span class="card-phase-badge">F04-02</span>
+                <div class="card-icon icon-teal"><i class="fa-solid fa-user-graduate"></i></div>
+                <div class="card-title">Perfil e Papel da Liderança Regulatória — PhD</div>
+                <div class="card-desc">A PhD como General Manager e Regulatory Affairs Director: submissões EU-CEG, interface com Helsedirektoratet, participação em consultas públicas e representação em fóruns nórdicos.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card" onclick="openModal('riscos')">
+                <span class="card-phase-badge">F04-03</span>
+                <div class="card-icon icon-red"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-title">Gestão de Riscos e Mitigações</div>
+                <div class="card-desc">Risco regulatório mitigado por transparência e foco científico · Modelo lean com escritório virtual · PhD monitora mudanças políticas diariamente · Posicionamento harm reduction.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                </div>
+            </div>
+
+            <div class="doc-card featured" onclick="openModal('conclusao')">
+                <span class="card-phase-badge">F04-04</span>
+                <div class="card-icon icon-gold"><i class="fa-solid fa-flag-checkered"></i></div>
+                <div class="card-title">Conclusão — Próximos Passos para a Diretoria</div>
+                <div class="card-desc">O escritório na Noruega transforma a empresa brasileira em marca global de referência regulatória. Próximos passos: aprovação AS, abertura de conta bancária, registro via Altinn e integração da PhD.</div>
+                <div class="card-tags">
+                    <span class="tag tag-pt">PT</span>
+                    <span class="tag tag-en">EN</span>
+                    <span class="tag tag-no">NO</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════ MODAL ═══════════════ -->
+<div id="modal-overlay" onclick="closeModal(event)">
+    <div id="modal-box">
+        <button id="modal-close" onclick="closeModalBtn()">✕</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script>
+const modals = {
+    resumo: {
+        title: '📋 Resumo Executivo & Entendimento do Projeto',
+        desc: 'A empresa deseja entrar na Noruega exclusivamente com um escritório de representação focado em assuntos regulatórios e elevação de status de marca, sem atuar como fabricante, importador ou distribuidor de produtos tabaqueiros/nicotínicos.',
+        content: `
+            <h3>Contexto do Projeto</h3>
+            <ul>
+                <li>Objetivo principal: status e credibilidade como escritório norueguês</li>
+                <li>Fabricação 100% Brasil — sem importação ou distribuição na Noruega</li>
+                <li>Situação atual: 80% benefícios nacionais / 20% internacionais</li>
+                <li>Meta: ampliar share internacional via inteligência regulatória norueguesa</li>
+                <li>Liderança local: PhD em Regulatory Affairs já residente na Noruega</li>
+            </ul>
+            <hr>
+            <h3>Por que este escritório?</h3>
+            <ul>
+                <li>Eleva o status da marca ao demonstrar compromisso institucional</li>
+                <li>Posiciona a empresa como parceira técnica das autoridades</li>
+                <li>Permite influência proativa em mudanças regulatórias</li>
+                <li>Sem necessidade de bevilling (licença tabaqueira)</li>
+            </ul>`
+    },
+    mercado: {
+        title: '📊 Análise do Mercado Norueguês (2026)',
+        desc: 'Panorama completo do setor tabaqueiro norueguês com dados atualizados de maio de 2026.',
+        content: `
+            <h3>Dados do Mercado</h3>
+            <ul>
+                <li>Mercado de snus: ~NOK 10,67 bilhões em 2026</li>
+                <li>Usuários adultos de snus: ~880.000</li>
+                <li>Prevalência de uso diário de nicotina: 27,7% (maior dos países nórdicos)</li>
+                <li>Snus brun + hvit: 64% · Helhvit (com traço mínimo): 34%</li>
+                <li>Crescimento CAGR 7% até 2030 (USD 35,5M → USD 56,8M)</li>
+            </ul>
+            <hr>
+            <h3>Proposta Regulatória 2025/2026</h3>
+            <ul>
+                <li>Limite proposto: 12 mg/g de nicotina em snus</li>
+                <li>Restrições de tamanho de pouch e aditivos</li>
+                <li>Consulta pública encerrada em março/2026 — decisão pendente</li>
+                <li>TPD 2014/40/EU integrada desde 30 de março de 2026</li>
+            </ul>`
+    },
+    regulatorio: {
+        title: '⚖️ Ambiente Regulatório Atual (Março 2026)',
+        desc: 'A Tobaksskadeloven e a incorporação plena da Diretiva de Produtos do Tabaco (TPD 2014/40/EU) definem o cenário regulatório atual.',
+        content: `
+            <h3>Principais Exigências</h3>
+            <ul>
+                <li>Relatórios obrigatórios via EU-CEG até 1º de março de cada ano</li>
+                <li>Novas advertências de saúde: 65% da embalagem (fumáveis)</li>
+                <li>Advertência dupla face para snus + advertência grávidas/jovens</li>
+                <li>Transição total exigida até 1º de janeiro de 2027</li>
+                <li>Proibição de vendas transfronteiriças online (desde jan/2026)</li>
+                <li>Isenção norueguesa ao banimento de tabaco oral (snus permitido)</li>
+            </ul>
+            <hr>
+            <h3>Não Aplicável ao Escritório Regulatório</h3>
+            <ul>
+                <li>Licenças (bevilling) — apenas para produção/importação/distribuição</li>
+                <li>O escritório puro está isento de todas as licenças comerciais</li>
+            </ul>`
+    },
+    vantagens: {
+        title: '🏆 Por que a Noruega? Vantagens Estratégicas',
+        desc: 'A Noruega é o mercado mais estratégico para posicionamento regulatório global em harm reduction.',
+        content: `
+            <h3>Vantagens Principais</h3>
+            <ul>
+                <li>Líder mundial em redução de danos — snus substitui cigarro de forma comprovada</li>
+                <li>Influência direta em políticas da UE e fóruns internacionais da OMS</li>
+                <li>Acesso privilegiado ao Helsedirektoratet e Ministério da Saúde</li>
+                <li>Presença no mesmo patamar de Swedish Match/PMI e BAT Norway</li>
+                <li>Networking com universidades e institutos de pesquisa nórdicos</li>
+            </ul>
+            <hr>
+            <h3>Comparativo vs. Concorrentes</h3>
+            <table>
+                <thead><tr><th>Empresa</th><th>Escritório Oslo</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Swedish Match/PMI</td><td>✓ Ativo</td><td>Tier 1</td></tr>
+                    <tr><td>BAT Norway</td><td>✓ Ativo</td><td>Tier 1</td></tr>
+                    <tr class="highlight-row"><td>Nossa Empresa (AS)</td><td>A implementar</td><td>Tier 1</td></tr>
+                </tbody>
+            </table>`
+    },
+    estrutura: {
+        title: '🏛 Estrutura Recomendada: NUF vs. AS vs. ASA',
+        desc: 'Comparativo executivo das três formas societárias disponíveis para o escritório regulatório em Oslo.',
+        content: `
+            <h3>Tabela Comparativa</h3>
+            <table>
+                <thead><tr><th>Forma</th><th>Capital</th><th>Status</th><th>Custo Ano 1</th></tr></thead>
+                <tbody>
+                    <tr><td>NUF</td><td>Zero</td><td>Filial estrangeira</td><td>1,2–1,6M NOK</td></tr>
+                    <tr class="highlight-row"><td>AS ★</td><td>30.000 NOK</td><td>Empresa norueguesa</td><td>1,1–1,45M NOK</td></tr>
+                    <tr><td>ASA</td><td>1.000.000 NOK</td><td>Empresa pública</td><td>2,15–2,5M NOK</td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Por que AS é a Melhor Escolha</h3>
+            <ul>
+                <li>Personalidade jurídica norueguesa plena — maior credibilidade vs. NUF</li>
+                <li>Capital mínimo de apenas 30.000 NOK (não é despesa — é equity)</li>
+                <li>Registro 100% digital via Altinn em 2–4 semanas</li>
+                <li>Auditoria dispensável (fravalg av revisjon) para escritório de 1 pessoa</li>
+                <li>ASA exige 1 milhão NOK de capital — overkill para modelo lean</li>
+            </ul>`
+    },
+    orcamento: {
+        title: '💰 Orçamento Detalhado — Empresa AS (Ano 1)',
+        desc: 'Estimativa conservadora e completa de todos os custos de abertura e primeiro ano de operação.',
+        content: `
+            <h3>Itens de Custo</h3>
+            <table>
+                <thead><tr><th>Item</th><th>Custo (NOK)</th></tr></thead>
+                <tbody>
+                    <tr><td>Capital social (equity, não despesa)</td><td>30.000</td></tr>
+                    <tr><td>Registro + assessoria jurídica</td><td>22.000–33.000</td></tr>
+                    <tr><td>Salário PhD + encargos (14,1%)</td><td>1.027.000–1.300.000</td></tr>
+                    <tr><td>Escritório virtual Oslo</td><td>3.000–8.000/ano</td></tr>
+                    <tr><td>Equipamentos TI + setup</td><td>10.000–20.000</td></tr>
+                    <tr><td>Contabilidade anual</td><td>25.000–40.000</td></tr>
+                    <tr><td>VAT + outros iniciais</td><td>5.000–10.000</td></tr>
+                    <tr class="highlight-row"><td><strong>TOTAL ANO 1</strong></td><td><strong>1,1–1,45M NOK</strong></td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Observações</h3>
+            <ul>
+                <li>Ano 2 em diante: redução de ~25–30% (sem custos de setup)</li>
+                <li>Escritório físico em Oslo adiciona +150–300K NOK/ano</li>
+                <li>Equivalente em EUR: ~€98.000–128.000</li>
+            </ul>`
+    },
+    documentos: {
+        title: '📁 Documentos Necessários para Registro',
+        desc: 'Com a PhD já documentada na Noruega, o processo é 100% digital via Altinn (Samordnet registermelding).',
+        content: `
+            <h3>Da Matriz (Empresa Estrangeira)</h3>
+            <ul>
+                <li>Certidão de Incorporação / Certificate of Registration</li>
+                <li>Estatuto social / Articles of Association</li>
+                <li>Extrato do registro comercial estrangeiro</li>
+                <li>Ata autorizando abertura da AS na Noruega</li>
+                <li>Procuração nomeando a PhD como diretora</li>
+                <li>Informações sobre UBOs (Ultimate Beneficial Owners)</li>
+            </ul>
+            <hr>
+            <h3>Da PhD (Diretora Local)</h3>
+            <ul>
+                <li>ID norueguês ou D-number (já possui)</li>
+                <li>Ata de fundação assinada digitalmente</li>
+                <li>Vedtekter (artigos de associação da AS)</li>
+                <li>Confirmação de integralização do capital (banco)</li>
+            </ul>
+            <hr>
+            <h3>Prazo</h3>
+            <ul>
+                <li>Registro digital via Altinn: 2–4 semanas</li>
+                <li>Documentos da matriz apostilados: +1–2 semanas</li>
+            </ul>`
+    },
+    impostos: {
+        title: '📊 Impostos e Obrigações Fiscais (2026)',
+        desc: 'Carga tributária mínima e previsível no modelo de escritório regulatório puro (não-operacional).',
+        content: `
+            <h3>Principais Impostos</h3>
+            <table>
+                <thead><tr><th>Imposto</th><th>Alíquota</th><th>Observação</th></tr></thead>
+                <tbody>
+                    <tr><td>Corporate Income Tax</td><td>22%</td><td>Quase zero — custos PhD são dedutíveis</td></tr>
+                    <tr><td>VAT (MVA)</td><td>25%</td><td>Registro se faturamento >50K NOK/ano</td></tr>
+                    <tr><td>Encargos empregador</td><td>14,1%</td><td>Sobre salário bruto PhD (zona Oslo)</td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Vantagens Fiscais do Modelo AS</h3>
+            <ul>
+                <li>Acesso à fritaksmetoden (isenção de participação) em dividendos</li>
+                <li>Declaração anual simplificada via contador</li>
+                <li>Modelo lean: carga tributária mínima e previsível</li>
+                <li>Todos os custos operacionais são dedutíveis do IR</li>
+            </ul>`
+    },
+    roi: {
+        title: '📈 Benefícios Econômicos Indiretos — ROI Detalhado',
+        desc: 'O escritório regulatório não é um centro de custo — é um investimento estratégico de alto retorno indireto.',
+        content: `
+            <h3>Benefícios Quantificados</h3>
+            <table>
+                <thead><tr><th>Benefício</th><th>NOK/ano (est.)</th></tr></thead>
+                <tbody>
+                    <tr><td>Mitigação de riscos em exportações</td><td>800K–3M</td></tr>
+                    <tr><td>Economia em compliance global</td><td>400K–1M</td></tr>
+                    <tr><td>Valorização de marca internacional</td><td>1,5M–4,5M</td></tr>
+                    <tr><td>Inteligência & novas oportunidades</td><td>1M–3M</td></tr>
+                    <tr><td>Eficiências fiscais e operacionais</td><td>200K–400K</td></tr>
+                    <tr class="highlight-row"><td><strong>TOTAL ESTIMADO</strong></td><td><strong>3,9–11,9M NOK</strong></td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>ROI por Perspectiva</h3>
+            <ul>
+                <li>ROI Ano 1: 2,5× a 6× o custo do escritório</li>
+                <li>Custo anual: 1,2–1,6M NOK vs. retorno 3,9–11,9M NOK</li>
+                <li>Crescimento acelerado nos anos 2–3 com consolidação da presença</li>
+                <li>Referência: Swedish Match e BAT mantêm escritórios exatamente por esses retornos</li>
+            </ul>`
+    },
+    internacionalizacao: {
+        title: '🌍 Internacionalização — Shift 80/20 → 50/50',
+        desc: 'O escritório em Oslo amplifica exponencialmente os 20% internacionais atuais sem alterar a cadeia produtiva brasileira.',
+        content: `
+            <h3>Modelo Atual vs. Projeção</h3>
+            <table>
+                <thead><tr><th>Período</th><th>Nacional</th><th>Internacional</th></tr></thead>
+                <tbody>
+                    <tr><td>Atual (2026)</td><td>80%</td><td>20%</td></tr>
+                    <tr><td>Ano 1 (com escritório)</td><td>65%</td><td>35%</td></tr>
+                    <tr class="highlight-row"><td>Ano 2–3</td><td>50%</td><td>50%+</td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Como o Escritório Gera Internacionalização</h3>
+            <ul>
+                <li>"Regulado na Noruega" sinaliza compliance de alto nível globalmente</li>
+                <li>PhD centraliza relatórios EU-CEG para múltiplos mercados</li>
+                <li>Facilita contratos de exportação e parcerias internacionais</li>
+                <li>Posicionamento harm reduction abre portas na América Latina e Ásia</li>
+                <li>Mantém 100% da vantagem de custo com fabricação no Brasil</li>
+            </ul>`
+    },
+    cronograma: {
+        title: '📅 Cronograma de Implementação — 90 Dias',
+        desc: 'Plano detalhado de implementação do escritório regulatório AS em Oslo, do registro ao início das atividades.',
+        content: `
+            <h3>Etapas</h3>
+            <table>
+                <thead><tr><th>Período</th><th>Ação</th></tr></thead>
+                <tbody>
+                    <tr><td>Semanas 1–3</td><td>Preparação de vedtekter + registro AS via Altinn</td></tr>
+                    <tr><td>Semanas 4–6</td><td>Abertura de conta bancária norueguesa e integralização do capital</td></tr>
+                    <tr><td>Semanas 7–8</td><td>Contratação formal da PhD + setup TI e escritório virtual</td></tr>
+                    <tr class="highlight-row"><td>Mês 3</td><td>Início das atividades regulatórias em Oslo</td></tr>
+                    <tr><td>Mês 3+</td><td>Primeiro contato com Helsedirektoratet e mapeamento de stakeholders</td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Pré-requisitos</h3>
+            <ul>
+                <li>Aprovação executiva do conceito AS</li>
+                <li>Documentos da matriz apostilados e traduzidos</li>
+                <li>PhD com ID norueguês já disponível — processo 100% digital</li>
+            </ul>`
+    },
+    phd: {
+        title: '🎓 Perfil e Papel da Liderança Regulatória — PhD',
+        desc: 'A PhD será a face da marca na Noruega e o principal ativo estratégico do escritório.',
+        content: `
+            <h3>Responsabilidades</h3>
+            <ul>
+                <li>Submissões regulatórias e relatórios EU-CEG em nome da matriz</li>
+                <li>Interface direta com Helsedirektoratet e Ministério da Saúde</li>
+                <li>Participação em consultas públicas com posicionamentos científicos</li>
+                <li>Monitoramento diário de propostas regulatórias (ex.: limite nicotina)</li>
+                <li>Representação em fóruns nórdicos de redução de danos</li>
+                <li>Relatórios internos sobre riscos e oportunidades regulatórias</li>
+            </ul>
+            <hr>
+            <h3>Contratação e Remuneração</h3>
+            <ul>
+                <li>Salário bruto médio PhD Regulatory Affairs Oslo: 900K–1,1M NOK/ano</li>
+                <li>Encargos empregador: +14,1% (contribuição National Insurance)</li>
+                <li>Contrato via AS + suporte jurídico da matriz brasileira</li>
+                <li>Pode acumular funções de General Manager e diretora da AS</li>
+            </ul>`
+    },
+    riscos: {
+        title: '🛡 Gestão de Riscos e Mitigações',
+        desc: 'Análise dos principais riscos e estratégias de mitigação para o escritório regulatório em Oslo.',
+        content: `
+            <h3>Matriz de Riscos</h3>
+            <table>
+                <thead><tr><th>Risco</th><th>Mitigação</th></tr></thead>
+                <tbody>
+                    <tr><td>Risco regulatório (Art. 5.3 FCTC)</td><td>Foco em ciência e transparência total</td></tr>
+                    <tr><td>Custo elevado</td><td>Modelo lean: escritório virtual + 1 pessoa</td></tr>
+                    <tr><td>Mudanças políticas</td><td>Monitoramento diário pela PhD</td></tr>
+                    <tr><td>Risco reputacional</td><td>Posicionamento harm reduction baseado em evidências</td></tr>
+                    <tr class="highlight-row"><td>Risco cambial BRL/NOK</td><td>Hedge via conta bancária norueguesa da AS</td></tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Avaliação Geral</h3>
+            <ul>
+                <li>Risco geral: BAIXO — sem atividade comercial ou importação</li>
+                <li>Modelo lean minimiza exposição financeira</li>
+                <li>PhD local garante compliance em tempo real</li>
+                <li>Principais concorrentes (BAT, PMI) validaram este modelo há anos</li>
+            </ul>`
+    },
+    conclusao: {
+        title: '🏁 Conclusão — Próximos Passos para a Diretoria',
+        desc: 'O escritório na Noruega transforma a empresa brasileira em uma marca global de referência regulatória.',
+        content: `
+            <h3>Síntese Executiva</h3>
+            <ul>
+                <li>Investimento de baixo risco com altíssimo retorno de status e marca</li>
+                <li>ROI indireto de 2,5× a 6× no Ano 1</li>
+                <li>Mantém 100% da vantagem competitiva da fabricação brasileira</li>
+                <li>Shift projetado: 80/20 nacional/internacional → 50/50 em 2–3 anos</li>
+                <li>PhD já documentada na Noruega — processo 100% digital e rápido</li>
+            </ul>
+            <hr>
+            <h3>Próximos Passos Imediatos</h3>
+            <ul>
+                <li>1. Aprovação executiva do conceito AS pela diretoria</li>
+                <li>2. Abertura de conta bancária norueguesa (PhD pode executar)</li>
+                <li>3. Preparação de vedtekter + ata (advogado ou Altinn direto)</li>
+                <li>4. Registro digital via Altinn — prazo: 2–4 semanas</li>
+                <li>5. Início das atividades regulatórias no Mês 3</li>
+            </ul>
+            <div class="modal-tags">
+                <span class="tag tag-pt">PT</span>
+                <span class="tag tag-en">EN</span>
+                <span class="tag tag-no">NO</span>
+            </div>`
+    }
+};
+
+function openModal(key) {
+    const m = modals[key];
+    if (!m) return;
+    document.getElementById('modal-body').innerHTML = `
+        <h2>${m.title}</h2>
+        <p class="modal-desc">${m.desc}</p>
+        <hr>
+        ${m.content}
+    `;
+    document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) {
+    if (e.target === document.getElementById('modal-overlay'))
+        document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeModalBtn() {
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open');
+});
+</script>
+</body>
+</html>
