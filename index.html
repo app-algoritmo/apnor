@@ -442,8 +442,8 @@
 
     <!-- TRÍPLICE CONSTANTE com submenu -->
     <div class="sb-sec">Gestão do Projeto</div>
-    <div class="sb-link" id="tcToggle"><i class="ico fa-solid fa-triangle-exclamation"></i> Tríplice Constante <i class="fa-solid fa-chevron-right sb-arrow"></i></div>
-    <div class="sb-children" id="tcChildren">
+    <div class="sb-link sb-open" style="cursor:default;opacity:1;color:var(--blue-glow);font-weight:600;border-color:rgba(37,99,235,.2);"><i class="ico fa-solid fa-triangle-exclamation"></i> Tríplice Constante</div>
+    <div id="tcChildren" style="overflow:visible;max-height:none;">
         <div class="sb-child" data-modal="tc_visao"><i class="fa-solid fa-circle-nodes"></i> Visão Geral TC</div>
         <div class="sb-child" data-modal="tc_escopo"><i class="fa-solid fa-bullseye"></i> Escopo</div>
         <div class="sb-child" data-modal="tc_tempo"><i class="fa-solid fa-clock"></i> Tempo · 90 dias</div>
@@ -696,28 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ── SIDEBAR SUBMENU TOGGLE (Tríplice Constante) ── */
-    var tcToggle = document.getElementById('tcToggle');
-    var tcChildren = document.getElementById('tcChildren');
-    var tcArrow = tcToggle ? tcToggle.querySelector('.sb-arrow') : null;
-    var tcOpen = false;
-    if (tcToggle && tcChildren) {
-        /* Remove any default anchor/link behavior */
-        tcChildren.style.maxHeight = '0px';
-        tcChildren.style.overflow = 'hidden';
-        tcChildren.style.transition = 'max-height 0.35s ease';
-
-        tcToggle.addEventListener('click', function(e){
-            e.stopPropagation();
-            tcOpen = !tcOpen;
-            if (tcOpen) {
-                tcChildren.style.maxHeight = tcChildren.scrollHeight + 'px';
-                if (tcArrow) tcArrow.style.transform = 'rotate(90deg)';
-            } else {
-                tcChildren.style.maxHeight = '0px';
-                if (tcArrow) tcArrow.style.transform = 'rotate(0deg)';
-            }
-        });
-    }
+    /* TC submenu always visible — no toggle needed */
 
     /* ── SIDEBAR LINK ACTIVE STATE ── */
     function setActiveSb(el) {
