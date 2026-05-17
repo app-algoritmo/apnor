@@ -238,95 +238,129 @@
         .modal-nav-btn:hover { color:var(--blue-brand); }
 
 
+        
+
         /* ─── LOGIN SCREEN ─── */
         #login-screen {
             position: fixed; inset: 0; z-index: 999;
             background: linear-gradient(135deg, #080f1a 0%, #0f1c2e 60%, #0b1622 100%);
             display: flex; align-items: center; justify-content: center;
-            flex-direction: column;
         }
         #login-screen.hidden { display: none; }
 
-        .login-orb {
-            position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+        .l-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(90px); pointer-events: none; z-index: 0;
         }
-        .login-orb-1 { width:420px; height:420px; background:rgba(37,99,235,.12); top:-80px; right:-60px; }
-        .login-orb-2 { width:300px; height:300px; background:rgba(96,165,250,.07); bottom:-40px; left:-60px; }
+        .l-orb-1 { width:500px;height:500px;background:rgba(37,99,235,.1);top:-120px;right:-100px; }
+        .l-orb-2 { width:350px;height:350px;background:rgba(96,165,250,.07);bottom:-80px;left:-80px; }
 
-        .login-box {
-            position: relative; z-index: 2;
+        .l-card {
+            position: relative; z-index: 1;
             display: flex; flex-direction: column; align-items: center;
-            width: 100%; max-width: 380px; padding: 0 24px;
+            background: rgba(15,28,46,.85);
+            border: 1px solid rgba(37,99,235,.25);
+            border-radius: 24px;
+            padding: 36px 32px 28px;
+            width: 320px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(96,165,250,.08);
         }
-        .login-logo {
-            width: 52px; height: 52px;
-            background: linear-gradient(135deg, var(--blue-brand), var(--blue-glow));
-            border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            font-size: 24px; margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(37,99,235,.3);
+
+        .l-flag {
+            font-size: 36px; margin-bottom: 12px;
+            filter: drop-shadow(0 4px 12px rgba(37,99,235,.4));
         }
-        .login-title {
-            font-size: 22px; font-weight: 700; color: var(--text-main);
-            letter-spacing: -.02em; margin-bottom: 4px; text-align: center;
+        .l-title {
+            font-size: 17px; font-weight: 700; color: #e8eef6;
+            letter-spacing: -.01em; margin-bottom: 2px;
         }
-        .login-sub {
-            font-size: 12px; color: var(--text-dim);
-            font-family: 'DM Mono', monospace; letter-spacing: .08em;
-            text-transform: uppercase; margin-bottom: 36px; text-align: center;
-        }
-        .login-field-wrap {
-            width: 100%; position: relative; margin-bottom: 14px;
-        }
-        .login-field-wrap i {
-            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-            color: var(--text-dim); font-size: 13px;
-        }
-        #login-input {
-            width: 100%; padding: 14px 16px 14px 42px;
-            background: rgba(22,40,61,.8); border: 1px solid var(--border);
-            border-radius: 10px; color: var(--text-main);
-            font-size: 15px; font-family: 'DM Mono', monospace;
-            letter-spacing: .12em; outline: none;
-            transition: border-color .2s, box-shadow .2s;
-        }
-        #login-input:focus {
-            border-color: var(--blue-brand);
-            box-shadow: 0 0 0 3px rgba(37,99,235,.18);
-        }
-        #login-input.shake {
-            animation: shake .35s ease;
-            border-color: #f87171;
-            box-shadow: 0 0 0 3px rgba(248,113,113,.18);
-        }
-        @keyframes shake {
-            0%,100%{transform:translateX(0)}
-            20%{transform:translateX(-8px)}
-            40%{transform:translateX(8px)}
-            60%{transform:translateX(-5px)}
-            80%{transform:translateX(5px)}
-        }
-        #login-btn {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, var(--blue-brand), #1d4ed8);
-            border: none; border-radius: 10px; color: #fff;
-            font-size: 14px; font-weight: 600; font-family: 'Sora', sans-serif;
-            cursor: pointer; transition: opacity .2s, transform .15s;
-            letter-spacing: .01em;
-        }
-        #login-btn:hover { opacity: .88; transform: translateY(-1px); }
-        #login-btn:active { transform: translateY(0); }
-        #login-error {
-            margin-top: 12px; font-size: 12px; color: #f87171;
-            font-family: 'DM Mono', monospace; letter-spacing: .04em;
-            opacity: 0; transition: opacity .2s; text-align: center;
-        }
-        #login-error.show { opacity: 1; }
-        .login-badge {
-            margin-top: 32px; display: flex; align-items: center; gap: 6px;
+        .l-sub {
             font-size: 10px; font-family: 'DM Mono', monospace;
-            color: var(--text-dim); letter-spacing: .08em;
+            color: #4a6b87; letter-spacing: .1em; text-transform: uppercase;
+            margin-bottom: 24px;
         }
-        .login-dot { width:5px; height:5px; background:rgba(201,168,76,.5); border-radius:50%; }
+
+        /* PIN dots */
+        .l-dots {
+            display: flex; gap: 12px; margin-bottom: 20px;
+        }
+        .l-dot {
+            width: 13px; height: 13px; border-radius: 50%;
+            border: 2px solid #2a4a6b;
+            transition: all .15s ease;
+        }
+        .l-dot.filled {
+            background: var(--blue-glow);
+            border-color: var(--blue-glow);
+            box-shadow: 0 0 10px rgba(96,165,250,.6);
+        }
+        .l-dot.error {
+            background: #f87171;
+            border-color: #f87171;
+            box-shadow: 0 0 10px rgba(248,113,113,.5);
+        }
+
+        /* Keypad */
+        .l-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .l-key {
+            background: rgba(30,53,80,.7);
+            border: 1px solid rgba(37,99,235,.2);
+            border-radius: 12px;
+            color: #e8eef6;
+            font-size: 18px; font-weight: 600;
+            font-family: 'Sora', sans-serif;
+            padding: 16px 0;
+            cursor: pointer;
+            transition: all .12s ease;
+            display: flex; align-items: center; justify-content: center;
+            user-select: none;
+        }
+        .l-key:hover {
+            background: rgba(37,99,235,.25);
+            border-color: rgba(96,165,250,.4);
+            transform: scale(1.04);
+        }
+        .l-key:active {
+            transform: scale(.95);
+            background: rgba(37,99,235,.4);
+        }
+        .l-key.zero { grid-column: 2; }
+        .l-key.del {
+            grid-column: 3;
+            font-size: 14px; color: #7fa4c4;
+        }
+        .l-key.del:hover { color: #f87171; border-color: rgba(248,113,113,.3); background: rgba(248,113,113,.08); }
+
+        .l-error-msg {
+            font-size: 11px; font-family: 'DM Mono', monospace;
+            color: #f87171; letter-spacing: .04em;
+            margin-top: 10px; opacity: 0;
+            transition: opacity .2s;
+            min-height: 16px;
+        }
+        .l-error-msg.show { opacity: 1; }
+
+        @keyframes l-shake {
+            0%,100%{transform:translateX(0)}
+            20%{transform:translateX(-6px)}
+            40%{transform:translateX(6px)}
+            60%{transform:translateX(-4px)}
+            80%{transform:translateX(4px)}
+        }
+        .l-dots.shake { animation: l-shake .35s ease; }
+
+        .l-footer {
+            margin-top: 20px;
+            font-size: 10px; font-family: 'DM Mono', monospace;
+            color: #2a4a6b; letter-spacing: .06em;
+        }
         ::-webkit-scrollbar { width:5px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:var(--navy-light); border-radius:10px; }
@@ -337,19 +371,37 @@
 
 <!-- ═══════════════ LOGIN ═══════════════ -->
 <div id="login-screen">
-    <div class="login-orb login-orb-1"></div>
-    <div class="login-orb login-orb-2"></div>
-    <div class="login-box">
-        <div class="login-logo">🇳🇴</div>
-        <div class="login-title">APNO Estratégia</div>
-        <div class="login-sub">Escritório Regulatório · 2026 · Confidencial</div>
-        <div class="login-field-wrap">
-            <i class="fa-solid fa-lock"></i>
-            <input id="login-input" type="password" placeholder="Senha de acesso" autocomplete="off">
+    <div class="l-orb l-orb-1"></div>
+    <div class="l-orb l-orb-2"></div>
+    <div class="l-card">
+        <div class="l-flag">🇳🇴</div>
+        <div class="l-title">APNO Estratégia</div>
+        <div class="l-sub">acesso restrito · confidencial</div>
+        <div class="l-dots" id="lDots">
+            <div class="l-dot" id="d0"></div>
+            <div class="l-dot" id="d1"></div>
+            <div class="l-dot" id="d2"></div>
+            <div class="l-dot" id="d3"></div>
+            <div class="l-dot" id="d4"></div>
+            <div class="l-dot" id="d5"></div>
+            <div class="l-dot" id="d6"></div>
+            <div class="l-dot" id="d7"></div>
         </div>
-        <button id="login-btn" onclick="doLogin()">Entrar</button>
-        <div id="login-error">Senha incorreta. Tente novamente.</div>
-        <div class="login-badge"><div class="login-dot"></div>Acesso restrito · barros.no</div>
+        <div class="l-keypad">
+            <div class="l-key" onclick="lPress('1')">1</div>
+            <div class="l-key" onclick="lPress('2')">2</div>
+            <div class="l-key" onclick="lPress('3')">3</div>
+            <div class="l-key" onclick="lPress('4')">4</div>
+            <div class="l-key" onclick="lPress('5')">5</div>
+            <div class="l-key" onclick="lPress('6')">6</div>
+            <div class="l-key" onclick="lPress('7')">7</div>
+            <div class="l-key" onclick="lPress('8')">8</div>
+            <div class="l-key" onclick="lPress('9')">9</div>
+            <div class="l-key zero" onclick="lPress('0')">0</div>
+            <div class="l-key del" onclick="lDel()">⌫</div>
+        </div>
+        <div class="l-error-msg" id="lErr">Senha incorreta</div>
+        <div class="l-footer">apno.barros.no</div>
     </div>
 </div>
 
@@ -1006,27 +1058,51 @@ const modals = {
     }
 };
 
+}
+});
 
-function doLogin(){
-    const val = document.getElementById('login-input').value;
-    const inp = document.getElementById('login-input');
-    const err = document.getElementById('login-error');
-    if(val === '20262026'){
-        document.getElementById('login-screen').classList.add('hidden');
-    } else {
-        inp.classList.remove('shake');
-        void inp.offsetWidth; // reflow
-        inp.classList.add('shake');
-        err.classList.add('show');
-        inp.value='';
-        setTimeout(()=>inp.classList.remove('shake'),400);
+/* ── PIN Login ── */
+let lPin = '';
+const CORRECT = '20262026';
+function lPress(n){
+    if(lPin.length >= 8) return;
+    lPin += n;
+    lUpdateDots();
+    if(lPin.length === 8) setTimeout(lCheck, 120);
+}
+function lDel(){
+    lPin = lPin.slice(0,-1);
+    lUpdateDots();
+    document.getElementById('lErr').classList.remove('show');
+}
+function lUpdateDots(){
+    for(let i=0;i<8;i++){
+        const d = document.getElementById('d'+i);
+        d.classList.toggle('filled', i < lPin.length);
+        d.classList.remove('error');
     }
 }
-document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('login-input').addEventListener('keydown',e=>{
-        if(e.key==='Enter') doLogin();
-    });
+function lCheck(){
+    if(lPin === CORRECT){
+        document.getElementById('login-screen').classList.add('hidden');
+    } else {
+        const dots = document.getElementById('lDots');
+        for(let i=0;i<8;i++) document.getElementById('d'+i).classList.add('error');
+        dots.classList.add('shake');
+        document.getElementById('lErr').classList.add('show');
+        setTimeout(()=>{
+            lPin='';
+            lUpdateDots();
+            dots.classList.remove('shake');
+        }, 700);
+    }
+}
+document.addEventListener('keydown', e => {
+    if(document.getElementById('login-screen').classList.contains('hidden')) return;
+    if(e.key>='0'&&e.key<='9') lPress(e.key);
+    if(e.key==='Backspace') lDel();
 });
+
 
 function openModal(key){
   const m=modals[key];if(!m)return;
