@@ -331,7 +331,8 @@
             transform: scale(.95);
             background: rgba(37,99,235,.4);
         }
-        .l-key.zero { grid-column: 2; }
+        .l-key.ast { color: #4a6b87; font-size:13px; cursor:default; }
+        .l-key.ast:hover { background:rgba(30,53,80,.7); border-color:rgba(37,99,235,.2); transform:none; }
         .l-key.del {
             grid-column: 3;
             font-size: 14px; color: #7fa4c4;
@@ -375,17 +376,13 @@
     <div class="l-orb l-orb-2"></div>
     <div class="l-card">
         <div class="l-flag">🇳🇴</div>
-        <div class="l-title">APNO Estratégia</div>
+        <div class="l-title">APNOR Estratégia</div>
         <div class="l-sub">acesso restrito · confidencial</div>
         <div class="l-dots" id="lDots">
             <div class="l-dot" id="d0"></div>
             <div class="l-dot" id="d1"></div>
             <div class="l-dot" id="d2"></div>
             <div class="l-dot" id="d3"></div>
-            <div class="l-dot" id="d4"></div>
-            <div class="l-dot" id="d5"></div>
-            <div class="l-dot" id="d6"></div>
-            <div class="l-dot" id="d7"></div>
         </div>
         <div class="l-keypad" id="lKeypad">
             <div class="l-key" data-key="1">1</div>
@@ -397,7 +394,8 @@
             <div class="l-key" data-key="7">7</div>
             <div class="l-key" data-key="8">8</div>
             <div class="l-key" data-key="9">9</div>
-            <div class="l-key zero" data-key="0">0</div>
+            <div class="l-key ast" data-key="noop">✱</div>
+            <div class="l-key" data-key="0">0</div>
             <div class="l-key del" data-key="del">⌫</div>
         </div>
         <div class="l-error-msg" id="lErr">Senha incorreta</div>
@@ -1064,67 +1062,78 @@ const modals = {
 /* ── PIN Login ── */
 (function(){
     var pin = '';
-    var pwd = '20262026';
+    var pwd = '2026';
+    var maxLen = pwd.length;
 
     function updateDots(){
-        for(var i=0;i<8;i++){
-            var d = document.getElementById('d'+i);
-            if(!d) return;
-            if(i < pin.length){ d.classList.add('filled'); } else { d.classList.remove('filled'); }
+        for(var i = 0; i < maxLen; i++){
+            var d = document.getElementById('d' + i);
+            if(!d) continue;
             d.classList.remove('error');
+            if(i < pin.length){ d.classList.add('filled'); }
+            else { d.classList.remove('filled'); }
         }
     }
 
     function check(){
         if(pin === pwd){
             var s = document.getElementById('login-screen');
-            if(s) s.classList.add('hidden');
+            if(s){ s.style.display = 'none'; }
         } else {
             var dots = document.getElementById('lDots');
-            for(var i=0;i<8;i++){
-                var d = document.getElementById('d'+i);
-                if(d) d.classList.add('error');
+            for(var i = 0; i < maxLen; i++){
+                var d = document.getElementById('d' + i);
+                if(d){ d.classList.add('error'); }
             }
-            if(dots) dots.classList.add('shake');
+            if(dots){ dots.classList.add('shake'); }
             var err = document.getElementById('lErr');
-            if(err) err.classList.add('show');
+            if(err){ err.classList.add('show'); }
             setTimeout(function(){
-                pin='';
+                pin = '';
                 updateDots();
-                if(dots) dots.classList.remove('shake');
+                if(dots){ dots.classList.remove('shake'); }
             }, 700);
         }
     }
 
     function press(n){
-        if(pin.length >= 8) return;
+        if(pin.length >= maxLen) return;
         pin += n;
         updateDots();
-        if(pin.length === 8) setTimeout(check, 150);
+        if(pin.length === maxLen){ setTimeout(check, 150); }
     }
 
     function del(){
-        pin = pin.slice(0,-1);
+        if(pin.length === 0) return;
+        pin = pin.slice(0, -1);
         updateDots();
         var err = document.getElementById('lErr');
-        if(err) err.classList.remove('show');
+        if(err){ err.classList.remove('show'); }
     }
 
-    document.addEventListener('DOMContentLoaded', function(){
-        var kp = document.getElementById('lKeypad');
-        if(kp){
-            kp.addEventListener('click', function(e){
-                var key = e.target.getAttribute('data-key');
-                if(!key) return;
-                if(key === 'del'){ del(); } else { press(key); }
-            });
-        }
-        document.addEventListener('keydown', function(e){
-            var s = document.getElementById('login-screen');
-            if(s && s.classList.contains('hidden')) return;
-            if(e.key >= '0' && e.key <= '9') press(e.key);
-            if(e.key === 'Backspace'){ e.preventDefault(); del(); }
+    /* Bind keypad clicks via event delegation */
+    var kp = document.getElementById('lKeypad');
+    if(kp){
+        kp.addEventListener('click', function(e){
+            var el = e.target;
+            while(el && el !== kp){
+                var key = el.getAttribute('data-key');
+                if(key){
+                    if(key === 'del'){ del(); }
+                    else if(key !== 'noop'){ press(key); }
+                    return;
+                }
+                el = el.parentElement;
+            }
         });
+    }
+
+    /* Physical keyboard */
+    document.addEventListener('keydown', function(e){
+        var s = document.getElementById('login-screen');
+        if(!s || s.style.display === 'none') return;
+        if(e.key >= '0' && e.key <= '9'){ press(e.key); }
+        if(e.key === 'Backspace'){ e.preventDefault(); del(); }
     });
 })();
 
