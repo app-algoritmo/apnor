@@ -2,1139 +2,531 @@
 <html lang="pt-BR">
 <head>
     <!-- FAVICON BARROS -->
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="BARROS" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#c44536" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+    <meta name="apple-mobile-web-app-title" content="BARROS"/>
+    <link rel="manifest" href="/site.webmanifest"/>
+    <meta name="theme-color" content="#c44536"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APNOR Estratégia 2026 | Escritório Regulatório</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>APNOR Estratégia 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root {
-            --navy:#0f1c2e; --navy-mid:#16283d; --navy-light:#1e3550;
-            --blue:#2563eb; --blue-glow:#60a5fa;
-            --gold:#c9a84c; --gold-light:#e4c97b;
-            --text:#e8eef6; --muted:#7fa4c4; --dim:#4a6b87;
-            --border:rgba(37,99,235,.22); --bh:rgba(96,165,250,.45);
-            --card:rgba(22,40,61,.7); --card-hov:rgba(30,53,80,.85);
-            --sw:270px; --r:14px;
-        }
+        :root{--navy:#0f1c2e;--nm:#16283d;--nl:#1e3550;--blue:#2563eb;--bg:#60a5fa;--gold:#c9a84c;--gl:#e4c97b;--tx:#e8eef6;--mu:#7fa4c4;--di:#4a6b87;--bo:rgba(37,99,235,.22);--bh:rgba(96,165,250,.45);--ca:rgba(22,40,61,.7);--ch:rgba(30,53,80,.85);--sw:270px;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Sora',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;display:flex;}
+        body{font-family:'Sora',sans-serif;background:var(--navy);color:var(--tx);min-height:100vh;display:flex;}
 
-        /* ── LOGIN ── */
-        #login{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,#080f1a 0%,#0f1c2e 60%,#0b1622 100%);display:flex;align-items:center;justify-content:center;}
+        /* LOGIN */
+        #login{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,#080f1a,#0f1c2e,#0b1622);display:flex;align-items:center;justify-content:center;}
         #login.gone{display:none;}
-        .l-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;}
-        .l-orb-1{width:500px;height:500px;background:rgba(37,99,235,.1);top:-120px;right:-100px;}
-        .l-orb-2{width:350px;height:350px;background:rgba(96,165,250,.07);bottom:-80px;left:-80px;}
-        .l-card{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;background:rgba(15,28,46,.85);border:1px solid rgba(37,99,235,.25);border-radius:24px;padding:36px 32px 28px;width:300px;backdrop-filter:blur(20px);box-shadow:0 32px 80px rgba(0,0,0,.5);}
-        .l-flag{font-size:36px;margin-bottom:12px;}
-        .l-title{font-size:17px;font-weight:700;color:#e8eef6;margin-bottom:2px;}
-        .l-sub{font-size:10px;font-family:'DM Mono',monospace;color:#4a6b87;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;}
-        .l-dots{display:flex;gap:12px;margin-bottom:20px;}
-        .l-dot{width:13px;height:13px;border-radius:50%;border:2px solid #2a4a6b;transition:all .15s;}
-        .l-dot.on{background:var(--blue-glow);border-color:var(--blue-glow);box-shadow:0 0 10px rgba(96,165,250,.6);}
-        .l-dot.err{background:#f87171;border-color:#f87171;}
-        .l-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-bottom:8px;}
-        .l-btn{background:rgba(30,53,80,.7);border:1px solid rgba(37,99,235,.2);border-radius:12px;color:#e8eef6;font-size:18px;font-weight:600;font-family:'Sora',sans-serif;padding:16px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;user-select:none;}
-        .l-btn:hover{background:rgba(37,99,235,.25);border-color:rgba(96,165,250,.4);transform:scale(1.04);}
-        .l-btn:active{transform:scale(.95);}
-        .l-btn.ast{font-size:13px;color:#4a6b87;cursor:default;}
-        .l-btn.ast:hover{background:rgba(30,53,80,.7);border-color:rgba(37,99,235,.2);transform:none;}
-        .l-btn.del{font-size:14px;color:#7fa4c4;}
-        .l-btn.del:hover{color:#f87171;border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.08);}
-        .l-err{font-size:11px;font-family:'DM Mono',monospace;color:#f87171;letter-spacing:.04em;margin-top:10px;opacity:0;transition:opacity .2s;min-height:16px;}
-        .l-err.show{opacity:1;}
-        .l-foot{margin-top:20px;font-size:10px;font-family:'DM Mono',monospace;color:#2a4a6b;letter-spacing:.06em;}
+        .lo{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;}
+        .lo1{width:500px;height:500px;background:rgba(37,99,235,.1);top:-120px;right:-100px;}
+        .lo2{width:350px;height:350px;background:rgba(96,165,250,.07);bottom:-80px;left:-80px;}
+        .lc{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;background:rgba(15,28,46,.85);border:1px solid rgba(37,99,235,.25);border-radius:24px;padding:36px 32px 28px;width:300px;backdrop-filter:blur(20px);box-shadow:0 32px 80px rgba(0,0,0,.5);}
+        .lf{font-size:36px;margin-bottom:12px;}
+        .lt{font-size:17px;font-weight:700;color:#e8eef6;margin-bottom:2px;}
+        .ls{font-size:10px;font-family:'DM Mono',monospace;color:#4a6b87;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;}
+        .ld{display:flex;gap:12px;margin-bottom:20px;}
+        .ldot{width:13px;height:13px;border-radius:50%;border:2px solid #2a4a6b;transition:all .15s;}
+        .ldot.on{background:var(--bg);border-color:var(--bg);box-shadow:0 0 10px rgba(96,165,250,.6);}
+        .ldot.er{background:#f87171;border-color:#f87171;}
+        .lp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-bottom:8px;}
+        .lk{background:rgba(30,53,80,.7);border:1px solid rgba(37,99,235,.2);border-radius:12px;color:#e8eef6;font-size:18px;font-weight:600;padding:16px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;user-select:none;}
+        .lk:hover{background:rgba(37,99,235,.25);border-color:rgba(96,165,250,.4);transform:scale(1.04);}
+        .lk:active{transform:scale(.95);}
+        .lk.ast{font-size:13px;color:#4a6b87;cursor:default;}
+        .lk.ast:hover{background:rgba(30,53,80,.7);border-color:rgba(37,99,235,.2);transform:none;}
+        .lk.del{font-size:14px;color:#7fa4c4;}
+        .lk.del:hover{color:#f87171;border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.08);}
+        .le{font-size:11px;font-family:'DM Mono',monospace;color:#f87171;letter-spacing:.04em;margin-top:10px;opacity:0;transition:opacity .2s;min-height:16px;}
+        .le.show{opacity:1;}
+        .lft{margin-top:20px;font-size:10px;font-family:'DM Mono',monospace;color:#2a4a6b;}
         @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
         .shake{animation:shake .35s ease;}
 
-        /* ── SIDEBAR ── */
-        #sidebar{width:var(--sw);height:100vh;background:linear-gradient(180deg,#0b1622 0%,#0f1c2e 100%);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-        .sb-logo{padding:24px 20px 18px;border-bottom:1px solid var(--border);}
-        .sb-badge{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;}
-        .sb-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--blue-glow));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
-        .sb-name{font-size:16px;font-weight:700;color:var(--text);}
-        .sb-sub-title{font-size:9.5px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-top:2px;}
-        .sb-sec{padding:14px 16px 6px;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;}
-        .sb-link{display:flex;align-items:center;gap:10px;padding:10px 18px;margin:2px 6px;border-radius:9px;font-size:13px;color:var(--muted);text-decoration:none;border:1px solid transparent;transition:all .2s;cursor:pointer;user-select:none;}
-        .sb-link:hover{background:var(--navy-mid);color:var(--text);border-color:var(--border);}
-        .sb-link.active{background:linear-gradient(135deg,rgba(37,99,235,.25),rgba(96,165,250,.12));color:var(--blue-glow);border-color:rgba(37,99,235,.4);font-weight:500;}
-        .sb-link i.ico{width:16px;text-align:center;font-size:12px;flex-shrink:0;}
-        .sb-arrow{margin-left:auto;font-size:10px;transition:transform .25s;color:var(--dim);}
-        .sb-link.sb-open .sb-arrow{transform:rotate(90deg);}
+        /* HAMBURGER */
+        #hbg{display:none;position:fixed;top:12px;left:12px;z-index:300;width:42px;height:42px;background:var(--nm);border:1px solid var(--bo);border-radius:10px;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+        #hbg span{display:block;width:20px;height:2px;background:var(--mu);border-radius:2px;transition:all .25s;}
+        #hbg.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+        #hbg.open span:nth-child(2){opacity:0;}
+        #hbg.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+        #sbo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:98;backdrop-filter:blur(2px);}
+        #sbo.open{display:block;}
 
-        /* Submenu */
-        .sb-children{overflow:hidden;transition:max-height 0.35s ease;}
-        .sb-children.open{max-height:600px;}
-        .sb-child{display:flex;align-items:center;gap:8px;padding:8px 18px 8px 42px;margin:1px 6px;border-radius:8px;font-size:12px;color:var(--dim);cursor:pointer;transition:all .18s;border:1px solid transparent;}
-        .sb-child:hover{background:rgba(37,99,235,.1);color:var(--muted);border-color:rgba(37,99,235,.15);}
-        .sb-child.active{color:var(--blue-glow);background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.2);}
-        .sb-child i{width:13px;text-align:center;font-size:11px;flex-shrink:0;}
+        /* SIDEBAR */
+        #sidebar{width:var(--sw);height:100vh;background:linear-gradient(180deg,#0b1622,#0f1c2e);border-right:1px solid var(--bo);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+        .sbl{padding:24px 20px 18px;border-bottom:1px solid var(--bo);}
+        .sbb{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;}
+        .sbi{width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--bg));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+        .sbn{font-size:16px;font-weight:700;color:var(--tx);}
+        .sbs{font-size:9.5px;color:var(--di);letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-top:2px;}
+        .sbsc{padding:14px 16px 6px;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--di);text-transform:uppercase;}
+        .sbl2{display:flex;align-items:center;gap:10px;padding:10px 18px;margin:2px 6px;border-radius:9px;font-size:13px;color:var(--mu);cursor:pointer;border:1px solid transparent;transition:all .2s;user-select:none;}
+        .sbl2:hover{background:var(--nm);color:var(--tx);border-color:var(--bo);}
+        .sbl2.act{background:linear-gradient(135deg,rgba(37,99,235,.25),rgba(96,165,250,.12));color:var(--bg);border-color:rgba(37,99,235,.4);font-weight:500;}
+        .sbl2 .ico{width:16px;text-align:center;font-size:12px;flex-shrink:0;}
+        .sbc2{display:flex;align-items:center;gap:8px;padding:8px 18px 8px 40px;margin:1px 6px;border-radius:8px;font-size:12px;color:var(--di);cursor:pointer;transition:all .18s;border:1px solid transparent;}
+        .sbc2:hover{background:rgba(37,99,235,.1);color:var(--mu);border-color:rgba(37,99,235,.15);}
+        .sbc2.act{color:var(--bg);background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.2);}
+        .sbf{margin-top:auto;padding:16px;border-top:1px solid var(--bo);}
+        .sbu{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+        .sbav{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+        .sbav img{width:100%;height:100%;object-fit:cover;}
+        .sbun{font-size:11.5px;font-weight:600;color:var(--gl);}
+        .sbur{font-size:9.5px;color:var(--di);margin-top:1px;}
 
-        /* TC badge */
-        .tc-pill{display:inline-flex;align-items:center;background:linear-gradient(135deg,rgba(201,168,76,.2),rgba(37,99,235,.1));border:1px solid rgba(201,168,76,.35);border-radius:5px;padding:2px 6px;font-size:8.5px;font-family:'DM Mono',monospace;color:var(--gold-light);letter-spacing:.05em;margin-left:auto;flex-shrink:0;}
+        /* WATERMARK */
+        .wmo{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
+        .wmt{position:absolute;inset:-50%;width:200%;height:200%;display:flex;flex-wrap:wrap;align-items:center;opacity:0.042;transform:rotate(-35deg);user-select:none;}
+        .wmi{font-family:'DM Mono',monospace;font-size:13px;color:#60a5fa;white-space:nowrap;padding:28px 40px;}
+        .mwm{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:4px;z-index:10;}
+        .mwt{position:absolute;inset:-50%;width:200%;height:200%;display:flex;flex-wrap:wrap;align-items:center;opacity:0.038;transform:rotate(-35deg);}
+        .mwi{font-family:'DM Mono',monospace;font-size:11px;color:#1e40af;white-space:nowrap;padding:22px 32px;}
 
-        .sb-foot{margin-top:auto;padding:16px;border-top:1px solid var(--border);}
-        .sb-user{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
-        .sb-av{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;}
-        .sb-av img{width:100%;height:100%;object-fit:cover;}
-        .sb-uname{font-size:11.5px;font-weight:600;color:var(--gold-light);}
-        .sb-urole{font-size:9.5px;color:var(--dim);margin-top:1px;}
-
-    
-    /* ── MOBILE SIDEBAR TOGGLE ── */
-    var hamburger  = document.getElementById('hamburger');
-    var sbOverlay  = document.getElementById('sb-overlay');
-    var sidebar    = document.getElementById('sidebar');
-
-    function openSidebar() {
-        sidebar.classList.add('mobile-open');
-        sbOverlay.classList.add('open');
-        hamburger.classList.add('open');
-    }
-    function closeSidebar() {
-        sidebar.classList.remove('mobile-open');
-        sbOverlay.classList.remove('open');
-        hamburger.classList.remove('open');
-    }
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            sidebar.classList.contains('mobile-open') ? closeSidebar() : openSidebar();
-        });
-    }
-    if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
-
-
-
-
-    /* ── CALCULATOR ── */
-    var COMPANY = {
-        AS:  { capital:2600,  registo:2400, contab:2800, ti:1300 },
-        NUF: { capital:0,     registo:1800, contab:2800, ti:1300 },
-        ASA: { capital:87000, registo:3500, contab:3500, ti:1300 }
-    };
-    var OFFICE = { virtual:480, fisico:18000 };
-    var BENEFITS = { conservador:339000, otimista:1040000 };
-
-    function calcScenario(prefix) {
-        var type   = document.getElementById(prefix+'_type')   ? document.getElementById(prefix+'_type').value   : 'AS';
-        var sal    = parseFloat(document.getElementById(prefix+'_sal').value)   || 0;
-        var emp    = parseFloat(document.getElementById(prefix+'_emp').value)   || 1;
-        var office = document.getElementById(prefix+'_office') ? document.getElementById(prefix+'_office').value : 'virtual';
-        var years  = parseFloat(document.getElementById(prefix+'_years').value) || 1;
-        var fx     = parseFloat(document.getElementById(prefix+'_fx').value)    || 11.5;
-        var co     = COMPANY[type];
-        var salTotal   = sal * emp * 1.141;
-        var offCost    = OFFICE[office];
-        var ano1       = co.capital + co.registo + salTotal + offCost + co.ti + co.contab;
-        var recorrente = salTotal + offCost + co.contab;
-        var total      = ano1 + recorrente * (years - 1);
-        var roi_c      = years > 0 ? ((BENEFITS.conservador * years) / total).toFixed(1) : 0;
-        var roi_o      = years > 0 ? ((BENEFITS.otimista    * years) / total).toFixed(1) : 0;
-        return {
-            type:type, sal:sal, emp:emp, office:office, years:years, fx:fx,
-            capital:co.capital, registo:co.registo, salTotal:salTotal,
-            offCost:offCost, ti:co.ti, contab:co.contab,
-            ano1:ano1, recorrente:recorrente, total:total,
-            roi_c:roi_c, roi_o:roi_o
-        };
-    }
-
-    function fmt(n){ return '€' + Math.round(n).toLocaleString('pt-BR'); }
-
-    function calcUpdate() {
-        if (!document.getElementById('calcWrap')) return;
-        var A = calcScenario('cA');
-        var B = calcScenario('cB');
-        var C = calcScenario('cC');
-        var rows = [
-            ['Tipo de empresa',       A.type,      B.type,      C.type],
-            ['Capital social',        fmt(A.capital),   fmt(B.capital),   fmt(C.capital)],
-            ['Registo + assessoria',  fmt(A.registo),   fmt(B.registo),   fmt(C.registo)],
-            ['Salário + encargos/ano',fmt(A.salTotal),  fmt(B.salTotal),  fmt(C.salTotal)],
-            ['Escritório/ano',        fmt(A.offCost),   fmt(B.offCost),   fmt(C.offCost)],
-            ['TI + setup',            fmt(A.ti),        fmt(B.ti),        fmt(C.ti)],
-            ['Contabilidade/ano',     fmt(A.contab),    fmt(B.contab),    fmt(C.contab)],
-            ['─── ANO 1 ───',         fmt(A.ano1),      fmt(B.ano1),      fmt(C.ano1)],
-            ['Total projeto ('+A.years+'/'+(B.years)+'/'+(C.years)+' anos)', fmt(A.total), fmt(B.total), fmt(C.total)]
-        ];
-        var tbody = document.getElementById('calcTbody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        rows.forEach(function(r,i){
-            var tr = document.createElement('tr');
-            if (i===7) tr.className='row-total';
-            if (i===8) tr.className='row-total';
-            [r[0],r[1],r[2],r[3]].forEach(function(v){
-                var td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
-            });
-            tbody.appendChild(tr);
-        });
-
-        /* Chart */
-        var maxV = Math.max(A.total, B.total, C.total) || 1;
-        var chart = document.getElementById('calcChart');
-        if (chart) {
-            var bars = [
-                {v:A.total, label:'Cenário A', color:'#2563eb'},
-                {v:B.total, label:'Cenário B', color:'#16a34a'},
-                {v:C.total, label:'Cenário C', color:'#d97706'}
-            ];
-            chart.innerHTML = bars.map(function(b){
-                var h = Math.max(4, Math.round((b.v/maxV)*110));
-                return '<div class="calc-bar-wrap">'+
-                    '<div class="calc-bar" style="height:'+h+'px;background:'+b.color+'">'+
-                    '<span class="calc-bar-val">'+fmt(b.v)+'</span></div>'+
-                    '<div class="calc-bar-label">'+b.label+'</div></div>';
-            }).join('');
-        }
-
-        /* ROI cards */
-        var roi = document.getElementById('calcRoi');
-        if (roi) {
-            var sc = [
-                {s:A, cls:'a', lbl:'Cenário A'},
-                {s:B, cls:'b', lbl:'Cenário B'},
-                {s:C, cls:'c', lbl:'Cenário C'}
-            ];
-            roi.innerHTML = sc.map(function(x){
-                return '<div class="calc-roi-card '+x.cls+'">'+
-                    '<div class="calc-roi-label">'+x.lbl+' · ROI (conservador)</div>'+
-                    '<div class="calc-roi-val">'+x.s.roi_c+'×</div>'+
-                    '<div class="calc-roi-sub">Otimista: '+x.s.roi_o+'× · '+x.s.years+' ano(s)</div>'+
-                    '</div>';
-            }).join('');
-        }
-
-        /* Store for export */
-        window._calcData = {A:A, B:B, C:C, rows:rows};
-    }
-
-    function calcExport() {
-        var d = window._calcData;
-        if (!d) return;
-        var wb = XLSX.utils.book_new();
-        var header = ['Item','Cenário A ('+d.A.type+')','Cenário B ('+d.B.type+')','Cenário C ('+d.C.type+')'];
-        var data = [header];
-        d.rows.forEach(function(r){ data.push(r); });
-        data.push([]);
-        data.push(['ROI Conservador', d.A.roi_c+'×', d.B.roi_c+'×', d.C.roi_c+'×']);
-        data.push(['ROI Otimista',    d.A.roi_o+'×', d.B.roi_o+'×', d.C.roi_o+'×']);
-        data.push(['Duração (anos)',  d.A.years, d.B.years, d.C.years]);
-        data.push(['Câmbio EUR/NOK', d.A.fx, d.B.fx, d.C.fx]);
-        var ws = XLSX.utils.aoa_to_sheet(data);
-        ws['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:22}];
-        XLSX.utils.book_append_sheet(wb, ws, 'Cenários APNOR');
-        XLSX.writeFile(wb, 'APNOR_Cenarios_'+new Date().toISOString().slice(0,10)+'.xlsx');
-    }
-
-    /* Init calculator when modal opens */
-    var _origOpenModal = openModal;
-    function openModal(key) {
-        _origOpenModal(key);
-        if (key === 'calculadora') {
-            setTimeout(function(){
-                calcUpdate();
-                var btn = document.getElementById('calcExportBtn');
-                if (btn) btn.addEventListener('click', calcExport);
-            }, 80);
-        }
-    }
-
-    /* ── WATERMARK ── */
-        .wm-overlay{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
-        .wm-text{position:absolute;inset:-50%;width:200%;height:200%;display:flex;flex-wrap:wrap;align-items:center;gap:0;opacity:0.042;transform:rotate(-35deg);transform-origin:center;user-select:none;}
-        .wm-item{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:#60a5fa;white-space:nowrap;padding:28px 40px;letter-spacing:.06em;}
-        .modal-wm{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:4px;z-index:10;}
-        .modal-wm-text{position:absolute;inset:-50%;width:200%;height:200%;display:flex;flex-wrap:wrap;align-items:center;gap:0;opacity:0.038;transform:rotate(-35deg);}
-        .modal-wm-item{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:#1e40af;white-space:nowrap;padding:22px 32px;}
-        .conf-bar{background:#fef2f2;border-top:1px solid #fecaca;padding:8px 48px;font-size:10.5px;font-family:'DM Mono',monospace;color:#991b1b;letter-spacing:.05em;display:flex;align-items:center;justify-content:space-between;}
-
-        /* ── MAIN ── */
+        /* MAIN */
         #main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;}
-        #topbar{padding:14px 36px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(10,16,28,.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;}
-        .tb-bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);}
-        .tb-bc span{color:var(--muted);}
-        .tb-right{display:flex;align-items:center;gap:16px;}
-        .tb-conf{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:4px 12px;font-size:11px;color:#4ade80;font-family:'DM Mono',monospace;}
-        .tb-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:blink 2s infinite;}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-        .tb-date{font-size:11px;color:var(--dim);font-family:'DM Mono',monospace;}
+        #topbar{padding:14px 36px;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;background:rgba(10,16,28,.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;}
+        .tbb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--di);}
+        .tbb span{color:var(--mu);}
+        .tbr{display:flex;align-items:center;gap:16px;}
+        .tbc{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:4px 12px;font-size:11px;color:#4ade80;font-family:'DM Mono',monospace;}
+        .tbd{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:bk 2s infinite;}
+        @keyframes bk{0%,100%{opacity:1}50%{opacity:.4}}
+        .tbt{font-size:11px;color:var(--di);font-family:'DM Mono',monospace;}
 
-        /* ── CONTENT ── */
+        /* CONTENT */
         #content{padding:40px 36px 60px;max-width:1060px;margin:0 auto;}
-        .pg-head{margin-bottom:32px;}
-        .pg-head h1{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:8px;}
-        .pg-head p{font-size:14px;color:var(--muted);line-height:1.6;max-width:580px;}
-        .meta-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;}
-        .pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--dim);}
-        .pill.blue{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.3);color:var(--blue-glow);}
-        .pill.gold{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.25);color:var(--gold-light);}
+        .pgh{margin-bottom:32px;}
+        .pgh h1{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--tx);margin-bottom:8px;}
+        .pgh p{font-size:14px;color:var(--mu);line-height:1.6;max-width:580px;}
+        .mr{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;}
+        .pi{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:20px;border:1px solid var(--bo);color:var(--di);}
+        .pi.bl{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.3);color:var(--bg);}
+        .pi.go{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.25);color:var(--gl);}
 
-        /* ── STATS ── */
-        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
-        .stat{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:16px 18px;backdrop-filter:blur(8px);}
-        .stat-l{font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
-        .stat-v{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1;}
-        .stat-s{font-size:11px;color:var(--muted);margin-top:4px;}
-        .stat.blue .stat-v{color:var(--blue-glow);}
-        .stat.gold  .stat-v{color:var(--gold-light);}
-        .stat.green .stat-v{color:#4ade80;}
+        /* STATS */
+        .sts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+        .st{background:var(--ca);border:1px solid var(--bo);border-radius:11px;padding:16px 18px;backdrop-filter:blur(8px);}
+        .stl{font-size:10px;font-family:'DM Mono',monospace;color:var(--di);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+        .stv{font-size:19px;font-weight:700;color:var(--tx);letter-spacing:-.02em;line-height:1;}
+        .sts2{font-size:11px;color:var(--mu);margin-top:4px;}
+        .st.bl .stv{color:var(--bg);}
+        .st.go .stv{color:var(--gl);}
+        .st.gr .stv{color:#4ade80;}
 
-        /* ── PHASE ── */
-        .phase{display:flex;align-items:center;gap:12px;margin:28px 0 14px;}
-        .phase span{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-family:'DM Mono',monospace;color:var(--dim);white-space:nowrap;}
-        .phase::after{content:'';flex:1;height:1px;background:var(--border);}
+        /* PHASE */
+        .ph{display:flex;align-items:center;gap:12px;margin:28px 0 14px;}
+        .ph span{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-family:'DM Mono',monospace;color:var(--di);white-space:nowrap;}
+        .ph::after{content:'';flex:1;height:1px;background:var(--bo);}
 
-        /* ── CARDS ── */
-        .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
-        .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;backdrop-filter:blur(8px);}
-        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--blue-glow));opacity:0;transition:opacity .25s;}
-        .card:hover{background:var(--card-hov);border-color:var(--bh);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.35);}
-        .card:hover::before{opacity:1;}
-        .card.gold-card{border-color:rgba(201,168,76,.3);background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(22,40,61,.7));}
-        .card.gold-card::before{background:linear-gradient(90deg,var(--gold),var(--gold-light));opacity:.6;}
-        .card.gold-card:hover{border-color:rgba(201,168,76,.5);}
-        .c-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
-        .i-blue{background:rgba(37,99,235,.15);color:var(--blue-glow);border:1px solid rgba(37,99,235,.25);}
-        .i-green{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
-        .i-gold{background:rgba(201,168,76,.12);color:var(--gold-light);border:1px solid rgba(201,168,76,.25);}
-        .i-purple{background:rgba(167,139,250,.1);color:#c4b5fd;border:1px solid rgba(167,139,250,.2);}
-        .i-red{background:rgba(248,113,113,.1);color:#fca5a5;border:1px solid rgba(248,113,113,.2);}
-        .i-teal{background:rgba(45,212,191,.1);color:#5eead4;border:1px solid rgba(45,212,191,.2);}
-        .i-amber{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
-        .c-phase{position:absolute;top:14px;right:14px;font-size:9.5px;font-family:'DM Mono',monospace;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;letter-spacing:.06em;}
-        .c-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:-.01em;}
-        .c-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
-        .c-tag{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;font-weight:500;padding:3px 8px;border-radius:5px;letter-spacing:.04em;text-transform:uppercase;background:rgba(37,99,235,.15);color:var(--blue-glow);border:1px solid rgba(37,99,235,.3);}
+        /* CARDS */
+        .gr{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+        .cd{background:var(--ca);border:1px solid var(--bo);border-radius:14px;padding:22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;backdrop-filter:blur(8px);}
+        .cd::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--bg));opacity:0;transition:opacity .25s;}
+        .cd:hover{background:var(--ch);border-color:var(--bh);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.35);}
+        .cd:hover::before{opacity:1;}
+        .cd.gc{border-color:rgba(201,168,76,.3);background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(22,40,61,.7));}
+        .cd.gc::before{background:linear-gradient(90deg,var(--gold),var(--gl));opacity:.6;}
+        .cd.gc:hover{border-color:rgba(201,168,76,.5);}
+        .ci{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
+        .ib{background:rgba(37,99,235,.15);color:var(--bg);border:1px solid rgba(37,99,235,.25);}
+        .ig{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+        .io{background:rgba(201,168,76,.12);color:var(--gl);border:1px solid rgba(201,168,76,.25);}
+        .ip{background:rgba(167,139,250,.1);color:#c4b5fd;border:1px solid rgba(167,139,250,.2);}
+        .ir{background:rgba(248,113,113,.1);color:#fca5a5;border:1px solid rgba(248,113,113,.2);}
+        .it{background:rgba(45,212,191,.1);color:#5eead4;border:1px solid rgba(45,212,191,.2);}
+        .ia{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
+        .cp{position:absolute;top:14px;right:14px;font-size:9.5px;font-family:'DM Mono',monospace;color:var(--di);background:rgba(255,255,255,.04);border:1px solid var(--bo);border-radius:5px;padding:2px 7px;}
+        .ct{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:6px;}
+        .cdesc{font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:14px;}
+        .ctg{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:5px;text-transform:uppercase;background:rgba(37,99,235,.15);color:var(--bg);border:1px solid rgba(37,99,235,.3);}
 
-        /* ── MODAL OVERLAY ── */
-        #overlay{display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);backdrop-filter:blur(4px);z-index:200;overflow-y:auto;padding:40px 20px 60px;align-items:flex-start;justify-content:center;}
-        #overlay.open{display:flex;}
-        @keyframes min{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+        /* MODAL */
+        #ov{display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);backdrop-filter:blur(4px);z-index:200;overflow-y:auto;padding:40px 20px 60px;align-items:flex-start;justify-content:center;}
+        #ov.open{display:flex;}
+        @keyframes mi{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+        #modal{background:#fff;border-radius:4px;width:100%;max-width:720px;position:relative;box-shadow:0 8px 48px rgba(0,0,0,.22);animation:mi .28s ease;overflow:hidden;}
+        #mtop{display:flex;align-items:center;justify-content:flex-end;padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e9eef5;}
+        #mcls{display:flex;align-items:center;background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.04em;transition:color .15s;}
+        #mcls:hover{color:#334155;}
+        #mcls::before{content:'×';font-size:18px;line-height:1;margin-right:4px;}
+        #mhdr{padding:32px 44px 0;}
+        .dc{font-size:10.5px;font-family:'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;margin-bottom:12px;}
+        .dt{font-size:24px;font-weight:700;color:#0f172a;line-height:1.25;letter-spacing:-.02em;}
+        .db{height:3px;width:60px;background:var(--blue);margin:12px 0 18px;border-radius:2px;}
+        .dl{font-size:13.5px;color:#475569;line-height:1.7;padding-bottom:22px;border-bottom:1px solid #e9eef5;}
+        #mbdy{padding:24px 44px 8px;}
+        .ds{margin-bottom:24px;}
+        .dst{font-size:14.5px;font-weight:600;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+        .dst .n{font-family:'DM Mono',monospace;font-size:12px;color:#94a3b8;font-weight:400;}
+        #mbdy ul{list-style:none;display:flex;flex-direction:column;}
+        #mbdy ul li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#334155;line-height:1.6;padding:6px 0;border-bottom:1px solid #f1f5f9;}
+        #mbdy ul li:last-child{border-bottom:none;}
+        #mbdy ul li::before{content:'•';color:var(--blue);flex-shrink:0;margin-top:2px;font-size:15px;line-height:1;}
+        #mbdy table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px;}
+        #mbdy table th{background:#f1f5f9;color:#475569;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;padding:9px 13px;text-align:left;border-bottom:2px solid #e2e8f0;font-weight:500;}
+        #mbdy table td{padding:10px 13px;color:#334155;border-bottom:1px solid #f1f5f9;}
+        #mbdy table tr:hover td{background:#fafbfc;}
+        #mbdy .hl td{color:#16a34a;font-weight:600;background:#f0fdf4;}
+        .dn{display:flex;align-items:flex-start;gap:10px;border-radius:3px;padding:12px 15px;font-size:13px;line-height:1.6;margin:18px 0;}
+        .dn.bl{background:#eff6ff;border:1px solid #bfdbfe;border-left:3px solid var(--blue);color:#1e40af;}
+        .dn.gr{background:#f0fdf4;border:1px solid #bbf7d0;border-left:3px solid #16a34a;color:#166534;}
+        .dn.am{background:#fffbeb;border:1px solid #fde68a;border-left:3px solid #d97706;color:#92400e;}
+        .tc-img{text-align:center;margin:18px 0;padding:20px;background:#f8fafc;border:1px solid #e9eef5;border-radius:8px;}
+        .tc-img img{max-width:100%;max-height:280px;object-fit:contain;}
+        .tc-img p{font-size:11px;font-family:'DM Mono',monospace;color:#94a3b8;margin-top:10px;}
+        #mftr{display:flex;align-items:center;justify-content:space-between;padding:18px 44px;margin-top:14px;border-top:1px solid #e9eef5;background:#fafbfc;}
+        .mfb{font-size:12px;color:#64748b;cursor:pointer;font-family:'DM Mono',monospace;background:none;border:none;transition:color .15s;}
+        .mfb:hover{color:var(--blue);}
+        .cbar{background:#fef2f2;border-top:1px solid #fecaca;padding:8px 44px;font-size:10.5px;font-family:'DM Mono',monospace;color:#991b1b;display:flex;align-items:center;justify-content:space-between;}
+        #mbdy,#mhdr{user-select:none;-webkit-user-select:none;}
 
-        /* ── MODAL DOC ── */
-        #modal{background:#fff;border-radius:4px;width:100%;max-width:720px;position:relative;box-shadow:0 8px 48px rgba(0,0,0,.22);animation:min .28s ease;font-family:'Sora',sans-serif;overflow:hidden;}
-        #modal-topbar{display:flex;align-items:center;justify-content:flex-end;padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e9eef5;}
-        #modal-close-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.04em;transition:color .15s;}
-        #modal-close-btn:hover{color:#334155;}
-        #modal-close-btn::before{content:'×';font-size:18px;line-height:1;}
-        #modal-header{padding:32px 44px 0;background:#fff;}
-        .doc-cat{font-size:10.5px;font-family:'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;margin-bottom:12px;}
-        .doc-ttl{font-size:24px;font-weight:700;color:#0f172a;line-height:1.25;letter-spacing:-.02em;}
-        .doc-bar{height:3px;width:60px;background:var(--blue);margin:12px 0 18px;border-radius:2px;}
-        .doc-lead{font-size:13.5px;color:#475569;line-height:1.7;padding-bottom:22px;border-bottom:1px solid #e9eef5;}
-        #modal-body{padding:24px 44px 8px;}
-        .doc-sec{margin-bottom:24px;}
-        .doc-sec-title{font-size:14.5px;font-weight:600;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-        .doc-sec-title .n{font-family:'DM Mono',monospace;font-size:12px;color:#94a3b8;font-weight:400;}
-        #modal-body ul{list-style:none;display:flex;flex-direction:column;}
-        #modal-body ul li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#334155;line-height:1.6;padding:6px 0;border-bottom:1px solid #f1f5f9;}
-        #modal-body ul li:last-child{border-bottom:none;}
-        #modal-body ul li::before{content:'•';color:var(--blue);flex-shrink:0;margin-top:2px;font-size:15px;line-height:1;}
-        #modal-body table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px;}
-        #modal-body table th{background:#f1f5f9;color:#475569;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;padding:9px 13px;text-align:left;border-bottom:2px solid #e2e8f0;font-weight:500;}
-        #modal-body table td{padding:10px 13px;color:#334155;border-bottom:1px solid #f1f5f9;}
-        #modal-body table tr:hover td{background:#fafbfc;}
-        #modal-body .hl td{color:#16a34a;font-weight:600;background:#f0fdf4;}
-        #modal-body .hl:hover td{background:#dcfce7;}
-        .doc-note{display:flex;align-items:flex-start;gap:10px;border-radius:3px;padding:12px 15px;font-size:13px;line-height:1.6;margin:18px 0;}
-        .doc-note.blue{background:#eff6ff;border:1px solid #bfdbfe;border-left:3px solid var(--blue);color:#1e40af;}
-        .doc-note.green{background:#f0fdf4;border:1px solid #bbf7d0;border-left:3px solid #16a34a;color:#166534;}
-        .doc-note.amber{background:#fffbeb;border:1px solid #fde68a;border-left:3px solid #d97706;color:#92400e;}
-        .doc-note.red{background:#fef2f2;border:1px solid #fecaca;border-left:3px solid #dc2626;color:#991b1b;}
+        /* CALCULATOR */
+        .cw{font-family:'Sora',sans-serif;}
+        .csc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+        .ccol{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;}
+        .cctl{font-size:11px;font-family:'DM Mono',monospace;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+        .cctl span{display:inline-block;width:8px;height:8px;border-radius:50%;}
+        .sa{background:#2563eb;}.sb2{background:#16a34a;}.sc2{background:#d97706;}
+        .cf{margin-bottom:11px;}
+        .cfl{font-size:10.5px;color:#64748b;margin-bottom:4px;font-family:'DM Mono',monospace;}
+        .cfi{width:100%;padding:7px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:13px;font-family:'Sora',sans-serif;color:#0f172a;background:#fff;outline:none;transition:border-color .15s;}
+        .cfi:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+        .cfs{width:100%;padding:7px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:12.5px;font-family:'Sora',sans-serif;color:#0f172a;background:#fff;outline:none;cursor:pointer;}
+        .crt{overflow-x:auto;margin-bottom:20px;}
+        .crt table{width:100%;border-collapse:collapse;font-size:12.5px;}
+        .crt th{background:#1e293b;color:#e2e8f0;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;padding:10px 12px;text-align:left;}
+        .crt th.ha{background:#1e3a8a;}.crt th.hb{background:#14532d;}.crt th.hc{background:#78350f;}
+        .crt td{padding:9px 12px;color:#334155;border-bottom:1px solid #f1f5f9;font-size:12.5px;}
+        .crt .rt td{font-weight:700;color:#0f172a;background:#f1f5f9;border-top:2px solid #e2e8f0;}
+        .cbg{display:flex;align-items:flex-end;gap:8px;height:120px;padding:0 4px;border-bottom:2px solid #e2e8f0;margin-bottom:20px;}
+        .cbw{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+        .cbar2{width:100%;border-radius:5px 5px 0 0;min-height:4px;transition:height .4s ease;position:relative;}
+        .cbl{font-size:9.5px;font-family:'DM Mono',monospace;color:#64748b;text-align:center;margin-top:6px;}
+        .cbv{font-size:9px;color:#fff;position:absolute;top:4px;left:0;right:0;text-align:center;font-family:'DM Mono',monospace;font-weight:600;}
+        .crg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+        .crc{border-radius:9px;padding:14px;text-align:center;}
+        .crc.ra{background:#eff6ff;border:1px solid #bfdbfe;}
+        .crc.rb{background:#f0fdf4;border:1px solid #bbf7d0;}
+        .crc.rc{background:#fffbeb;border:1px solid #fde68a;}
+        .crl{font-size:9.5px;font-family:'DM Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+        .crv{font-size:20px;font-weight:700;}
+        .crc.ra .crv{color:#1d4ed8;}.crc.rb .crv{color:#15803d;}.crc.rc .crv{color:#b45309;}
+        .crs{font-size:10px;color:#94a3b8;margin-top:2px;}
+        .ceb{display:flex;align-items:center;gap:8px;background:#16a34a;border:none;color:#fff;font-size:13px;font-weight:600;font-family:'Sora',sans-serif;padding:11px 20px;border-radius:9px;cursor:pointer;transition:opacity .15s;}
+        .ceb:hover{opacity:.85;}
+        .cht{font-size:10.5px;font-family:'DM Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
 
-        /* TC triangle image block */
-        .tc-img-block{text-align:center;margin:18px 0;padding:20px;background:#f8fafc;border:1px solid #e9eef5;border-radius:8px;}
-        .tc-img-block img{max-width:100%;max-height:280px;object-fit:contain;}
-        .tc-img-block p{font-size:11px;font-family:'DM Mono',monospace;color:#94a3b8;margin-top:10px;letter-spacing:.04em;}
-
-        #modal-footer{display:flex;align-items:center;justify-content:space-between;padding:18px 44px;margin-top:14px;border-top:1px solid #e9eef5;background:#fafbfc;}
-        .mf-btn{font-size:12px;color:#64748b;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.02em;background:none;border:none;transition:color .15s;}
-        .mf-btn:hover{color:var(--blue);}
-
-        /* ── ANTI-COPY ── */
-        #modal-body,#modal-header{user-select:none;-webkit-user-select:none;}
-
-        /* ── PRINT ── */
-        @media print{
-            #login,#sidebar,#topbar,#bgWm{display:none!important;}
-            body{background:#fff;}
-            #main{margin-left:0!important;}
-            #overlay{position:static!important;display:block!important;background:none!important;padding:0!important;}
-            #modal{box-shadow:none!important;max-width:100%!important;}
-            #modal-topbar,#modal-footer,.modal-wm{display:none!important;}
-            .conf-bar{display:flex!important;}
+        /* MOBILE */
+        @media(max-width:900px){
+            #hbg{display:flex;}
+            #sidebar{transform:translateX(-100%);transition:transform .3s ease;box-shadow:4px 0 32px rgba(0,0,0,.5);}
+            #sidebar.mo{transform:translateX(0);}
+            #main{margin-left:0;}
+            #topbar{padding:12px 16px 12px 64px;}
+            .tbt{display:none;}
+            #content{padding:24px 16px 48px;}
+            .sts{grid-template-columns:repeat(2,1fr);gap:10px;}
+            .gr{grid-template-columns:1fr;}
+            .pgh h1{font-size:20px;}
+            .pgh p{font-size:13px;}
+            .csc{grid-template-columns:1fr;}
+            .crg{grid-template-columns:1fr;}
         }
-
-
-        /* ══════════════════════════════
-           MOBILE & TABLET RESPONSIVE
-           ══════════════════════════════ */
-
-        /* Hamburger button */
-        #hamburger {
-            display: none;
-            position: fixed;
-            top: 12px; left: 12px;
-            z-index: 300;
-            width: 42px; height: 42px;
-            background: var(--navy-mid);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0,0,0,.4);
+        @media(max-width:540px){
+            #ov{padding:0;align-items:flex-end;}
+            #modal{border-radius:18px 18px 0 0;max-height:92vh;overflow-y:auto;}
+            #mhdr{padding:24px 20px 0;}
+            .dt{font-size:18px;}
+            #mbdy{padding:18px 20px 8px;}
+            #mftr{padding:14px 20px;}
+            .cbar{padding:8px 20px;flex-direction:column;gap:2px;}
         }
-        #hamburger span {
-            display: block;
-            width: 20px; height: 2px;
-            background: var(--muted);
-            border-radius: 2px;
-            transition: all .25s;
-        }
-        #hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        #hamburger.open span:nth-child(2) { opacity: 0; }
-        #hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        /* Sidebar overlay for mobile */
-        #sb-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.6);
-            z-index: 98;
-            backdrop-filter: blur(2px);
-        }
-        #sb-overlay.open { display: block; }
-
-        @media (max-width: 900px) {
-            /* Show hamburger */
-            #hamburger { display: flex; }
-
-            /* Sidebar slides off-screen by default */
-            #sidebar {
-                transform: translateX(-100%);
-                transition: transform .3s ease;
-                z-index: 99;
-                box-shadow: 4px 0 32px rgba(0,0,0,.5);
-            }
-            #sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            /* Main takes full width */
-            #main { margin-left: 0; }
-
-            /* Topbar padding adjusted */
-            #topbar { padding: 12px 16px 12px 64px; }
-            .tb-bc { font-size: 11px; gap: 5px; }
-            .tb-date { display: none; }
-
-            /* Content */
-            #content { padding: 24px 16px 48px; }
-
-            /* Stats — 2 columns */
-            .stats { grid-template-columns: repeat(2,1fr); gap: 10px; }
-
-            /* Cards — single column */
-            .grid { grid-template-columns: 1fr; gap: 12px; }
-
-            /* Page header */
-            .pg-head h1 { font-size: 20px; }
-            .pg-head p  { font-size: 13px; }
-            .meta-row   { gap: 8px; }
-            .pill       { font-size: 10px; padding: 3px 8px; }
-        }
-
-        @media (max-width: 540px) {
-            /* Stats — single column on very small screens */
-            .stats { grid-template-columns: repeat(2,1fr); }
-            .stat-v { font-size: 17px; }
-
-            /* Modal full-screen */
-            #overlay { padding: 0; align-items: flex-end; }
-            #modal {
-                border-radius: 18px 18px 0 0;
-                max-height: 92vh;
-                overflow-y: auto;
-            }
-            #modal-header { padding: 24px 20px 0; }
-            .doc-ttl { font-size: 18px; }
-            .doc-lead { font-size: 12.5px; }
-            #modal-body { padding: 18px 20px 8px; }
-            #modal-body table { font-size: 11px; }
-            #modal-body table th,
-            #modal-body table td { padding: 7px 8px; }
-            #modal-footer { padding: 14px 20px; }
-            .conf-bar { padding: 8px 20px; font-size: 9.5px; flex-direction: column; gap: 2px; }
-
-            /* Login card */
-            .l-card { width: 280px; padding: 28px 22px 22px; }
-        }
-
-
-        @media (max-width: 900px) {
-            #sidebar { height: 100vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            .sb-foot  { margin-top: 24px; }
-            /* tc submenu handled via JS inline style */
-        }
-
-        @media (min-width: 901px) {
-            /* Make sure sidebar is always visible on desktop */
-            #sidebar { transform: translateX(0) !important; }
-        }
-
-        /* ── CALCULATOR ── */
-        .calc-wrap { font-family:'Sora',sans-serif; }
-        .calc-scenarios { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
-        .calc-col { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
-        .calc-col-title { font-size:11px; font-family:'DM Mono',monospace; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#2563eb; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
-        .calc-col-title span { display:inline-block; width:8px; height:8px; border-radius:50%; }
-        .c-s-a { background:#2563eb; }
-        .c-s-b { background:#16a34a; }
-        .c-s-c { background:#d97706; }
-        .calc-field { margin-bottom:11px; }
-        .calc-label { font-size:10.5px; color:#64748b; margin-bottom:4px; font-family:'DM Mono',monospace; }
-        .calc-input { width:100%; padding:7px 10px; border:1px solid #e2e8f0; border-radius:7px; font-size:13px; font-family:'Sora',sans-serif; color:#0f172a; background:#fff; outline:none; transition:border-color .15s; }
-        .calc-input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
-        .calc-select { width:100%; padding:7px 10px; border:1px solid #e2e8f0; border-radius:7px; font-size:12.5px; font-family:'Sora',sans-serif; color:#0f172a; background:#fff; outline:none; cursor:pointer; }
-        .calc-divider { border:none; border-top:1px dashed #e2e8f0; margin:12px 0; }
-
-        /* Results table */
-        .calc-results { overflow-x:auto; margin-bottom:20px; }
-        .calc-results table { width:100%; border-collapse:collapse; font-size:12.5px; }
-        .calc-results th { background:#1e293b; color:#e2e8f0; font-size:10px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.07em; padding:10px 12px; text-align:left; }
-        .calc-results th.col-a { background:#1e3a8a; }
-        .calc-results th.col-b { background:#14532d; }
-        .calc-results th.col-c { background:#78350f; }
-        .calc-results td { padding:9px 12px; color:#334155; border-bottom:1px solid #f1f5f9; font-size:12.5px; }
-        .calc-results tr:hover td { background:#f8fafc; }
-        .calc-results .row-total td { font-weight:700; color:#0f172a; background:#f1f5f9; border-top:2px solid #e2e8f0; }
-        .calc-results .row-roi { background:#f0fdf4; }
-        .calc-results .row-roi td { color:#15803d; font-weight:600; }
-
-        /* ROI dashboard */
-        .calc-roi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
-        .calc-roi-card { border-radius:9px; padding:14px; text-align:center; }
-        .calc-roi-card.a { background:#eff6ff; border:1px solid #bfdbfe; }
-        .calc-roi-card.b { background:#f0fdf4; border:1px solid #bbf7d0; }
-        .calc-roi-card.c { background:#fffbeb; border:1px solid #fde68a; }
-        .calc-roi-label { font-size:9.5px; font-family:'DM Mono',monospace; color:#64748b; text-transform:uppercase; letter-spacing:.07em; margin-bottom:4px; }
-        .calc-roi-val { font-size:20px; font-weight:700; }
-        .calc-roi-card.a .calc-roi-val { color:#1d4ed8; }
-        .calc-roi-card.b .calc-roi-val { color:#15803d; }
-        .calc-roi-card.c .calc-roi-val { color:#b45309; }
-        .calc-roi-sub { font-size:10px; color:#94a3b8; margin-top:2px; }
-
-        /* Bar chart */
-        .calc-chart { margin-bottom:18px; }
-        .calc-chart-title { font-size:10.5px; font-family:'DM Mono',monospace; color:#64748b; text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; }
-        .calc-bar-group { display:flex; align-items:flex-end; gap:8px; height:120px; padding:0 4px; border-bottom:2px solid #e2e8f0; }
-        .calc-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
-        .calc-bar { width:100%; border-radius:5px 5px 0 0; min-height:4px; transition:height .4s ease; position:relative; }
-        .calc-bar-label { font-size:9.5px; font-family:'DM Mono',monospace; color:#64748b; text-align:center; margin-top:6px; }
-        .calc-bar-val { font-size:9px; color:#fff; position:absolute; top:4px; left:0; right:0; text-align:center; font-family:'DM Mono',monospace; font-weight:600; }
-
-        /* Export btn */
-        .calc-export-btn { display:flex; align-items:center; gap:8px; background:#16a34a; border:none; color:#fff; font-size:13px; font-weight:600; font-family:'Sora',sans-serif; padding:11px 20px; border-radius:9px; cursor:pointer; transition:opacity .15s; }
-        .calc-export-btn:hover { opacity:.85; }
-
-        @media (max-width:700px) {
-            .calc-scenarios { grid-template-columns:1fr; }
-            .calc-roi-grid { grid-template-columns:1fr; }
-        }
-        ::-webkit-scrollbar{width:5px;}
-        ::-webkit-scrollbar-track{background:transparent;}
-        ::-webkit-scrollbar-thumb{background:var(--navy-light);border-radius:10px;}
-        #overlay::-webkit-scrollbar-thumb{background:#cbd5e1;}
+        @media(min-width:901px){#sidebar{transform:translateX(0)!important;}}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}
+        ::-webkit-scrollbar-thumb{background:var(--nl);border-radius:10px;}
         #sidebar::-webkit-scrollbar{width:3px;}
     </style>
 </head>
 <body>
 
-<!-- HAMBURGER -->
-<button id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-</button>
-<!-- SIDEBAR OVERLAY -->
-<div id="sb-overlay"></div>
+<div class="wmo"><div class="wmt" id="bwm"></div></div>
 
-<!-- WATERMARK BG -->
-<div class="wm-overlay" id="bgWm"><div class="wm-text" id="bgWmText"></div></div>
-
-<!-- LOGIN -->
 <div id="login">
-    <div class="l-orb l-orb-1"></div>
-    <div class="l-orb l-orb-2"></div>
-    <div class="l-card">
-        <div class="l-flag">🇳🇴</div>
-        <div class="l-title">APNOR Estratégia</div>
-        <div class="l-sub">acesso restrito · confidencial</div>
-        <div class="l-dots" id="lDots">
-            <div class="l-dot" id="d0"></div>
-            <div class="l-dot" id="d1"></div>
-            <div class="l-dot" id="d2"></div>
-            <div class="l-dot" id="d3"></div>
+    <div class="lo lo1"></div><div class="lo lo2"></div>
+    <div class="lc">
+        <div class="lf">🇳🇴</div>
+        <div class="lt">APNOR Estratégia</div>
+        <div class="ls">acesso restrito · confidencial</div>
+        <div class="ld" id="ldots">
+            <div class="ldot" id="d0"></div><div class="ldot" id="d1"></div>
+            <div class="ldot" id="d2"></div><div class="ldot" id="d3"></div>
         </div>
-        <div class="l-pad" id="lPad">
-            <div class="l-btn" data-k="1">1</div>
-            <div class="l-btn" data-k="2">2</div>
-            <div class="l-btn" data-k="3">3</div>
-            <div class="l-btn" data-k="4">4</div>
-            <div class="l-btn" data-k="5">5</div>
-            <div class="l-btn" data-k="6">6</div>
-            <div class="l-btn" data-k="7">7</div>
-            <div class="l-btn" data-k="8">8</div>
-            <div class="l-btn" data-k="9">9</div>
-            <div class="l-btn ast" data-k="">✱</div>
-            <div class="l-btn" data-k="0">0</div>
-            <div class="l-btn del" data-k="del">⌫</div>
+        <div class="lp" id="lpad">
+            <div class="lk" data-k="1">1</div><div class="lk" data-k="2">2</div><div class="lk" data-k="3">3</div>
+            <div class="lk" data-k="4">4</div><div class="lk" data-k="5">5</div><div class="lk" data-k="6">6</div>
+            <div class="lk" data-k="7">7</div><div class="lk" data-k="8">8</div><div class="lk" data-k="9">9</div>
+            <div class="lk ast" data-k="">✱</div><div class="lk" data-k="0">0</div><div class="lk del" data-k="del">⌫</div>
         </div>
-        <div class="l-err" id="lErr">Senha incorreta</div>
-        <div class="l-foot">apnor.barros.no</div>
+        <div class="le" id="lerr">Senha incorreta</div>
+        <div class="lft">apnor.barros.no</div>
     </div>
 </div>
 
-<!-- SIDEBAR -->
+<button id="hbg"><span></span><span></span><span></span></button>
+<div id="sbo"></div>
+
 <aside id="sidebar">
-    <div class="sb-logo">
-        <div class="sb-badge">
-            <div class="sb-icon">🇳🇴</div>
-            <div class="sb-name">APNOR Estratégia</div>
-        </div>
-        <div class="sb-sub-title">Escritório Regulatório · 2026</div>
+    <div class="sbl">
+        <div class="sbb"><div class="sbi">🇳🇴</div><div class="sbn">APNOR Estratégia</div></div>
+        <div class="sbs">Escritório Regulatório · 2026</div>
     </div>
-
-    <div class="sb-sec">Visão Geral</div>
-    <div class="sb-link active" data-view="docs"><i class="ico fa-solid fa-layer-group"></i> Documentação Completa</div>
-
-    <div class="sb-sec">Estratégia</div>
-    <div class="sb-link" data-modal="resumo"><i class="ico fa-solid fa-chart-line"></i> Resumo Executivo</div>
-    <div class="sb-link" data-modal="mercado"><i class="ico fa-solid fa-magnifying-glass-chart"></i> Mapa de Mercado</div>
-    <div class="sb-link" data-modal="vantagens"><i class="ico fa-solid fa-trophy"></i> Por que a Noruega?</div>
-
-    <div class="sb-sec">Estrutura Legal</div>
-    <div class="sb-link" data-modal="estrutura"><i class="ico fa-solid fa-building-columns"></i> Forma Societária</div>
-    <div class="sb-link" data-modal="documentos"><i class="ico fa-solid fa-file-contract"></i> Documentos NUF/AS</div>
-    <div class="sb-link" data-modal="impostos"><i class="ico fa-solid fa-receipt"></i> Obrigações Fiscais</div>
-
-    <div class="sb-sec">Operacional</div>
-    <div class="sb-link" data-modal="cronograma"><i class="ico fa-solid fa-calendar-check"></i> Cronograma 90 dias</div>
-    <div class="sb-link" data-modal="riscos"><i class="ico fa-solid fa-shield-halved"></i> Gestão de Riscos</div>
-    <div class="sb-link" data-modal="phd"><i class="ico fa-solid fa-user-graduate"></i> Liderança PhD</div>
-
-    <!-- TRÍPLICE CONSTANTE com submenu -->
-    <div class="sb-sec">Gestão do Projeto</div>
-    <div class="sb-link sb-open" style="cursor:default;opacity:1;color:var(--blue-glow);font-weight:600;border-color:rgba(37,99,235,.2);"><i class="ico fa-solid fa-triangle-exclamation"></i> Tríplice Constante</div>
-    <div id="tcChildren" style="overflow:visible;max-height:none;">
-        <div class="sb-child" data-modal="tc_visao"><i class="fa-solid fa-circle-nodes"></i> Visão Geral TC</div>
-        <div class="sb-child" data-modal="tc_escopo"><i class="fa-solid fa-bullseye"></i> Escopo</div>
-        <div class="sb-child" data-modal="tc_tempo"><i class="fa-solid fa-clock"></i> Tempo · 90 dias</div>
-        <div class="sb-child" data-modal="tc_custo"><i class="fa-solid fa-euro-sign"></i> Custo · €98K–128K</div>
-        <div class="sb-child" data-modal="tc_tradeoff"><i class="fa-solid fa-arrow-right-arrow-left"></i> Matriz de Trade-off</div>
-        <div class="sb-child" data-modal="tc_kpis"><i class="fa-solid fa-gauge-high"></i> Dashboard KPIs</div>
-    </div>
-
-    <div class="sb-link" data-modal="calculadora"><i class="ico fa-solid fa-table-cells"></i> Calculadora de Cenários</div>
-
-    <div class="sb-sec">ROI</div>
-    <div class="sb-link" data-modal="roi"><i class="ico fa-solid fa-arrow-trend-up"></i> Benefícios &amp; ROI</div>
-    <div class="sb-link" data-modal="internacionalizacao"><i class="ico fa-solid fa-globe"></i> Internacionalização</div>
-    <div class="sb-link" data-modal="conclusao"><i class="ico fa-solid fa-flag-checkered"></i> Conclusão</div>
-
-    <div class="sb-foot">
-        <div class="sb-user">
-            <div class="sb-av"><img src="/logo.png" alt="Barros"></div>
-            <div>
-                <div class="sb-uname">Paulo Barros</div>
-                <div class="sb-urole">Strategic Consultant · barros.no</div>
-            </div>
+    <div class="sbsc">Visão Geral</div>
+    <div class="sbl2 act" data-modal="resumo"><i class="ico fa-solid fa-layer-group"></i> Documentação Completa</div>
+    <div class="sbsc">Estratégia</div>
+    <div class="sbl2" data-modal="resumo"><i class="ico fa-solid fa-chart-line"></i> Resumo Executivo</div>
+    <div class="sbl2" data-modal="mercado"><i class="ico fa-solid fa-magnifying-glass-chart"></i> Mapa de Mercado</div>
+    <div class="sbl2" data-modal="vantagens"><i class="ico fa-solid fa-trophy"></i> Por que a Noruega?</div>
+    <div class="sbsc">Estrutura Legal</div>
+    <div class="sbl2" data-modal="estrutura"><i class="ico fa-solid fa-building-columns"></i> Forma Societária</div>
+    <div class="sbl2" data-modal="documentos"><i class="ico fa-solid fa-file-contract"></i> Documentos NUF/AS</div>
+    <div class="sbl2" data-modal="impostos"><i class="ico fa-solid fa-receipt"></i> Obrigações Fiscais</div>
+    <div class="sbsc">Operacional</div>
+    <div class="sbl2" data-modal="cronograma"><i class="ico fa-solid fa-calendar-check"></i> Cronograma 90 dias</div>
+    <div class="sbl2" data-modal="riscos"><i class="ico fa-solid fa-shield-halved"></i> Gestão de Riscos</div>
+    <div class="sbl2" data-modal="phd"><i class="ico fa-solid fa-user-graduate"></i> Liderança PhD</div>
+    <div class="sbsc">Gestão do Projeto</div>
+    <div class="sbl2" style="cursor:default;color:var(--bg);font-weight:600;"><i class="ico fa-solid fa-triangle-exclamation"></i> Tríplice Constante</div>
+    <div class="sbc2" data-modal="tc_visao"><i class="fa-solid fa-circle-nodes"></i> Visão Geral TC</div>
+    <div class="sbc2" data-modal="tc_escopo"><i class="fa-solid fa-bullseye"></i> Escopo</div>
+    <div class="sbc2" data-modal="tc_tempo"><i class="fa-solid fa-clock"></i> Tempo · 90 dias</div>
+    <div class="sbc2" data-modal="tc_custo"><i class="fa-solid fa-euro-sign"></i> Custo · €98K–128K</div>
+    <div class="sbc2" data-modal="tc_tradeoff"><i class="fa-solid fa-arrow-right-arrow-left"></i> Trade-off</div>
+    <div class="sbc2" data-modal="tc_kpis"><i class="fa-solid fa-gauge-high"></i> Dashboard KPIs</div>
+    <div class="sbsc">ROI</div>
+    <div class="sbl2" data-modal="calculadora"><i class="ico fa-solid fa-table-cells"></i> Calculadora de Cenários</div>
+    <div class="sbl2" data-modal="roi"><i class="ico fa-solid fa-arrow-trend-up"></i> Benefícios &amp; ROI</div>
+    <div class="sbl2" data-modal="internacionalizacao"><i class="ico fa-solid fa-globe"></i> Internacionalização</div>
+    <div class="sbl2" data-modal="conclusao"><i class="ico fa-solid fa-flag-checkered"></i> Conclusão</div>
+    <div class="sbf">
+        <div class="sbu">
+            <div class="sbav"><img src="/logo.png" alt="Barros"></div>
+            <div><div class="sbun">Paulo Barros</div><div class="sbur">Strategic Consultant · barros.no</div></div>
         </div>
     </div>
 </aside>
 
-<!-- MAIN -->
 <div id="main">
     <div id="topbar">
-        <div class="tb-bc">
-            <i class="fa-solid fa-folder-open" style="color:#2563eb"></i>
-            <span id="tbSection">Estratégia Noruega</span>
-            <span style="color:#4a6b87">/</span>
-            <span id="tbPage">Documentação Completa</span>
-        </div>
-        <div class="tb-right">
-            <div class="tb-conf"><div class="tb-dot"></div>CONFIDENCIAL</div>
-            <div class="tb-date">Maio 2026</div>
-        </div>
+        <div class="tbb"><i class="fa-solid fa-folder-open" style="color:#2563eb"></i><span id="tbs">Estratégia Noruega</span><span style="color:#4a6b87">/</span><span id="tbp">Documentação Completa</span></div>
+        <div class="tbr"><div class="tbc"><div class="tbd"></div>CONFIDENCIAL</div><div class="tbt">Maio 2026</div></div>
     </div>
-
     <div id="content">
-        <div class="pg-head">
+        <div class="pgh">
             <h1>Escritório Regulatório na Noruega</h1>
             <p>Elevação de status institucional com fabricação no Brasil. Todos os documentos e análises estratégicas para apresentação à diretoria.</p>
-            <div class="meta-row">
-                <span class="pill blue"><i class="fa-solid fa-flag"></i> Oslo · Noruega</span>
-                <span class="pill gold"><i class="fa-solid fa-star"></i> Empresa AS Recomendada</span>
-                <span class="pill"><i class="fa-solid fa-clock"></i> 90 dias de implementação</span>
+            <div class="mr">
+                <span class="pi bl"><i class="fa-solid fa-flag"></i> Oslo · Noruega</span>
+                <span class="pi go"><i class="fa-solid fa-star"></i> Empresa AS Recomendada</span>
+                <span class="pi"><i class="fa-solid fa-clock"></i> 90 dias de implementação</span>
             </div>
         </div>
-
-        <div class="stats">
-            <div class="stat blue"><div class="stat-l">Investimento Ano 1</div><div class="stat-v">€126K</div><div class="stat-s">Modelo AS lean</div></div>
-            <div class="stat gold"><div class="stat-l">ROI Estimado</div><div class="stat-v">2.5–6×</div><div class="stat-s">Retorno indireto Ano 1</div></div>
-            <div class="stat green"><div class="stat-l">Mercado Snus NO</div><div class="stat-v">€931M</div><div class="stat-s">Mercado · 880K usuários</div></div>
-            <div class="stat"><div class="stat-l">Benefícios Indiretos</div><div class="stat-v">€1,04M</div><div class="stat-s">Por ano · estimativa máx.</div></div>
+        <div class="sts">
+            <div class="st bl"><div class="stl">Investimento Ano 1</div><div class="stv">€126K</div><div class="sts2">Modelo AS lean</div></div>
+            <div class="st go"><div class="stl">ROI Estimado</div><div class="stv">2.5–6×</div><div class="sts2">Retorno indireto Ano 1</div></div>
+            <div class="st gr"><div class="stl">Mercado Snus NO</div><div class="stv">€931M</div><div class="sts2">880K usuários</div></div>
+            <div class="st"><div class="stl">Benefícios Indiretos</div><div class="stv">€1,04M</div><div class="sts2">Por ano · máx.</div></div>
         </div>
 
-        <!-- FASE 01 -->
-        <div class="phase"><span>Fase 01 · Análise e Estratégia</span></div>
-        <div class="grid">
-            <div class="card" data-modal="resumo"><span class="c-phase">F01-01</span><div class="c-icon i-blue"><i class="fa-solid fa-chart-line"></i></div><div class="c-title">Resumo Executivo &amp; Entendimento do Projeto</div><div class="c-desc">Contexto completo: objetivo de status institucional, fabricação 100% Brasil, mix 80%/20% e metas de expansão via escritório regulatório puro.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="mercado"><span class="c-phase">F01-02</span><div class="c-icon i-teal"><i class="fa-solid fa-magnifying-glass-chart"></i></div><div class="c-title">Análise do Mercado Norueguês (2026)</div><div class="c-desc">Panorama do setor: snus domina 64%, 880K usuários adultos, mercado de €931 milhões e influência nórdica em políticas de redução de danos da UE.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="regulatorio"><span class="c-phase">F01-03</span><div class="c-icon i-purple"><i class="fa-solid fa-scale-balanced"></i></div><div class="c-title">Ambiente Regulatório Atual (Março 2026)</div><div class="c-desc">Tobaksskadeloven + TPD 2014/40/EU integrada. Relatórios EU-CEG obrigatórios, novas advertências, proibição de vendas online e limite de nicotina proposto.</div><span class="c-tag">PT</span></div>
-            <div class="card gold-card" data-modal="vantagens"><span class="c-phase">F01-04</span><div class="c-icon i-gold"><i class="fa-solid fa-trophy"></i></div><div class="c-title">Por que a Noruega? Vantagens Estratégicas</div><div class="c-desc">Líder mundial em harm reduction, influência em políticas da UE e internacionais, acesso ao ecossistema nórdico e posicionamento como parceiro técnico responsável.</div><span class="c-tag">PT</span></div>
+        <div class="ph"><span>Fase 01 · Análise e Estratégia</span></div>
+        <div class="gr">
+            <div class="cd" data-modal="resumo"><span class="cp">F01-01</span><div class="ci ib"><i class="fa-solid fa-chart-line"></i></div><div class="ct">Resumo Executivo &amp; Entendimento do Projeto</div><div class="cdesc">Contexto completo: status institucional, fabricação 100% Brasil, mix 80%/20% e metas de expansão via escritório regulatório puro.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="mercado"><span class="cp">F01-02</span><div class="ci it"><i class="fa-solid fa-magnifying-glass-chart"></i></div><div class="ct">Análise do Mercado Norueguês (2026)</div><div class="cdesc">Snus domina 64%, 880K usuários, mercado €931M e influência nórdica em políticas de redução de danos da UE.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="regulatorio"><span class="cp">F01-03</span><div class="ci ip"><i class="fa-solid fa-scale-balanced"></i></div><div class="ct">Ambiente Regulatório Atual (Março 2026)</div><div class="cdesc">Tobaksskadeloven + TPD 2014/40/EU integrada. Relatórios EU-CEG, novas advertências, proibição online e limite de nicotina.</div><span class="ctg">PT</span></div>
+            <div class="cd gc" data-modal="vantagens"><span class="cp">F01-04</span><div class="ci io"><i class="fa-solid fa-trophy"></i></div><div class="ct">Por que a Noruega? Vantagens Estratégicas</div><div class="cdesc">Líder mundial em harm reduction, influência na UE, acesso ao ecossistema nórdico e posicionamento como parceiro técnico.</div><span class="ctg">PT</span></div>
         </div>
 
-        <!-- FASE 02 -->
-        <div class="phase"><span>Fase 02 · Estrutura Legal e Orçamento</span></div>
-        <div class="grid">
-            <div class="card gold-card" data-modal="estrutura"><span class="c-phase">F02-01</span><div class="c-icon i-gold"><i class="fa-solid fa-building-columns"></i></div><div class="c-title">Estrutura Recomendada: NUF vs. AS vs. ASA</div><div class="c-desc">Comparativo das três formas societárias. AS (Aksjeselskap) é a escolha ideal — capital de €2.600, personalidade jurídica norueguesa plena.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="orcamento"><span class="c-phase">F02-02</span><div class="c-icon i-green"><i class="fa-solid fa-coins"></i></div><div class="c-title">Orçamento Detalhado — Empresa AS (Ano 1)</div><div class="c-desc">Capital €2.600 · Registro €1.900–2.900 · Salário PhD + encargos €89K–113K · Escritório virtual + TI + contabilidade €3.700–6.800. Total: €96K–126K.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="documentos"><span class="c-phase">F02-03</span><div class="c-icon i-blue"><i class="fa-solid fa-file-lines"></i></div><div class="c-title">Documentos Necessários para Registro</div><div class="c-desc">Lista completa de documentos da matriz e da PhD para registro via Altinn. Com PhD já documentada localmente, processo 100% digital em 2–4 semanas.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="impostos"><span class="c-phase">F02-04</span><div class="c-icon i-purple"><i class="fa-solid fa-percent"></i></div><div class="c-title">Impostos e Obrigações Fiscais (2026)</div><div class="c-desc">Imposto corporativo 22% · VAT 25% · Encargos empregador 14,1% Oslo. Carga tributária mínima no modelo lean não-operacional.</div><span class="c-tag">PT</span></div>
+        <div class="ph"><span>Fase 02 · Estrutura Legal e Orçamento</span></div>
+        <div class="gr">
+            <div class="cd gc" data-modal="estrutura"><span class="cp">F02-01</span><div class="ci io"><i class="fa-solid fa-building-columns"></i></div><div class="ct">Estrutura Recomendada: NUF vs. AS vs. ASA</div><div class="cdesc">AS é a escolha ideal — capital €2.600, personalidade jurídica norueguesa plena e maior credibilidade institucional.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="orcamento"><span class="cp">F02-02</span><div class="ci ig"><i class="fa-solid fa-coins"></i></div><div class="ct">Orçamento Detalhado — Empresa AS (Ano 1)</div><div class="cdesc">Capital €2.600 · Registo €1.900–2.900 · Salário PhD €89K–113K · Escritório + TI + contabilidade €3.700–6.800. Total: €96K–126K.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="documentos"><span class="cp">F02-03</span><div class="ci ib"><i class="fa-solid fa-file-lines"></i></div><div class="ct">Documentos Necessários para Registo</div><div class="cdesc">Lista completa para registo via Altinn. Com PhD já documentada localmente, processo 100% digital em 2–4 semanas.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="impostos"><span class="cp">F02-04</span><div class="ci ip"><i class="fa-solid fa-percent"></i></div><div class="ct">Impostos e Obrigações Fiscais (2026)</div><div class="cdesc">IR corporativo 22% · VAT 25% · Encargos 14,1% Oslo. Carga tributária mínima no modelo lean não-operacional.</div><span class="ctg">PT</span></div>
         </div>
 
-        <!-- FASE 03 -->
-        <div class="phase"><span>Fase 03 · Benefícios Econômicos e ROI</span></div>
-        <div class="grid">
-            <div class="card gold-card" data-modal="roi"><span class="c-phase">F03-01</span><div class="c-icon i-gold"><i class="fa-solid fa-arrow-trend-up"></i></div><div class="c-title">Benefícios Econômicos Indiretos — ROI Detalhado</div><div class="c-desc">Mitigação de riscos regulatórios, compliance global, valorização de marca e inteligência de mercado. Total estimado: €339K–€1,04M/ano.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="internacionalizacao"><span class="c-phase">F03-02</span><div class="c-icon i-teal"><i class="fa-solid fa-globe"></i></div><div class="c-title">Internacionalização — Shift 80/20 → 50/50</div><div class="c-desc">O escritório em Oslo amplifica os 20% internacionais sem alterar a cadeia produtiva brasileira. Projeção: share internacional superior a 50% em 12–24 meses.</div><span class="c-tag">PT</span></div>
+        <div class="ph"><span>Fase 03 · Benefícios e ROI</span></div>
+        <div class="gr">
+            <div class="cd gc" data-modal="roi"><span class="cp">F03-01</span><div class="ci io"><i class="fa-solid fa-arrow-trend-up"></i></div><div class="ct">Benefícios Econômicos Indiretos — ROI Detalhado</div><div class="cdesc">Mitigação de riscos, compliance global, valorização de marca e inteligência de mercado. Total estimado: €339K–€1,04M/ano.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="internacionalizacao"><span class="cp">F03-02</span><div class="ci it"><i class="fa-solid fa-globe"></i></div><div class="ct">Internacionalização — Shift 80/20 → 50/50</div><div class="cdesc">O escritório em Oslo amplifica os 20% internacionais sem alterar a cadeia produtiva brasileira. Projeção: 50%+ em 12–24 meses.</div><span class="ctg">PT</span></div>
         </div>
 
-        <!-- FASE 04 -->
-        <div class="phase"><span>Fase 04 · Implementação e Gestão de Riscos</span></div>
-        <div class="grid">
-            <div class="card" data-modal="cronograma"><span class="c-phase">F04-01</span><div class="c-icon i-blue"><i class="fa-solid fa-calendar-days"></i></div><div class="c-title">Cronograma de Implementação — 90 Dias</div><div class="c-desc">Semanas 1–3: Registro AS · Semanas 4–6: Conta bancária · Semanas 7–8: Contratação da PhD · Mês 3: Início das atividades regulatórias em Oslo.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="phd"><span class="c-phase">F04-02</span><div class="c-icon i-teal"><i class="fa-solid fa-user-graduate"></i></div><div class="c-title">Perfil e Papel da Liderança Regulatória — PhD</div><div class="c-desc">A PhD como General Manager e Regulatory Affairs Director: submissões EU-CEG, interface com Helsedirektoratet, consultas públicas e fóruns nórdicos.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="riscos"><span class="c-phase">F04-03</span><div class="c-icon i-red"><i class="fa-solid fa-shield-halved"></i></div><div class="c-title">Gestão de Riscos e Mitigações</div><div class="c-desc">Risco regulatório mitigado por transparência · Modelo lean com escritório virtual · PhD monitora mudanças diariamente · Posicionamento harm reduction.</div><span class="c-tag">PT</span></div>
-            <div class="card gold-card" data-modal="conclusao"><span class="c-phase">F04-04</span><div class="c-icon i-gold"><i class="fa-solid fa-flag-checkered"></i></div><div class="c-title">Conclusão — Próximos Passos para a Diretoria</div><div class="c-desc">O escritório na Noruega transforma a empresa brasileira em marca global de referência regulatória. Aprovação AS, conta bancária, registro Altinn e integração da PhD.</div><span class="c-tag">PT</span></div>
+        <div class="ph"><span>Fase 04 · Implementação e Riscos</span></div>
+        <div class="gr">
+            <div class="cd" data-modal="cronograma"><span class="cp">F04-01</span><div class="ci ib"><i class="fa-solid fa-calendar-days"></i></div><div class="ct">Cronograma de Implementação — 90 Dias</div><div class="cdesc">Semanas 1–3: Registo AS · Semanas 4–6: Conta bancária · Semanas 7–8: PhD e setup · Mês 3: Início das atividades.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="phd"><span class="cp">F04-02</span><div class="ci it"><i class="fa-solid fa-user-graduate"></i></div><div class="ct">Perfil e Papel da Liderança — PhD</div><div class="cdesc">General Manager e Regulatory Affairs Director: EU-CEG, Helsedirektoratet, consultas públicas e fóruns nórdicos.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="riscos"><span class="cp">F04-03</span><div class="ci ir"><i class="fa-solid fa-shield-halved"></i></div><div class="ct">Gestão de Riscos e Mitigações</div><div class="cdesc">Risco regulatório mitigado por transparência · Modelo lean · PhD monitora diariamente · Posicionamento harm reduction.</div><span class="ctg">PT</span></div>
+            <div class="cd gc" data-modal="conclusao"><span class="cp">F04-04</span><div class="ci io"><i class="fa-solid fa-flag-checkered"></i></div><div class="ct">Conclusão — Próximos Passos para a Diretoria</div><div class="cdesc">O escritório transforma a empresa brasileira em marca global de referência regulatória. Aprovação AS, conta bancária, Altinn e PhD.</div><span class="ctg">PT</span></div>
         </div>
 
-        <!-- FASE 05 – TRÍPLICE CONSTANTE -->
-        <div class="phase"><span>Fase 05 · Tríplice Constante — Gestão do Projeto</span></div>
-        <div class="grid">
-            <div class="card gold-card" data-modal="tc_visao"><span class="c-phase">TC-00</span><div class="c-icon i-amber"><i class="fa-solid fa-circle-nodes"></i></div><div class="c-title">Visão Geral — Tríplice Constante</div><div class="c-desc">O Triângulo de Ferro aplicado ao projeto APNOR: Escopo fixo, Custo controlado e Tempo com flexibilidade moderada. Balanceamento estratégico das três restrições.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="tc_escopo"><span class="c-phase">TC-01</span><div class="c-icon i-blue"><i class="fa-solid fa-bullseye"></i></div><div class="c-title">Escopo — O que será e não será entregue</div><div class="c-desc">Definição precisa do escopo: escritório regulatório AS registado, PhD integrada, monitoramento ativo. Fora do escopo: importação, distribuição, fabricação local.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="tc_tempo"><span class="c-phase">TC-02</span><div class="c-icon i-teal"><i class="fa-solid fa-clock"></i></div><div class="c-title">Tempo — Cronograma Macro 90 Dias</div><div class="c-desc">Fases, responsáveis, durações e riscos de atraso. Contingência de até +20 dias prevista. Início: 19/05/2026 · Conclusão prevista: 16/08/2026.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="tc_custo"><span class="c-phase">TC-03</span><div class="c-icon i-green"><i class="fa-solid fa-euro-sign"></i></div><div class="c-title">Custo — Orçamento Base €98K–128K</div><div class="c-desc">Orçamento detalhado da Tríplice Constante com estratégias de controlo de custo: modelo lean, priorização AS e deduções fiscais máximas.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="tc_tradeoff"><span class="c-phase">TC-04</span><div class="c-icon i-purple"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><div class="c-title">Matriz de Trade-off — Impactos entre Restrições</div><div class="c-desc">Como alterações num dos vértices do triângulo afetam os outros dois. Ferramenta de decisão executiva para ajustes ao longo do projeto.</div><span class="c-tag">PT</span></div>
-            <div class="card" data-modal="tc_kpis"><span class="c-phase">TC-05</span><div class="c-icon i-amber"><i class="fa-solid fa-gauge-high"></i></div><div class="c-title">Dashboard KPIs &amp; Plano de Monitoramento</div><div class="c-desc">KPIs do projeto: % de escopo concluído, desvio de prazo (SPI), desvio orçamentário (CPI/CV). Weekly PM Review e relatório mensal para a diretoria.</div><span class="c-tag">PT</span></div>
+        <div class="ph"><span>Fase 05 · Tríplice Constante</span></div>
+        <div class="gr">
+            <div class="cd gc" data-modal="tc_visao"><span class="cp">TC-00</span><div class="ci ia"><i class="fa-solid fa-circle-nodes"></i></div><div class="ct">Visão Geral — Tríplice Constante</div><div class="cdesc">Triângulo de Ferro aplicado ao projeto APNOR: Escopo fixo, Custo controlado e Tempo com flexibilidade moderada.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="tc_escopo"><span class="cp">TC-01</span><div class="ci ib"><i class="fa-solid fa-bullseye"></i></div><div class="ct">Escopo — O que será e não será entregue</div><div class="cdesc">Definição precisa: AS registada, PhD integrada, monitoramento ativo. Fora do escopo: importação, distribuição, fabricação local.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="tc_tempo"><span class="cp">TC-02</span><div class="ci it"><i class="fa-solid fa-clock"></i></div><div class="ct">Tempo — Cronograma Macro 90 Dias</div><div class="cdesc">Fases, responsáveis e riscos de atraso. Contingência de até +20 dias. Início: 19/05/2026 · Conclusão: 16/08/2026.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="tc_custo"><span class="cp">TC-03</span><div class="ci ig"><i class="fa-solid fa-euro-sign"></i></div><div class="ct">Custo — Orçamento Base €98K–128K</div><div class="cdesc">Orçamento detalhado com estratégias de controlo: modelo lean, priorização AS e deduções fiscais máximas.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="tc_tradeoff"><span class="cp">TC-04</span><div class="ci ip"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><div class="ct">Matriz de Trade-off</div><div class="cdesc">Como alterações num vértice do triângulo afetam os outros dois. Ferramenta de decisão executiva para ajustes.</div><span class="ctg">PT</span></div>
+            <div class="cd" data-modal="tc_kpis"><span class="cp">TC-05</span><div class="ci ia"><i class="fa-solid fa-gauge-high"></i></div><div class="ct">Dashboard KPIs &amp; Monitoramento</div><div class="cdesc">SPI, CPI, CV, ROI · Weekly PM Review · Relatório mensal para a diretoria · Stakeholders e responsabilidades.</div><span class="ctg">PT</span></div>
         </div>
 
-        <!-- CALCULADORA -->
-        <div class="phase"><span>Ferramenta · Calculadora de Cenários</span></div>
-        <div class="grid">
-            <div class="card gold-card" data-modal="calculadora" style="grid-column:1/-1;">
-                <span class="c-phase">TOOL</span>
-                <div class="c-icon i-green"><i class="fa-solid fa-table-cells"></i></div>
-                <div class="c-title">Calculadora Interativa de Cenários — NUF / AS / ASA</div>
-                <div class="c-desc">Compare até 3 cenários de gastos lado a lado. Escolha o tipo de empresa, ajuste salário da PhD, escritório, número de funcionários e duração. Dashboard com ROI calculado e exportação para Excel.</div>
-                <span class="c-tag">PT</span>
-            </div>
+        <div class="ph"><span>Ferramenta · Calculadora de Cenários</span></div>
+        <div class="gr">
+            <div class="cd gc" data-modal="calculadora" style="grid-column:1/-1"><span class="cp">TOOL</span><div class="ci ig"><i class="fa-solid fa-table-cells"></i></div><div class="ct">Calculadora Interativa de Cenários — NUF / AS / ASA</div><div class="cdesc">Compare até 3 cenários de custos. Selecione o tipo de empresa, ajuste salário da PhD, escritório, nº de funcionários e duração. Dashboard ROI + exportação Excel.</div><span class="ctg">PT</span></div>
         </div>
     </div>
 </div>
 
-<!-- MODAL -->
-<div id="overlay">
+<div id="ov">
     <div id="modal">
-        <div class="modal-wm"><div class="modal-wm-text" id="modalWmText"></div></div>
-        <div id="modal-topbar">
-            <button id="modal-close-btn">Fechar documento</button>
+        <div class="mwm"><div class="mwt" id="mwm"></div></div>
+        <div id="mtop"><button id="mcls">Fechar documento</button></div>
+        <div id="mhdr"></div>
+        <div id="mbdy"></div>
+        <div id="mftr">
+            <button class="mfb" id="mbk">← Voltar</button>
+            <button class="mfb" id="mpr">🖨 Imprimir</button>
         </div>
-        <div id="modal-header"></div>
-        <div id="modal-body"></div>
-        <div id="modal-footer">
-            <button class="mf-btn" id="modal-back">← Voltar à Documentação</button>
-            <button class="mf-btn" id="modal-print">🖨 Imprimir</button>
-        </div>
-        <div class="conf-bar" id="confBar">
-            <span>🔒 CONFIDENCIAL · Uso exclusivo da Diretoria · APNOR Estratégia 2026</span>
-            <span id="confTs"></span>
-        </div>
+        <div class="cbar"><span>🔒 CONFIDENCIAL · Uso exclusivo da Diretoria · APNOR 2026</span><span id="cts"></span></div>
     </div>
 </div>
 
 <script>
-var MODALS = {
-    resumo:{cat:'ANÁLISE E ESTRATÉGIA · F01-01',title:'Resumo Executivo &amp; Entendimento do Projeto',lead:'A empresa deseja entrar na Noruega exclusivamente com um escritório de representação focado em assuntos regulatórios e elevação de status de marca, sem atuar como fabricante, importador ou distribuidor.',body:`<div class="doc-note blue">📋 Documento base do projeto. Leitura recomendada antes de qualquer outra secção da documentação estratégica.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Contexto e Objetivos</div><ul><li>Objetivo principal: status e credibilidade como escritório norueguês registado</li><li>Fabricação 100% Brasil — sem importação ou distribuição na Noruega</li><li>Situação atual: 80% benefícios nacionais / 20% internacionais</li><li>Meta: ampliar share internacional via inteligência regulatória norueguesa</li><li>Liderança local: PhD em Regulatory Affairs já residente e documentada na Noruega</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Justificativa Estratégica</div><ul><li>Eleva o status da marca ao demonstrar compromisso institucional de longo prazo</li><li>Posiciona a empresa como parceira técnica das autoridades norueguesas</li><li>Permite influência proativa em mudanças regulatórias antes da implementação</li><li>Sem necessidade de bevilling (licença tabaqueira)</li></ul></div><div class="doc-note green">✅ Modelo validado pelos principais concorrentes globais: Swedish Match/PMI e BAT Norway operam escritórios equivalentes em Oslo.</div>`},
-    mercado:{cat:'ANÁLISE E ESTRATÉGIA · F01-02',title:'Análise do Mercado Norueguês (2026)',lead:'Panorama completo do setor tabaqueiro norueguês com dados atualizados de maio de 2026, incluindo tendências de consumo, projeções de crescimento e ambiente regulatório.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Tamanho e Estrutura do Mercado</div><ul><li>Mercado de snus: ~€931 milhões em 2026</li><li>Usuários adultos de snus: ~880.000 pessoas</li><li>Prevalência de uso diário de nicotina: 27,7% — maior dos países nórdicos</li><li>Snus brun + hvit: 64% · Helhvit (traço mínimo de tabaco): 34%</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Projeções de Crescimento</div><ul><li>CAGR projetado: 7% até 2030</li><li>Receita esperada: USD 35,5M (2023) → USD 56,8M (2030)</li><li>Snus substitui cigarro de forma acelerada — cigarros em forte declínio</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Proposta Regulatória 2025/2026</div><ul><li>Limite proposto: 12 mg/g de nicotina em snus — decisão pendente</li><li>Consulta pública encerrada em março/2026</li><li>TPD 2014/40/EU plenamente integrada desde 30 de março de 2026</li></ul></div><div class="doc-note amber">⚠️ A proposta de limite de nicotina a 12 mg/g pode impactar produtos de alta concentração. O escritório regulatório é o instrumento ideal para acompanhar e influenciar esta decisão.</div>`},
-    regulatorio:{cat:'ANÁLISE E ESTRATÉGIA · F01-03',title:'Ambiente Regulatório Atual (Março 2026)',lead:'A Tobaksskadeloven e a incorporação plena da TPD 2014/40/EU desde 30 de março de 2026 definem o cenário regulatório que a empresa precisará navegar.',body:`<div class="doc-note blue">📋 A TPD 2014/40/EU foi plenamente incorporada ao ordenamento norueguês em 30 de março de 2026. Este é o marco regulatório central do setor.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Principais Exigências Vigentes</div><ul><li>Relatórios obrigatórios via EU-CEG (ingredientes, emissões, toxicologia) até 1º de março de cada ano</li><li>Novas advertências de saúde: 65% da embalagem (fumáveis)</li><li>Advertência dupla face para snus com aviso específico para grávidas e jovens</li><li>Transição total de embalagens exigida até 1º de janeiro de 2027</li><li>Proibição de vendas transfronteiriças online em vigor desde janeiro de 2026</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Não Aplicável ao Escritório Regulatório</div><ul><li>Licenças bevilling — exigidas apenas para produção, importação e distribuição</li><li>O escritório puro está isento de todas as licenças comerciais do setor</li></ul></div><div class="doc-note green">✅ O escritório de representação puro está completamente isento de licenças comerciais do setor tabaqueiro norueguês.</div>`},
-    vantagens:{cat:'ANÁLISE E ESTRATÉGIA · F01-04',title:'Por que a Noruega? Vantagens Estratégicas',lead:'A Noruega é o mercado mais estratégico do mundo para posicionamento regulatório em harm reduction. A sua influência extrapola fronteiras e impacta políticas da União Europeia.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Liderança Global em Harm Reduction</div><ul><li>Líder mundial na transição cigarro → snus: modelo adotado por organismos internacionais</li><li>Influência direta em políticas da UE (via EEA) e fóruns da OMS</li><li>Acesso privilegiado ao Helsedirektoratet e ao Ministério da Saúde norueguês</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Comparativo vs. Concorrentes em Oslo</div><table><thead><tr><th>Empresa</th><th>Escritório Oslo</th><th>Posicionamento</th></tr></thead><tbody><tr><td>Swedish Match / PMI</td><td>✓ Ativo há anos</td><td>Tier 1</td></tr><tr><td>BAT Norway</td><td>✓ Ativo há anos</td><td>Tier 1</td></tr><tr class="hl"><td>Nossa Empresa (AS)</td><td>A implementar — 90 dias</td><td>Tier 1 — meta</td></tr></tbody></table></div><div class="doc-note blue">📋 Empresas com presença regulatória em mercados líderes registam aumento de brand equity de 5–15% em setores altamente regulados.</div>`},
-    estrutura:{cat:'ESTRUTURA LEGAL E ORÇAMENTO · F02-01',title:'Estrutura Recomendada: NUF vs. AS vs. ASA',lead:'Comparativo executivo das três formas societárias disponíveis para o escritório regulatório em Oslo.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Comparativo das Formas Societárias</div><table><thead><tr><th>Forma</th><th>Capital</th><th>Status</th><th>Custo Ano 1</th></tr></thead><tbody><tr><td>NUF</td><td>Zero</td><td>Filial estrangeira</td><td>€104K–139K</td></tr><tr class="hl"><td>AS ★ Recomendado</td><td>€2.600</td><td>Empresa norueguesa</td><td>€96K–126K</td></tr><tr><td>ASA</td><td>€87.000</td><td>Empresa pública</td><td>€187K–217K</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Por que AS é a Melhor Escolha</div><ul><li>Personalidade jurídica norueguesa plena — maior credibilidade vs. NUF</li><li>Capital mínimo de apenas €2.600 (equity, não despesa operacional)</li><li>Registro 100% digital via Altinn em 2–4 semanas</li><li>Auditoria dispensável (fravalg av revisjon)</li></ul></div><div class="doc-note green">✅ Recomendação: Empresa AS — melhor equilíbrio entre status institucional, custo e simplicidade operacional.</div>`},
-    orcamento:{cat:'ESTRUTURA LEGAL E ORÇAMENTO · F02-02',title:'Orçamento Detalhado — Empresa AS (Ano 1)',lead:'Estimativa conservadora e completa de todos os custos de abertura e primeiro ano de operação do escritório regulatório em Oslo.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Itens de Custo — Ano 1</div><table><thead><tr><th>Item</th><th>Estimativa</th><th>Observação</th></tr></thead><tbody><tr><td>Capital social (equity)</td><td>€2.600</td><td>Permanece no caixa</td></tr><tr><td>Registro + assessoria jurídica</td><td>€1.900–2.900</td><td>Altinn + vedtekter + ata</td></tr><tr><td>Salário PhD + encargos (14,1%)</td><td>€89.000–113.000</td><td>Principal item de custo</td></tr><tr><td>Escritório virtual em Oslo</td><td>€260–700/ano</td><td>Aceito pelo Brreg</td></tr><tr><td>Equipamentos TI + setup</td><td>€870–1.740</td><td>Laptop, celular, software</td></tr><tr><td>Contabilidade anual</td><td>€2.175–3.480</td><td>Declaração simplificada</td></tr><tr><td>VAT + outros iniciais</td><td>€435–870</td><td>Se faturamento &gt;€4.350</td></tr><tr class="hl"><td>TOTAL ANO 1</td><td>€96.000–126.000</td><td>Inclui todos os itens</td></tr></tbody></table></div><div class="doc-note amber">⚠️ O principal item de custo é o salário da PhD (&gt;90% do total). A qualidade da profissional determina diretamente o retorno do investimento.</div>`},
-    documentos:{cat:'ESTRUTURA LEGAL E ORÇAMENTO · F02-03',title:'Documentos Necessários para Registro',lead:'Com a PhD já documentada na Noruega, o processo é 100% digital via Altinn (Samordnet registermelding).',body:`<div class="doc-note blue">📋 Com a PhD já portadora de ID norueguês, todo o processo é digital via Altinn — sem envio de papel ao Brreg.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Da Matriz (Empresa Estrangeira)</div><ul><li>Certidão de Incorporação / Certificate of Registration</li><li>Estatuto social / Articles of Association</li><li>Extrato do registro comercial estrangeiro</li><li>Ata autorizando abertura da AS na Noruega</li><li>Procuração nomeando a PhD como diretora executiva</li><li>Informações sobre UBOs (Ultimate Beneficial Owners)</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Da PhD (Diretora Local)</div><ul><li>ID norueguês válido ou D-number (já possui)</li><li>Ata de fundação assinada digitalmente via Altinn</li><li>Vedtekter (artigos de associação da AS)</li><li>Confirmação de integralização do capital via banco norueguês</li></ul></div><div class="doc-note green">✅ Taxa oficial de registro no Foretaksregisteret: €593 — uma das mais baixas da Europa.</div>`},
-    impostos:{cat:'ESTRUTURA LEGAL E ORÇAMENTO · F02-04',title:'Impostos e Obrigações Fiscais (2026)',lead:'Carga tributária mínima e previsível no modelo de escritório regulatório puro.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Principais Impostos</div><table><thead><tr><th>Imposto</th><th>Alíquota</th><th>Impacto Prático</th></tr></thead><tbody><tr><td>Corporate Income Tax</td><td>22%</td><td>Quase zero — custos são dedutíveis</td></tr><tr><td>VAT — MVA</td><td>25%</td><td>Registro apenas se faturamento &gt;€4.350/ano</td></tr><tr><td>Encargos empregador</td><td>14,1%</td><td>Sobre salário bruto da PhD — zona Oslo</td></tr><tr class="hl"><td>Carga tributária efetiva</td><td>Mínima</td><td>Escritório lean sem receita comercial</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Vantagens Fiscais do Modelo AS</div><ul><li>Acesso à fritaksmetoden — isenção de participação em dividendos</li><li>Todos os custos operacionais são integralmente dedutíveis do IR</li><li>Declaração anual simplificada via contador</li><li>Nenhuma exposição a impostos especiais sobre tabaco</li></ul></div><div class="doc-note blue">📋 Imposto corporativo efetivo Ano 1: próximo de zero — lucro tributável mínimo ou inexistente.</div>`},
-    roi:{cat:'BENEFÍCIOS E ROI · F03-01',title:'Benefícios Econômicos Indiretos — ROI Detalhado',lead:'O escritório regulatório não é um centro de custo — é um investimento estratégico de alto retorno indireto.',body:`<div class="doc-note blue">📈 ROI estimado Ano 1: 2,5× a 6× o custo do escritório — retorno via benefícios econômicos indiretos e valorização de marca.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Benefícios Quantificados</div><table><thead><tr><th>Benefício</th><th>Conservador</th><th>Máximo</th></tr></thead><tbody><tr><td>Mitigação de riscos em exportações</td><td>€70K</td><td>€261K</td></tr><tr><td>Economia em compliance global</td><td>€35K</td><td>€87K</td></tr><tr><td>Valorização de marca internacional</td><td>€130K</td><td>€391K</td></tr><tr><td>Inteligência &amp; novas oportunidades</td><td>€87K</td><td>€261K</td></tr><tr><td>Eficiências fiscais e operacionais</td><td>€17K</td><td>€35K</td></tr><tr class="hl"><td>TOTAL ESTIMADO</td><td>€339K</td><td>€1,04M</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> ROI em Perspectiva</div><ul><li>Custo anual: €104K–139K vs. benefícios estimados €339K–€1,04M</li><li>ROI Ano 1: 2,5× (conservador) a 6× (otimista)</li><li>Swedish Match e BAT mantêm escritórios em Oslo exatamente por estes retornos</li></ul></div>`},
-    internacionalizacao:{cat:'BENEFÍCIOS E ROI · F03-02',title:'Internacionalização — Shift 80/20 → 50/50',lead:'O escritório em Oslo amplifica os 20% de benefícios internacionais atuais sem alterar a cadeia produtiva brasileira.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Modelo Atual vs. Projeção</div><table><thead><tr><th>Período</th><th>Nacional</th><th>Internacional</th></tr></thead><tbody><tr><td>Atual — sem escritório (2026)</td><td>80%</td><td>20%</td></tr><tr><td>Ano 1 — com escritório Oslo</td><td>65%</td><td>35%</td></tr><tr class="hl"><td>Ano 2–3 — consolidado</td><td>50%</td><td>50%+</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Mecanismos de Internacionalização</div><ul><li>"Regulado na Noruega" sinaliza compliance de alto nível globalmente</li><li>PhD centraliza relatórios EU-CEG para múltiplos mercados de exportação</li><li>Facilita contratos de exportação e parcerias internacionais</li><li>Mantém 100% da vantagem de custo com fabricação no Brasil</li></ul></div><div class="doc-note blue">📋 O mercado global de snus cresce a CAGR 6–10% ao ano. A Noruega é a referência internacional de harm reduction.</div>`},
-    cronograma:{cat:'IMPLEMENTAÇÃO E RISCOS · F04-01',title:'Cronograma de Implementação — 90 Dias',lead:'Plano detalhado de implementação do escritório regulatório AS em Oslo, do registo ao início das atividades.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Linha do Tempo</div><table><thead><tr><th>Período</th><th>Ação</th><th>Responsável</th></tr></thead><tbody><tr><td>Semanas 1–3</td><td>Vedtekter + ata + registo AS via Altinn</td><td>PhD + advogado</td></tr><tr><td>Semanas 4–6</td><td>Conta bancária norueguesa + capital €2.600</td><td>PhD</td></tr><tr><td>Semanas 7–8</td><td>Contratação PhD pela AS + setup TI + escritório virtual</td><td>PhD + matriz</td></tr><tr><td>Semanas 8–10</td><td>Contador + Skatteetaten + setup contabilidade</td><td>Contador</td></tr><tr class="hl"><td>Mês 3</td><td>Início oficial das atividades regulatórias em Oslo</td><td>PhD</td></tr></tbody></table></div><div class="doc-note green">✅ Com a PhD já documentada localmente, o cronograma de 90 dias é conservador. Em cenário otimista, operacional em 60 dias.</div>`},
-    phd:{cat:'IMPLEMENTAÇÃO E RISCOS · F04-02',title:'Perfil e Papel da Liderança Regulatória — PhD',lead:'A PhD em Assuntos Regulatórios será a face institucional da marca na Noruega e o principal ativo estratégico do escritório.',body:`<div class="doc-note blue">🎓 A PhD assume os papéis de General Manager, Regulatory Affairs Director e representante legal da AS.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Responsabilidades Principais</div><ul><li>Submissões regulatórias e relatórios EU-CEG anuais em nome da matriz</li><li>Interface direta com Helsedirektoratet e Ministério da Saúde</li><li>Posicionamentos científicos para consultas públicas</li><li>Monitoramento diário de propostas regulatórias</li><li>Representação em fóruns nórdicos de redução de danos</li><li>Relatórios mensais à diretoria sobre riscos e oportunidades</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Contratação e Remuneração</div><table><thead><tr><th>Item</th><th>Estimativa</th></tr></thead><tbody><tr><td>Salário bruto médio PhD Regulatory Affairs Oslo</td><td>€78.000–96.000/ano</td></tr><tr><td>Encargos empregador (National Insurance)</td><td>+14,1%</td></tr><tr class="hl"><td>Custo total para a AS</td><td>€89.000–113.000/ano</td></tr></tbody></table></div><div class="doc-note green">✅ PhD já residente na Noruega: elimina processo de visto e acelera a implementação.</div>`},
-    riscos:{cat:'IMPLEMENTAÇÃO E RISCOS · F04-03',title:'Gestão de Riscos e Mitigações',lead:'Análise estruturada dos principais riscos e estratégias de mitigação recomendadas.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Matriz de Riscos</div><table><thead><tr><th>Risco</th><th>Prob.</th><th>Mitigação</th></tr></thead><tbody><tr><td>Risco regulatório (Art. 5.3 FCTC)</td><td>Baixa</td><td>Foco em ciência e transparência total</td></tr><tr><td>Custo sem retorno a curto prazo</td><td>Média</td><td>Modelo lean — escritório virtual + 1 pessoa</td></tr><tr><td>Mudanças políticas desfavoráveis</td><td>Baixa</td><td>Monitoramento diário pela PhD</td></tr><tr><td>Risco reputacional</td><td>Baixa</td><td>Posicionamento exclusivo em harm reduction</td></tr><tr class="hl"><td>Avaliação geral</td><td>BAIXO</td><td>Sem atividade comercial ou importação</td></tr></tbody></table></div><div class="doc-note green">✅ O maior risco é a inação — deixar concorrentes consolidarem a presença regulatória em Oslo sem a nossa empresa.</div>`},
-    conclusao:{cat:'IMPLEMENTAÇÃO E RISCOS · F04-04',title:'Conclusão — Próximos Passos para a Diretoria',lead:'O escritório regulatório na Noruega transforma a empresa brasileira em uma marca global de referência institucional.',body:`<div class="doc-note blue">📋 Documento de decisão executiva. Recomenda-se aprovação nesta reunião para início dentro da janela regulatória favorável de 2026.</div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Síntese Executiva</div><ul><li>Investimento de baixo risco com altíssimo retorno de status e marca</li><li>ROI indireto estimado: 2,5× a 6× o custo anual no primeiro ano</li><li>Mantém 100% da vantagem competitiva de custo com fabricação no Brasil</li><li>Shift projetado: 80/20 → 50/50 em 2–3 anos</li><li>PhD já documentada na Noruega — processo 100% digital em 60–90 dias</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Próximos Passos Imediatos</div><table><thead><tr><th>#</th><th>Ação</th><th>Prazo</th></tr></thead><tbody><tr><td>1</td><td>Aprovação executiva do conceito AS pela diretoria</td><td>Esta reunião</td></tr><tr><td>2</td><td>Abertura de conta bancária norueguesa</td><td>Semana 1–2</td></tr><tr><td>3</td><td>Preparação de vedtekter + ata de fundação</td><td>Semana 1–3</td></tr><tr><td>4</td><td>Registo digital via Altinn</td><td>Semana 2–4</td></tr><tr class="hl"><td>5</td><td>Início das atividades regulatórias em Oslo</td><td>Mês 3</td></tr></tbody></table></div><div class="doc-note green">✅ Com aprovação hoje, o escritório pode estar operacional e contactar o Helsedirektoratet dentro de 90 dias.</div>`},
+/* ══════════════════════════════════════════════
+   ALL LOGIC — zero inline handlers
+   ══════════════════════════════════════════════ */
 
-    /* ── TRÍPLICE CONSTANTE ── */
-    tc_visao:{cat:'TRÍPLICE CONSTANTE · TC-00',title:'Visão Geral — Tríplice Constante (Triângulo de Ferro)',lead:'Aplicação da Tríplice Constante (Escopo × Tempo × Custo) ao projeto APNOR — Escritório Regulatório na Noruega. O balanceamento estratégico destas três restrições é a base da gestão do projeto.',body:`<div class="tc-img-block"><img src="/etc.jpeg" alt="Triângulo de Ferro — Tríplice Constante"><p>TRÍPLICE CONSTANTE · ESCOPO × TEMPO × CUSTO · PROJETO APNOR 2026</p></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Visão Geral das Três Restrições</div><table><thead><tr><th>Restrição</th><th>Definição no Projeto</th><th>Prioridade</th><th>Status</th></tr></thead><tbody><tr><td>Escopo</td><td>Escritório regulatório puro AS em Oslo</td><td>Alta — fixo</td><td>Bem definido</td></tr><tr><td>Tempo</td><td>Prazo de implementação de 90 dias</td><td>Média — flexível</td><td>19/05 → 16/08/2026</td></tr><tr class="hl"><td>Custo</td><td>Orçamento total Ano 1</td><td>Alta — controlado</td><td>€98K–€128K</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Princípio de Balanceamento</div><ul><li>Fixar o Escopo garante que a entrega final não sofre desvios estratégicos</li><li>Controlar o Custo mantém o modelo lean e o ROI atrativo</li><li>Dar flexibilidade moderada ao Tempo permite absorver imprevistos sem comprometer qualidade</li><li>Contingência de tempo: até +20 dias (110 dias no total)</li></ul></div><div class="doc-note blue">📋 Recomendação do PM: manter Escopo fixo, Custo controlado e Tempo com contingência de ±20 dias.</div>`},
-
-    tc_escopo:{cat:'TRÍPLICE CONSTANTE · TC-01',title:'Escopo — O que será e não será entregue',lead:'Definição precisa e aprovada do escopo do projeto APNOR. O escopo é a restrição de maior prioridade — nenhuma alteração deve ser feita sem aprovação executiva formal.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> O que SERÁ entregue (In Scope)</div><ul><li>Registo de empresa AS (Aksjeselskap) na Noruega via Altinn</li><li>Escritório regulatório puro — sem bevilling / tobacco license</li><li>Contratação e integração da PhD como Head of Regulatory Affairs</li><li>Monitoramento regulatório ativo: Helsedirektoratet + EU-CEG</li><li>Posicionamento institucional da marca como ator responsável de harm reduction</li><li>Relatórios internos de inteligência regulatória para a matriz brasileira</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> O que NÃO será entregue (Out of Scope)</div><ul><li>Importação, distribuição ou venda de produtos na Noruega</li><li>Fabricação local de qualquer produto</li><li>Atividades comerciais diretas no mercado norueguês</li><li>Escritório físico de grande porte (inicialmente virtual)</li><li>Licenças tabaqueiras (bevilling) — não são necessárias</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Critério de Aceitação</div><ul><li>Empresa AS registada no Foretaksregisteret (Brreg)</li><li>PhD formalmente contratada e atuando em Oslo</li><li>Primeiro relatório regulatório enviado à diretoria da matriz</li></ul></div><div class="doc-note green">✅ Escopo fixo e bem definido. Qualquer expansão deve passar por Change Request formal com análise de impacto em Tempo e Custo.</div>`},
-
-    tc_tempo:{cat:'TRÍPLICE CONSTANTE · TC-02',title:'Tempo — Cronograma Macro 90 Dias',lead:'O tempo é a restrição com maior flexibilidade no projeto APNOR. O cronograma de 90 dias é conservador — uma contingência de até +20 dias está prevista sem impacto no Escopo.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Cronograma Macro — 4 Fases</div><table><thead><tr><th>Fase</th><th>Atividades Principais</th><th>Duração</th><th>Responsável</th><th>Início</th></tr></thead><tbody><tr><td>1</td><td>Registo da AS via Altinn + capital</td><td>3 semanas</td><td>PM + Advogado</td><td>19/05/2026</td></tr><tr><td>2</td><td>Conta bancária + contador + documentos</td><td>3 semanas</td><td>PM + PhD</td><td>09/06/2026</td></tr><tr><td>3</td><td>Contratação PhD + setup operacional</td><td>2 semanas</td><td>PM</td><td>30/06/2026</td></tr><tr class="hl"><td>4</td><td>Ativação regulatória + primeiros contatos</td><td>4 semanas</td><td>PhD</td><td>14/07/2026</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Marcos e Datas-Chave</div><ul><li>Início oficial do projeto: 19 de maio de 2026</li><li>Conclusão prevista (90 dias): 16 de agosto de 2026</li><li>Conclusão com contingência (+20 dias): 5 de setembro de 2026</li><li>Marco crítico: AS registada no Foretaksregisteret — Semana 3</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Riscos de Atraso e Mitigações</div><ul><li>Apostila de documentos da matriz: mitigado com advogado local pré-contratado</li><li>Aprovação de residência da PhD: já mitigado — PhD já documentada localmente</li><li>Abertura de conta bancária corporativa: pode levar 2–3 semanas adicionais</li></ul></div><div class="doc-note amber">⚠️ A fase mais crítica é a Fase 1 (registo AS). Um atraso nesta fase propaga-se para todas as fases seguintes.</div>`},
-
-    tc_custo:{cat:'TRÍPLICE CONSTANTE · TC-03',title:'Custo — Orçamento Base €98K–128K',lead:'O custo é a restrição de alta prioridade no projeto APNOR. O modelo lean (escritório virtual + 1 funcionária) é a estratégia central para manter o orçamento dentro da faixa-alvo.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Orçamento Base — Empresa AS (Ano 1)</div><table><thead><tr><th>Item</th><th>Valor Planejado</th><th>Observação</th></tr></thead><tbody><tr><td>Capital Social</td><td>€2.600</td><td>Recuperável — equity</td></tr><tr><td>Registo + Assessoria Jurídica</td><td>€1.900–2.900</td><td>Altinn + vedtekter + ata</td></tr><tr><td>Salário PhD + Encargos (14,1%)</td><td>€89.000–113.000</td><td>Principal custo do projeto</td></tr><tr><td>Escritório virtual + TI + Contabilidade</td><td>€3.700–6.800</td><td>Lean model</td></tr><tr class="hl"><td>TOTAL ANO 1</td><td>€98.000–128.000</td><td>Faixa-alvo controlada</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Estratégias de Controlo de Custo</div><ul><li>Modelo lean: escritório virtual em vez de espaço físico (poupa €13K–26K/ano)</li><li>Priorizar AS ao invés de ASA (poupa €87K em capital imobilizado)</li><li>Deduções fiscais máximas — todos os custos operacionais dedutíveis a 22%</li><li>PhD acumula funções de GM + Regulatory Director (sem necessidade de equipa adicional)</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Projeção para Anos Seguintes</div><ul><li>Ano 2+: redução de ~25–30% (sem custos únicos de setup e registo)</li><li>Custo recorrente estimado: ~€96K/ano (salário PhD + contabilidade)</li></ul></div><div class="doc-note green">✅ O custo total representa menos de 13% do benefício máximo estimado (€1,04M), confirmando a viabilidade económica do projeto.</div>`},
-
-    tc_tradeoff:{cat:'TRÍPLICE CONSTANTE · TC-04',title:'Matriz de Trade-off — Impactos entre Restrições',lead:'O Triângulo de Ferro estabelece que alterar uma das restrições impacta obrigatoriamente pelo menos uma das outras duas. Esta matriz é a ferramenta de decisão executiva para ajustes ao longo do projeto.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Matriz de Impactos</div><table><thead><tr><th>Se aumentar...</th><th>Impacto no Escopo</th><th>Impacto no Tempo</th><th>Impacto no Custo</th></tr></thead><tbody><tr><td>Escopo (ex: escritório físico)</td><td>—</td><td>Aumenta</td><td>Aumenta muito</td></tr><tr><td>Tempo (ex: acelerar para 60 dias)</td><td>Reduz ligeiramente</td><td>—</td><td>Aumenta</td></tr><tr class="hl"><td>Custo (ex: orçamento +20%)</td><td>Pode expandir</td><td>Reduz</td><td>—</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Cenários de Decisão Executiva</div><ul><li>Escritório físico em Oslo: +€13K–26K/ano ao custo, +2–3 semanas ao tempo de setup</li><li>Acelerar para 60 dias: requer assessoria jurídica premium +€5K e PhD disponível imediatamente</li><li>Reduzir custo em 15%: possível cortando assessoria jurídica (risco: erros no registo)</li><li>Expansão para 2 funcionários no Ano 2: +€78K–96K de custo, sem impacto no escopo base</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Recomendação Atual do PM</div><ul><li>Manter Escopo fixo — prioridade máxima, sem alterações</li><li>Manter Custo controlado — modelo lean, deduções fiscais máximas</li><li>Ter flexibilidade moderada no Tempo — até +20 dias de contingência</li></ul></div><div class="doc-note blue">📋 Qualquer alteração ao triângulo deve ser formalizada como Change Request com aprovação da diretoria e nova análise de impacto.</div>`},
-
-    tc_kpis:{cat:'TRÍPLICE CONSTANTE · TC-05',title:'Dashboard KPIs &amp; Plano de Monitoramento',lead:'Sistema de monitoramento contínuo das três restrições do projeto APNOR, com KPIs, ferramentas e cadência de revisão para garantir entrega dentro do triângulo definido.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> KPIs do Projeto</div><table><thead><tr><th>KPI</th><th>Fórmula</th><th>Meta</th><th>Alerta</th></tr></thead><tbody><tr><td>% Escopo concluído</td><td>Entregas realizadas / Total planejado</td><td>100% no Mês 3</td><td>&lt;80% no Mês 2</td></tr><tr><td>SPI — Schedule Performance Index</td><td>EV / PV</td><td>&gt;1,0</td><td>&lt;0,85</td></tr><tr><td>CPI — Cost Performance Index</td><td>EV / AC</td><td>&gt;1,0</td><td>&lt;0,90</td></tr><tr><td>CV — Cost Variance</td><td>EV - AC</td><td>≥ 0</td><td>&lt; -€10K</td></tr><tr class="hl"><td>ROI Indireto Ano 1</td><td>Benefícios estimados / Custo real</td><td>&gt;2,5×</td><td>&lt;2×</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Ferramentas e Cadência</div><ul><li>Kanban board para acompanhamento de tarefas por fase</li><li>Weekly PM Review — toda segunda-feira, 30 minutos</li><li>Relatório mensal para a diretoria — status das 3 restrições + KPIs</li><li>Dashboard Excel atualizado semanalmente com variações de custo e prazo</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Stakeholders e Responsabilidades</div><ul><li>Diretoria — aprovação de Change Requests e relatório mensal</li><li>PhD Regulatory Affairs — execução e relatórios regulatórios semanais</li><li>PM (Paulo Barros) — monitoramento da Tríplice Constante e coordenação</li><li>Helsedirektoratet — stakeholder externo de alta influência</li></ul></div><div class="doc-note green">✅ Com este sistema de monitoramento, o projeto APNOR está preparado para identificar e corrigir desvios antes que se tornem problemas irreversíveis.</div>`}
-
-    calculadora:{cat:'FERRAMENTA · CALCULADORA DE CENÁRIOS',title:'Calculadora Interativa de Cenários',lead:'Compare até 3 cenários de custos lado a lado. Selecione o tipo de empresa, ajuste as variáveis e obtenha automaticamente o orçamento total, ROI estimado e gráfico comparativo. Exporte para Excel com um clique.',body:`
-<div class="calc-wrap" id="calcWrap">
-
-  <!-- INPUTS -->
-  <div class="calc-scenarios">
-    <!-- CENÁRIO A -->
-    <div class="calc-col">
-      <div class="calc-col-title"><span class="c-s-a"></span> Cenário A</div>
-      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
-        <select class="calc-select" id="cA_type" onchange="calcUpdate()">
-          <option value="AS">AS (Aksjeselskap)</option>
-          <option value="NUF">NUF (Filial)</option>
-          <option value="ASA">ASA (Pública)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
-        <input class="calc-input" id="cA_sal" type="number" value="87000" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
-        <input class="calc-input" id="cA_emp" type="number" value="1" min="1" max="10" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Escritório</div>
-        <select class="calc-select" id="cA_office" onchange="calcUpdate()">
-          <option value="virtual">Virtual (€480/ano)</option>
-          <option value="fisico">Físico (€18000/ano)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
-        <input class="calc-input" id="cA_years" type="number" value="1" min="1" max="5" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
-        <input class="calc-input" id="cA_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
-    </div>
-    <!-- CENÁRIO B -->
-    <div class="calc-col">
-      <div class="calc-col-title"><span class="c-s-b"></span> Cenário B</div>
-      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
-        <select class="calc-select" id="cB_type" onchange="calcUpdate()">
-          <option value="AS">AS (Aksjeselskap)</option>
-          <option value="NUF">NUF (Filial)</option>
-          <option value="ASA">ASA (Pública)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
-        <input class="calc-input" id="cB_sal" type="number" value="96000" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
-        <input class="calc-input" id="cB_emp" type="number" value="1" min="1" max="10" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Escritório</div>
-        <select class="calc-select" id="cB_office" onchange="calcUpdate()">
-          <option value="virtual">Virtual (€480/ano)</option>
-          <option value="fisico">Físico (€18000/ano)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
-        <input class="calc-input" id="cB_years" type="number" value="2" min="1" max="5" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
-        <input class="calc-input" id="cB_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
-    </div>
-    <!-- CENÁRIO C -->
-    <div class="calc-col">
-      <div class="calc-col-title"><span class="c-s-c"></span> Cenário C</div>
-      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
-        <select class="calc-select" id="cC_type" onchange="calcUpdate()">
-          <option value="NUF">NUF (Filial)</option>
-          <option value="AS">AS (Aksjeselskap)</option>
-          <option value="ASA">ASA (Pública)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
-        <input class="calc-input" id="cC_sal" type="number" value="78000" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
-        <input class="calc-input" id="cC_emp" type="number" value="2" min="1" max="10" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Escritório</div>
-        <select class="calc-select" id="cC_office" onchange="calcUpdate()">
-          <option value="fisico">Físico (€18000/ano)</option>
-          <option value="virtual">Virtual (€480/ano)</option>
-        </select></div>
-      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
-        <input class="calc-input" id="cC_years" type="number" value="3" min="1" max="5" oninput="calcUpdate()"></div>
-      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
-        <input class="calc-input" id="cC_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
-    </div>
+var M = {
+resumo:{c:'ANÁLISE E ESTRATÉGIA · F01-01',t:'Resumo Executivo &amp; Entendimento do Projeto',l:'A empresa deseja entrar na Noruega exclusivamente com um escritório de representação focado em assuntos regulatórios e elevação de status de marca.',b:`<div class="dn bl">📋 Documento base do projeto. Leitura recomendada antes de qualquer outra secção.</div><div class="ds"><div class="dst"><span class="n">1.</span> Contexto e Objetivos</div><ul><li>Objetivo principal: status e credibilidade como escritório norueguês registado</li><li>Fabricação 100% Brasil — sem importação ou distribuição na Noruega</li><li>Situação atual: 80% benefícios nacionais / 20% internacionais</li><li>Meta: ampliar share internacional via inteligência regulatória norueguesa</li><li>Liderança local: PhD em Regulatory Affairs já residente na Noruega</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Justificativa Estratégica</div><ul><li>Eleva o status da marca ao demonstrar compromisso institucional de longo prazo</li><li>Posiciona a empresa como parceira técnica das autoridades norueguesas</li><li>Permite influência proativa em mudanças regulatórias antes da implementação</li><li>Sem necessidade de bevilling (licença tabaqueira)</li></ul></div><div class="dn gr">✅ Modelo validado pelos concorrentes globais: Swedish Match/PMI e BAT Norway operam escritórios equivalentes em Oslo.</div>`},
+mercado:{c:'ANÁLISE E ESTRATÉGIA · F01-02',t:'Análise do Mercado Norueguês (2026)',l:'Panorama completo do setor tabaqueiro norueguês com dados atualizados de maio de 2026.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Tamanho e Estrutura</div><ul><li>Mercado de snus: ~€931 milhões em 2026</li><li>Usuários adultos: ~880.000 pessoas</li><li>Prevalência de uso diário de nicotina: 27,7% — maior dos países nórdicos</li><li>Snus brun+hvit: 64% · Helhvit (traço mínimo): 34%</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Projeções de Crescimento</div><ul><li>CAGR projetado: 7% até 2030</li><li>Receita: USD 35,5M (2023) → USD 56,8M (2030)</li><li>Snus substitui cigarro de forma acelerada</li></ul></div><div class="dn am">⚠️ Proposta de limite de nicotina a 12 mg/g — decisão pendente. O escritório regulatório é o instrumento ideal para influenciar esta decisão.</div>`},
+regulatorio:{c:'ANÁLISE E ESTRATÉGIA · F01-03',t:'Ambiente Regulatório Atual (Março 2026)',l:'A Tobaksskadeloven e a TPD 2014/40/EU integrada desde 30 de março de 2026 definem o cenário regulatório.',b:`<div class="dn bl">📋 A TPD 2014/40/EU foi plenamente incorporada ao ordenamento norueguês em 30 de março de 2026.</div><div class="ds"><div class="dst"><span class="n">1.</span> Principais Exigências</div><ul><li>Relatórios obrigatórios via EU-CEG até 1º de março de cada ano</li><li>Novas advertências: 65% da embalagem (fumáveis)</li><li>Advertência dupla face para snus com aviso para grávidas e jovens</li><li>Transição total de embalagens até 1º de janeiro de 2027</li><li>Proibição de vendas transfronteiriças online desde jan/2026</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Não Aplicável ao Escritório Puro</div><ul><li>Licenças bevilling — apenas para produção, importação e distribuição</li><li>O escritório está isento de todas as licenças comerciais do setor</li></ul></div><div class="dn gr">✅ Escritório de representação puro — completamente isento de licenças tabaqueiras.</div>`},
+vantagens:{c:'ANÁLISE E ESTRATÉGIA · F01-04',t:'Por que a Noruega? Vantagens Estratégicas',l:'A Noruega é o mercado mais estratégico para posicionamento regulatório global em harm reduction.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Liderança Global em Harm Reduction</div><ul><li>Líder mundial na transição cigarro → snus</li><li>Influência direta em políticas da UE (via EEA) e fóruns da OMS</li><li>Acesso privilegiado ao Helsedirektoratet e Ministério da Saúde</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Comparativo vs. Concorrentes</div><table><thead><tr><th>Empresa</th><th>Escritório Oslo</th><th>Posicionamento</th></tr></thead><tbody><tr><td>Swedish Match / PMI</td><td>✓ Ativo há anos</td><td>Tier 1</td></tr><tr><td>BAT Norway</td><td>✓ Ativo há anos</td><td>Tier 1</td></tr><tr class="hl"><td>Nossa Empresa (AS)</td><td>A implementar — 90 dias</td><td>Tier 1 — meta</td></tr></tbody></table></div><div class="dn bl">📋 Presença regulatória em mercados líderes aumenta brand equity em 5–15% em setores regulados.</div>`},
+estrutura:{c:'ESTRUTURA LEGAL · F02-01',t:'Estrutura Recomendada: NUF vs. AS vs. ASA',l:'Comparativo das três formas societárias disponíveis para o escritório regulatório em Oslo.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Comparativo</div><table><thead><tr><th>Forma</th><th>Capital</th><th>Status</th><th>Custo Ano 1</th></tr></thead><tbody><tr><td>NUF</td><td>Zero</td><td>Filial estrangeira</td><td>€104K–139K</td></tr><tr class="hl"><td>AS ★</td><td>€2.600</td><td>Empresa norueguesa</td><td>€96K–126K</td></tr><tr><td>ASA</td><td>€87.000</td><td>Empresa pública</td><td>€187K–217K</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Por que AS</div><ul><li>Personalidade jurídica norueguesa plena</li><li>Capital mínimo de €2.600 (equity, não despesa)</li><li>Registo 100% digital via Altinn em 2–4 semanas</li><li>Auditoria dispensável (fravalg av revisjon)</li></ul></div><div class="dn gr">✅ Recomendação: AS — melhor equilíbrio entre status, custo e simplicidade.</div>`},
+orcamento:{c:'ESTRUTURA LEGAL · F02-02',t:'Orçamento Detalhado — Empresa AS (Ano 1)',l:'Estimativa conservadora e completa de todos os custos de abertura e primeiro ano.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Itens de Custo</div><table><thead><tr><th>Item</th><th>Estimativa</th><th>Observação</th></tr></thead><tbody><tr><td>Capital social</td><td>€2.600</td><td>Permanece no caixa</td></tr><tr><td>Registo + assessoria</td><td>€1.900–2.900</td><td>Altinn + vedtekter + ata</td></tr><tr><td>Salário PhD + encargos</td><td>€89.000–113.000</td><td>Principal item de custo</td></tr><tr><td>Escritório virtual Oslo</td><td>€260–700/ano</td><td>Aceito pelo Brreg</td></tr><tr><td>Equipamentos TI</td><td>€870–1.740</td><td>Laptop, celular, software</td></tr><tr><td>Contabilidade anual</td><td>€2.175–3.480</td><td>Declaração simplificada</td></tr><tr><td>VAT + outros</td><td>€435–870</td><td>Se faturamento &gt;€4.350</td></tr><tr class="hl"><td>TOTAL ANO 1</td><td>€96.000–126.000</td><td>Inclui todos os itens</td></tr></tbody></table></div><div class="dn am">⚠️ O salário da PhD representa &gt;90% do custo total. A qualidade da profissional determina o retorno do investimento.</div>`},
+documentos:{c:'ESTRUTURA LEGAL · F02-03',t:'Documentos Necessários para Registo',l:'Com a PhD já documentada na Noruega, o processo é 100% digital via Altinn.',b:`<div class="dn bl">📋 Com ID norueguês da PhD, todo o processo é digital via Altinn — sem papel ao Brreg.</div><div class="ds"><div class="dst"><span class="n">1.</span> Da Matriz</div><ul><li>Certidão de Incorporação / Certificate of Registration</li><li>Estatuto social / Articles of Association</li><li>Extrato do registo comercial estrangeiro</li><li>Ata autorizando abertura da AS na Noruega</li><li>Procuração nomeando a PhD como diretora</li><li>Informações sobre UBOs</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Da PhD</div><ul><li>ID norueguês (já possui)</li><li>Ata de fundação assinada digitalmente via Altinn</li><li>Vedtekter (artigos de associação)</li><li>Confirmação de capital via banco norueguês</li></ul></div><div class="dn gr">✅ Taxa de registo no Foretaksregisteret: €593 — uma das mais baixas da Europa.</div>`},
+impostos:{c:'ESTRUTURA LEGAL · F02-04',t:'Impostos e Obrigações Fiscais (2026)',l:'Carga tributária mínima no modelo de escritório regulatório puro.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Principais Impostos</div><table><thead><tr><th>Imposto</th><th>Alíquota</th><th>Impacto</th></tr></thead><tbody><tr><td>Corporate Income Tax</td><td>22%</td><td>Quase zero — custos dedutíveis</td></tr><tr><td>VAT — MVA</td><td>25%</td><td>Registo se faturamento &gt;€4.350/ano</td></tr><tr><td>Encargos empregador</td><td>14,1%</td><td>Sobre salário bruto — zona Oslo</td></tr><tr class="hl"><td>Carga efetiva</td><td>Mínima</td><td>Escritório lean sem receita</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Vantagens Fiscais</div><ul><li>Fritaksmetoden — isenção de participação em dividendos</li><li>Todos os custos operacionais dedutíveis do IR</li><li>Declaração anual simplificada via contador</li><li>Nenhuma exposição a impostos especiais sobre tabaco</li></ul></div>`},
+roi:{c:'BENEFÍCIOS E ROI · F03-01',t:'Benefícios Econômicos Indiretos — ROI Detalhado',l:'O escritório regulatório não é um centro de custo — é um investimento de alto retorno indireto.',b:`<div class="dn bl">📈 ROI estimado Ano 1: 2,5× a 6× o custo do escritório.</div><div class="ds"><div class="dst"><span class="n">1.</span> Benefícios Quantificados</div><table><thead><tr><th>Benefício</th><th>Conservador</th><th>Máximo</th></tr></thead><tbody><tr><td>Mitigação de riscos em exportações</td><td>€70K</td><td>€261K</td></tr><tr><td>Economia em compliance global</td><td>€35K</td><td>€87K</td></tr><tr><td>Valorização de marca internacional</td><td>€130K</td><td>€391K</td></tr><tr><td>Inteligência &amp; novas oportunidades</td><td>€87K</td><td>€261K</td></tr><tr><td>Eficiências fiscais</td><td>€17K</td><td>€35K</td></tr><tr class="hl"><td>TOTAL</td><td>€339K</td><td>€1,04M</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> ROI em Perspectiva</div><ul><li>Custo anual: €104K–139K vs. benefícios €339K–€1,04M</li><li>ROI Ano 1: 2,5× (conservador) a 6× (otimista)</li><li>Swedish Match e BAT mantêm escritórios em Oslo por estes retornos</li></ul></div>`},
+internacionalizacao:{c:'BENEFÍCIOS E ROI · F03-02',t:'Internacionalização — Shift 80/20 → 50/50',l:'O escritório em Oslo amplifica os 20% internacionais sem alterar a cadeia produtiva brasileira.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Modelo Atual vs. Projeção</div><table><thead><tr><th>Período</th><th>Nacional</th><th>Internacional</th></tr></thead><tbody><tr><td>Atual (2026)</td><td>80%</td><td>20%</td></tr><tr><td>Ano 1 — com escritório</td><td>65%</td><td>35%</td></tr><tr class="hl"><td>Ano 2–3</td><td>50%</td><td>50%+</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Mecanismos</div><ul><li>"Regulado na Noruega" sinaliza compliance de alto nível globalmente</li><li>PhD centraliza relatórios EU-CEG para múltiplos mercados</li><li>Facilita contratos de exportação e parcerias internacionais</li><li>Mantém 100% da vantagem de custo no Brasil</li></ul></div><div class="dn bl">📋 Mercado global de snus cresce a CAGR 6–10%/ano. Noruega é referência internacional de harm reduction.</div>`},
+cronograma:{c:'IMPLEMENTAÇÃO · F04-01',t:'Cronograma de Implementação — 90 Dias',l:'Plano detalhado de implementação do escritório regulatório AS em Oslo.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Linha do Tempo</div><table><thead><tr><th>Período</th><th>Ação</th><th>Responsável</th></tr></thead><tbody><tr><td>Semanas 1–3</td><td>Vedtekter + ata + registo AS via Altinn</td><td>PhD + advogado</td></tr><tr><td>Semanas 4–6</td><td>Conta bancária + capital €2.600</td><td>PhD</td></tr><tr><td>Semanas 7–8</td><td>Contratação PhD + setup TI + escritório</td><td>PhD + matriz</td></tr><tr><td>Semanas 8–10</td><td>Contador + Skatteetaten</td><td>Contador</td></tr><tr class="hl"><td>Mês 3</td><td>Início oficial das atividades em Oslo</td><td>PhD</td></tr></tbody></table></div><div class="dn gr">✅ Com a PhD já documentada, prazo de 90 dias é conservador. Em cenário otimista: 60 dias.</div>`},
+phd:{c:'IMPLEMENTAÇÃO · F04-02',t:'Perfil e Papel da Liderança — PhD',l:'A PhD será a face institucional da marca na Noruega e o principal ativo estratégico.',b:`<div class="dn bl">🎓 A PhD assume os papéis de General Manager, Regulatory Affairs Director e representante legal da AS.</div><div class="ds"><div class="dst"><span class="n">1.</span> Responsabilidades</div><ul><li>Submissões regulatórias e relatórios EU-CEG anuais</li><li>Interface direta com Helsedirektoratet e Ministério da Saúde</li><li>Posicionamentos científicos para consultas públicas</li><li>Monitoramento diário de propostas regulatórias</li><li>Representação em fóruns nórdicos de harm reduction</li><li>Relatórios mensais à diretoria</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Remuneração</div><table><thead><tr><th>Item</th><th>Estimativa</th></tr></thead><tbody><tr><td>Salário bruto PhD Oslo</td><td>€78.000–96.000/ano</td></tr><tr><td>Encargos National Insurance</td><td>+14,1%</td></tr><tr class="hl"><td>Custo total para a AS</td><td>€89.000–113.000/ano</td></tr></tbody></table></div><div class="dn gr">✅ PhD já residente: elimina processo de visto e acelera a implementação.</div>`},
+riscos:{c:'IMPLEMENTAÇÃO · F04-03',t:'Gestão de Riscos e Mitigações',l:'Análise dos principais riscos e estratégias de mitigação.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Matriz de Riscos</div><table><thead><tr><th>Risco</th><th>Prob.</th><th>Mitigação</th></tr></thead><tbody><tr><td>Risco regulatório (Art. 5.3 FCTC)</td><td>Baixa</td><td>Foco em ciência e transparência</td></tr><tr><td>Custo sem retorno a curto prazo</td><td>Média</td><td>Modelo lean — escritório virtual + 1 pessoa</td></tr><tr><td>Mudanças políticas</td><td>Baixa</td><td>Monitoramento diário pela PhD</td></tr><tr><td>Risco reputacional</td><td>Baixa</td><td>Posicionamento exclusivo em harm reduction</td></tr><tr class="hl"><td>Avaliação geral</td><td>BAIXO</td><td>Sem atividade comercial ou importação</td></tr></tbody></table></div><div class="dn gr">✅ O maior risco é a inação — deixar concorrentes consolidarem a presença em Oslo.</div>`},
+conclusao:{c:'IMPLEMENTAÇÃO · F04-04',t:'Conclusão — Próximos Passos para a Diretoria',l:'O escritório regulatório transforma a empresa brasileira em marca global de referência institucional.',b:`<div class="dn bl">📋 Documento de decisão executiva. Recomenda-se aprovação nesta reunião.</div><div class="ds"><div class="dst"><span class="n">1.</span> Síntese Executiva</div><ul><li>Investimento de baixo risco com altíssimo retorno de status</li><li>ROI indireto: 2,5× a 6× o custo anual no primeiro ano</li><li>Mantém 100% da vantagem de custo com fabricação no Brasil</li><li>Shift projetado: 80/20 → 50/50 em 2–3 anos</li><li>PhD já documentada — processo 100% digital em 60–90 dias</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Próximos Passos</div><table><thead><tr><th>#</th><th>Ação</th><th>Prazo</th></tr></thead><tbody><tr><td>1</td><td>Aprovação executiva do conceito AS</td><td>Esta reunião</td></tr><tr><td>2</td><td>Abertura de conta bancária norueguesa</td><td>Semana 1–2</td></tr><tr><td>3</td><td>Preparação de vedtekter + ata</td><td>Semana 1–3</td></tr><tr><td>4</td><td>Registo digital via Altinn</td><td>Semana 2–4</td></tr><tr class="hl"><td>5</td><td>Início das atividades em Oslo</td><td>Mês 3</td></tr></tbody></table></div><div class="dn gr">✅ Com aprovação hoje, operacional em 90 dias e a contactar o Helsedirektoratet.</div>`},
+tc_visao:{c:'TRÍPLICE CONSTANTE · TC-00',t:'Visão Geral — Tríplice Constante',l:'Aplicação da Tríplice Constante (Escopo × Tempo × Custo) ao projeto APNOR.',b:`<div class="tc-img"><img src="/etc.jpeg" alt="Triângulo de Ferro"><p>TRÍPLICE CONSTANTE · ESCOPO × TEMPO × CUSTO · PROJETO APNOR 2026</p></div><div class="ds"><div class="dst"><span class="n">1.</span> As Três Restrições</div><table><thead><tr><th>Restrição</th><th>Definição</th><th>Prioridade</th><th>Status</th></tr></thead><tbody><tr><td>Escopo</td><td>Escritório regulatório puro AS</td><td>Alta — fixo</td><td>Bem definido</td></tr><tr><td>Tempo</td><td>Implementação 90 dias</td><td>Média — flexível</td><td>19/05 → 16/08/2026</td></tr><tr class="hl"><td>Custo</td><td>Orçamento total Ano 1</td><td>Alta — controlado</td><td>€98K–€128K</td></tr></tbody></table></div><div class="dn bl">📋 Recomendação do PM: Escopo fixo, Custo controlado, Tempo com contingência de ±20 dias.</div>`},
+tc_escopo:{c:'TRÍPLICE CONSTANTE · TC-01',t:'Escopo — O que será e não será entregue',l:'O escopo é a restrição de maior prioridade. Nenhuma alteração sem aprovação executiva formal.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> In Scope</div><ul><li>Registo de empresa AS (Aksjeselskap) na Noruega via Altinn</li><li>Escritório regulatório puro — sem bevilling / tobacco license</li><li>Contratação e integração da PhD como Head of Regulatory Affairs</li><li>Monitoramento regulatório ativo: Helsedirektoratet + EU-CEG</li><li>Posicionamento institucional da marca como ator de harm reduction</li><li>Relatórios internos de inteligência regulatória para a matriz</li></ul></div><div class="ds"><div class="dst"><span class="n">2.</span> Out of Scope</div><ul><li>Importação, distribuição ou venda de produtos na Noruega</li><li>Fabricação local de qualquer produto</li><li>Atividades comerciais diretas no mercado norueguês</li><li>Escritório físico de grande porte (inicialmente virtual)</li></ul></div><div class="ds"><div class="dst"><span class="n">3.</span> Critério de Aceitação</div><ul><li>AS registada no Foretaksregisteret (Brreg)</li><li>PhD formalmente contratada e atuando em Oslo</li><li>Primeiro relatório regulatório enviado à diretoria</li></ul></div><div class="dn gr">✅ Qualquer expansão deve passar por Change Request formal com análise de impacto.</div>`},
+tc_tempo:{c:'TRÍPLICE CONSTANTE · TC-02',t:'Tempo — Cronograma Macro 90 Dias',l:'O tempo é a restrição com maior flexibilidade. Contingência de até +20 dias prevista.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Cronograma — 4 Fases</div><table><thead><tr><th>Fase</th><th>Atividade</th><th>Duração</th><th>Início</th></tr></thead><tbody><tr><td>1</td><td>Registo AS via Altinn + capital</td><td>3 semanas</td><td>19/05/2026</td></tr><tr><td>2</td><td>Conta bancária + contador</td><td>3 semanas</td><td>09/06/2026</td></tr><tr><td>3</td><td>Contratação PhD + setup</td><td>2 semanas</td><td>30/06/2026</td></tr><tr class="hl"><td>4</td><td>Ativação regulatória + primeiros contatos</td><td>4 semanas</td><td>14/07/2026</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Marcos e Riscos</div><ul><li>Conclusão prevista (90 dias): 16 de agosto de 2026</li><li>Com contingência (+20 dias): 5 de setembro de 2026</li><li>Risco: apostila de documentos da matriz — mitigado com advogado pré-contratado</li><li>PhD já documentada: elimina risco de visto e residence permit</li></ul></div><div class="dn am">⚠️ A Fase 1 (registo AS) é crítica — um atraso propaga-se para todas as fases seguintes.</div>`},
+tc_custo:{c:'TRÍPLICE CONSTANTE · TC-03',t:'Custo — Orçamento Base €98K–128K',l:'O custo é de alta prioridade. O modelo lean (escritório virtual + 1 funcionária) é a estratégia central.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Orçamento Base — Empresa AS (Ano 1)</div><table><thead><tr><th>Item</th><th>Valor</th><th>Observação</th></tr></thead><tbody><tr><td>Capital Social</td><td>€2.600</td><td>Recuperável — equity</td></tr><tr><td>Registo + Assessoria</td><td>€1.900–2.900</td><td>Altinn + vedtekter + ata</td></tr><tr><td>Salário PhD + Encargos</td><td>€89.000–113.000</td><td>Principal custo</td></tr><tr><td>Escritório + TI + Contabilidade</td><td>€3.700–6.800</td><td>Lean model</td></tr><tr class="hl"><td>TOTAL ANO 1</td><td>€98.000–128.000</td><td>Faixa-alvo</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Estratégias de Controlo</div><ul><li>Escritório virtual em vez de físico: poupa €13K–26K/ano</li><li>AS em vez de ASA: poupa €87K em capital imobilizado</li><li>Deduções fiscais máximas — todos os custos dedutíveis a 22%</li><li>PhD acumula funções de GM + Regulatory Director</li></ul></div><div class="dn gr">✅ O custo total representa menos de 13% do benefício máximo estimado (€1,04M).</div>`},
+tc_tradeoff:{c:'TRÍPLICE CONSTANTE · TC-04',t:'Matriz de Trade-off — Impactos entre Restrições',l:'Alterar uma restrição impacta obrigatoriamente pelo menos uma das outras duas.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> Matriz de Impactos</div><table><thead><tr><th>Se aumentar...</th><th>Escopo</th><th>Tempo</th><th>Custo</th></tr></thead><tbody><tr><td>Escopo (ex: escritório físico)</td><td>—</td><td>Aumenta</td><td>Aumenta muito</td></tr><tr><td>Tempo (ex: acelerar 60 dias)</td><td>Reduz ligeiramente</td><td>—</td><td>Aumenta</td></tr><tr class="hl"><td>Custo (ex: orçamento +20%)</td><td>Pode expandir</td><td>Reduz</td><td>—</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Cenários de Decisão</div><ul><li>Escritório físico em Oslo: +€13K–26K/ano, +2–3 semanas setup</li><li>Acelerar para 60 dias: assessoria premium +€5K, PhD disponível imediatamente</li><li>2 funcionários no Ano 2: +€78K–96K, sem impacto no escopo base</li></ul></div><div class="dn bl">📋 Qualquer alteração deve ser formalizada como Change Request com aprovação da diretoria.</div>`},
+tc_kpis:{c:'TRÍPLICE CONSTANTE · TC-05',t:'Dashboard KPIs &amp; Plano de Monitoramento',l:'Sistema de monitoramento contínuo das três restrições do projeto APNOR.',b:`<div class="ds"><div class="dst"><span class="n">1.</span> KPIs do Projeto</div><table><thead><tr><th>KPI</th><th>Fórmula</th><th>Meta</th><th>Alerta</th></tr></thead><tbody><tr><td>% Escopo concluído</td><td>Entregas / Total</td><td>100% Mês 3</td><td>&lt;80% Mês 2</td></tr><tr><td>SPI</td><td>EV / PV</td><td>&gt;1,0</td><td>&lt;0,85</td></tr><tr><td>CPI</td><td>EV / AC</td><td>&gt;1,0</td><td>&lt;0,90</td></tr><tr><td>CV</td><td>EV - AC</td><td>≥ 0</td><td>&lt;-€10K</td></tr><tr class="hl"><td>ROI Indireto Ano 1</td><td>Benefícios / Custo</td><td>&gt;2,5×</td><td>&lt;2×</td></tr></tbody></table></div><div class="ds"><div class="dst"><span class="n">2.</span> Cadência de Revisão</div><ul><li>Kanban board para acompanhamento de tarefas por fase</li><li>Weekly PM Review — toda segunda-feira, 30 minutos</li><li>Relatório mensal para a diretoria — status das 3 restrições + KPIs</li></ul></div><div class="dn gr">✅ Com este sistema, o projeto APNOR está preparado para identificar e corrigir desvios antes que sejam irreversíveis.</div>`},
+calculadora:{c:'FERRAMENTA · CALCULADORA DE CENÁRIOS',t:'Calculadora Interativa de Cenários',l:'Compare até 3 cenários de custos. Selecione tipo de empresa, ajuste as variáveis e obtenha orçamento, ROI e gráfico comparativo. Exporte para Excel com um clique.',b:`
+<div class="cw" id="calcWrap">
+<div class="csc">
+  <div class="ccol">
+    <div class="cctl"><span class="sa"></span> Cenário A</div>
+    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cA_type"><option value="AS">AS (Aksjeselskap)</option><option value="NUF">NUF (Filial)</option><option value="ASA">ASA (Pública)</option></select></div>
+    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cA_sal" type="number" value="87000"></div>
+    <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cA_emp" type="number" value="1" min="1" max="10"></div>
+    <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cA_off"><option value="virtual">Virtual (€480/ano)</option><option value="fisico">Físico (€18.000/ano)</option></select></div>
+    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cA_yr" type="number" value="1" min="1" max="5"></div>
+    <div class="cf"><div class="cfl">Câmbio EUR/NOK</div><input class="cfi" id="cA_fx" type="number" value="11.5" step="0.1"></div>
   </div>
-
-  <!-- RESULTS TABLE -->
-  <div class="calc-results">
-    <table id="calcTable">
-      <thead><tr>
-        <th>Item</th>
-        <th class="col-a">Cenário A</th>
-        <th class="col-b">Cenário B</th>
-        <th class="col-c">Cenário C</th>
-      </tr></thead>
-      <tbody id="calcTbody"></tbody>
-    </table>
+  <div class="ccol">
+    <div class="cctl"><span class="sb2"></span> Cenário B</div>
+    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cB_type"><option value="AS">AS (Aksjeselskap)</option><option value="NUF">NUF (Filial)</option><option value="ASA">ASA (Pública)</option></select></div>
+    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cB_sal" type="number" value="96000"></div>
+    <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cB_emp" type="number" value="1" min="1" max="10"></div>
+    <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cB_off"><option value="virtual">Virtual (€480/ano)</option><option value="fisico">Físico (€18.000/ano)</option></select></div>
+    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cB_yr" type="number" value="2" min="1" max="5"></div>
+    <div class="cf"><div class="cfl">Câmbio EUR/NOK</div><input class="cfi" id="cB_fx" type="number" value="11.5" step="0.1"></div>
   </div>
-
-  <!-- CHART -->
-  <div class="calc-chart">
-    <div class="calc-chart-title">Custo Total do Projeto (€)</div>
-    <div class="calc-bar-group" id="calcChart"></div>
+  <div class="ccol">
+    <div class="cctl"><span class="sc2"></span> Cenário C</div>
+    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cC_type"><option value="NUF">NUF (Filial)</option><option value="AS">AS (Aksjeselskap)</option><option value="ASA">ASA (Pública)</option></select></div>
+    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cC_sal" type="number" value="78000"></div>
+    <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cC_emp" type="number" value="2" min="1" max="10"></div>
+    <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cC_off"><option value="fisico">Físico (€18.000/ano)</option><option value="virtual">Virtual (€480/ano)</option></select></div>
+    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cC_yr" type="number" value="3" min="1" max="5"></div>
+    <div class="cf"><div class="cfl">Câmbio EUR/NOK</div><input class="cfi" id="cC_fx" type="number" value="11.5" step="0.1"></div>
   </div>
-
-  <!-- ROI DASHBOARD -->
-  <div class="calc-roi-grid" id="calcRoi"></div>
-
-  <!-- EXPORT -->
-  <button class="calc-export-btn" id="calcExportBtn">
-    <i class="fa-solid fa-file-excel"></i> Exportar para Excel (.xlsx)
-  </button>
-
+</div>
+<div class="crt"><table><thead><tr><th>Item</th><th class="ha">Cenário A</th><th class="hb">Cenário B</th><th class="hc">Cenário C</th></tr></thead><tbody id="ctb"></tbody></table></div>
+<div class="cht">Custo Total do Projeto (€)</div>
+<div class="cbg" id="cch"></div>
+<div class="crg" id="croi"></div>
+<button class="ceb" id="cxl"><i class="fa-solid fa-file-excel"></i> Exportar para Excel (.xlsx)</button>
 </div>`}
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-
-
-    /* ── MOBILE SIDEBAR TOGGLE ── */
-    var hamburger  = document.getElementById('hamburger');
-    var sbOverlay  = document.getElementById('sb-overlay');
-    var sidebar    = document.getElementById('sidebar');
-
-    function openSidebar() {
-        sidebar.classList.add('mobile-open');
-        sbOverlay.classList.add('open');
-        hamburger.classList.add('open');
-    }
-    function closeSidebar() {
-        sidebar.classList.remove('mobile-open');
-        sbOverlay.classList.remove('open');
-        hamburger.classList.remove('open');
-    }
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            sidebar.classList.contains('mobile-open') ? closeSidebar() : openSidebar();
-        });
-    }
-    if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
-
-
-
-
-    /* ── CALCULATOR ── */
-    var COMPANY = {
-        AS:  { capital:2600,  registo:2400, contab:2800, ti:1300 },
-        NUF: { capital:0,     registo:1800, contab:2800, ti:1300 },
-        ASA: { capital:87000, registo:3500, contab:3500, ti:1300 }
-    };
-    var OFFICE = { virtual:480, fisico:18000 };
-    var BENEFITS = { conservador:339000, otimista:1040000 };
-
-    function calcScenario(prefix) {
-        var type   = document.getElementById(prefix+'_type')   ? document.getElementById(prefix+'_type').value   : 'AS';
-        var sal    = parseFloat(document.getElementById(prefix+'_sal').value)   || 0;
-        var emp    = parseFloat(document.getElementById(prefix+'_emp').value)   || 1;
-        var office = document.getElementById(prefix+'_office') ? document.getElementById(prefix+'_office').value : 'virtual';
-        var years  = parseFloat(document.getElementById(prefix+'_years').value) || 1;
-        var fx     = parseFloat(document.getElementById(prefix+'_fx').value)    || 11.5;
-        var co     = COMPANY[type];
-        var salTotal   = sal * emp * 1.141;
-        var offCost    = OFFICE[office];
-        var ano1       = co.capital + co.registo + salTotal + offCost + co.ti + co.contab;
-        var recorrente = salTotal + offCost + co.contab;
-        var total      = ano1 + recorrente * (years - 1);
-        var roi_c      = years > 0 ? ((BENEFITS.conservador * years) / total).toFixed(1) : 0;
-        var roi_o      = years > 0 ? ((BENEFITS.otimista    * years) / total).toFixed(1) : 0;
-        return {
-            type:type, sal:sal, emp:emp, office:office, years:years, fx:fx,
-            capital:co.capital, registo:co.registo, salTotal:salTotal,
-            offCost:offCost, ti:co.ti, contab:co.contab,
-            ano1:ano1, recorrente:recorrente, total:total,
-            roi_c:roi_c, roi_o:roi_o
-        };
-    }
-
-    function fmt(n){ return '€' + Math.round(n).toLocaleString('pt-BR'); }
-
-    function calcUpdate() {
-        if (!document.getElementById('calcWrap')) return;
-        var A = calcScenario('cA');
-        var B = calcScenario('cB');
-        var C = calcScenario('cC');
-        var rows = [
-            ['Tipo de empresa',       A.type,      B.type,      C.type],
-            ['Capital social',        fmt(A.capital),   fmt(B.capital),   fmt(C.capital)],
-            ['Registo + assessoria',  fmt(A.registo),   fmt(B.registo),   fmt(C.registo)],
-            ['Salário + encargos/ano',fmt(A.salTotal),  fmt(B.salTotal),  fmt(C.salTotal)],
-            ['Escritório/ano',        fmt(A.offCost),   fmt(B.offCost),   fmt(C.offCost)],
-            ['TI + setup',            fmt(A.ti),        fmt(B.ti),        fmt(C.ti)],
-            ['Contabilidade/ano',     fmt(A.contab),    fmt(B.contab),    fmt(C.contab)],
-            ['─── ANO 1 ───',         fmt(A.ano1),      fmt(B.ano1),      fmt(C.ano1)],
-            ['Total projeto ('+A.years+'/'+(B.years)+'/'+(C.years)+' anos)', fmt(A.total), fmt(B.total), fmt(C.total)]
-        ];
-        var tbody = document.getElementById('calcTbody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        rows.forEach(function(r,i){
-            var tr = document.createElement('tr');
-            if (i===7) tr.className='row-total';
-            if (i===8) tr.className='row-total';
-            [r[0],r[1],r[2],r[3]].forEach(function(v){
-                var td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
-            });
-            tbody.appendChild(tr);
-        });
-
-        /* Chart */
-        var maxV = Math.max(A.total, B.total, C.total) || 1;
-        var chart = document.getElementById('calcChart');
-        if (chart) {
-            var bars = [
-                {v:A.total, label:'Cenário A', color:'#2563eb'},
-                {v:B.total, label:'Cenário B', color:'#16a34a'},
-                {v:C.total, label:'Cenário C', color:'#d97706'}
-            ];
-            chart.innerHTML = bars.map(function(b){
-                var h = Math.max(4, Math.round((b.v/maxV)*110));
-                return '<div class="calc-bar-wrap">'+
-                    '<div class="calc-bar" style="height:'+h+'px;background:'+b.color+'">'+
-                    '<span class="calc-bar-val">'+fmt(b.v)+'</span></div>'+
-                    '<div class="calc-bar-label">'+b.label+'</div></div>';
-            }).join('');
-        }
-
-        /* ROI cards */
-        var roi = document.getElementById('calcRoi');
-        if (roi) {
-            var sc = [
-                {s:A, cls:'a', lbl:'Cenário A'},
-                {s:B, cls:'b', lbl:'Cenário B'},
-                {s:C, cls:'c', lbl:'Cenário C'}
-            ];
-            roi.innerHTML = sc.map(function(x){
-                return '<div class="calc-roi-card '+x.cls+'">'+
-                    '<div class="calc-roi-label">'+x.lbl+' · ROI (conservador)</div>'+
-                    '<div class="calc-roi-val">'+x.s.roi_c+'×</div>'+
-                    '<div class="calc-roi-sub">Otimista: '+x.s.roi_o+'× · '+x.s.years+' ano(s)</div>'+
-                    '</div>';
-            }).join('');
-        }
-
-        /* Store for export */
-        window._calcData = {A:A, B:B, C:C, rows:rows};
-    }
-
-    function calcExport() {
-        var d = window._calcData;
-        if (!d) return;
-        var wb = XLSX.utils.book_new();
-        var header = ['Item','Cenário A ('+d.A.type+')','Cenário B ('+d.B.type+')','Cenário C ('+d.C.type+')'];
-        var data = [header];
-        d.rows.forEach(function(r){ data.push(r); });
-        data.push([]);
-        data.push(['ROI Conservador', d.A.roi_c+'×', d.B.roi_c+'×', d.C.roi_c+'×']);
-        data.push(['ROI Otimista',    d.A.roi_o+'×', d.B.roi_o+'×', d.C.roi_o+'×']);
-        data.push(['Duração (anos)',  d.A.years, d.B.years, d.C.years]);
-        data.push(['Câmbio EUR/NOK', d.A.fx, d.B.fx, d.C.fx]);
-        var ws = XLSX.utils.aoa_to_sheet(data);
-        ws['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:22}];
-        XLSX.utils.book_append_sheet(wb, ws, 'Cenários APNOR');
-        XLSX.writeFile(wb, 'APNOR_Cenarios_'+new Date().toISOString().slice(0,10)+'.xlsx');
-    }
-
-    /* Init calculator when modal opens */
-    var _origOpenModal = openModal;
-    function openModal(key) {
-        _origOpenModal(key);
-        if (key === 'calculadora') {
-            setTimeout(function(){
-                calcUpdate();
-                var btn = document.getElementById('calcExportBtn');
-                if (btn) btn.addEventListener('click', calcExport);
-            }, 80);
-        }
-    }
+document.addEventListener('DOMContentLoaded', function() {
 
     /* ── WATERMARK ── */
-    var ts = new Date();
-    var tsStr = ts.toLocaleDateString('pt-BR') + ' ' + ts.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-    var wmLine = 'CONFIDENCIAL · APNOR ESTRATÉGIA · ' + tsStr + '   ';
-    var confTs = document.getElementById('confTs');
-    if (confTs) confTs.textContent = 'Acesso registado · ' + tsStr;
+    var ts  = new Date();
+    var tss = ts.toLocaleDateString('pt-BR') + ' ' + ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    var wml = 'CONFIDENCIAL \u00b7 APNOR ESTRAT\u00c9GIA \u00b7 ' + tss + '   ';
+    var cts = document.getElementById('cts');
+    if (cts) cts.textContent = 'Acesso registado \u00b7 ' + tss;
     function buildWm(el, line, cls) {
         if (!el) return;
-        var html = '';
-        for (var i = 0; i < 120; i++) html += '<div class="' + cls + '">' + line + '</div>';
-        el.innerHTML = html;
+        var h = '';
+        for (var i = 0; i < 120; i++) h += '<div class="' + cls + '">' + line + '</div>';
+        el.innerHTML = h;
     }
-    buildWm(document.getElementById('bgWmText'), wmLine, 'wm-item');
-    buildWm(document.getElementById('modalWmText'), wmLine, 'modal-wm-item');
+    buildWm(document.getElementById('bwm'), wml, 'wmi');
+    buildWm(document.getElementById('mwm'), wml, 'mwi');
 
     /* ── ANTI-COPY ── */
     document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
     document.addEventListener('keydown', function(e){
-        var mod = e.ctrlKey || e.metaKey;
-        if (mod && ['s','p','u','a'].indexOf(e.key.toLowerCase()) > -1) e.preventDefault();
-        if (e.key === 'F12' || (mod && e.shiftKey && e.key.toLowerCase() === 'i')) e.preventDefault();
+        var m = e.ctrlKey || e.metaKey;
+        if (m && 'spua'.indexOf(e.key.toLowerCase()) > -1) e.preventDefault();
+        if (e.key === 'F12') e.preventDefault();
     });
     document.addEventListener('dragstart', function(e){ e.preventDefault(); });
 
     /* ── PIN LOGIN ── */
-    var pin = '';
-    var pwd = '2026';
-    function dotUpdate() {
+    var pin = '', pwd = '2026';
+    function dotUp() {
         for (var i = 0; i < 4; i++) {
             var d = document.getElementById('d' + i);
             if (!d) continue;
-            d.classList.remove('err');
+            d.classList.remove('er');
             i < pin.length ? d.classList.add('on') : d.classList.remove('on');
         }
     }
-    function pinCheck() {
-        var screen = document.getElementById('login');
-        if (pin === pwd) {
-            screen.style.transition = 'opacity .4s';
-            screen.style.opacity = '0';
-            setTimeout(function(){ screen.classList.add('gone'); }, 400);
-        } else {
-            var dots = document.getElementById('lDots');
-            for (var i = 0; i < 4; i++) { var d = document.getElementById('d'+i); if(d) d.classList.add('err'); }
-            dots.classList.add('shake');
-            document.getElementById('lErr').classList.add('show');
-            setTimeout(function(){ pin=''; dotUpdate(); dots.classList.remove('shake'); }, 700);
-        }
+    function pinOk() {
+        var sc = document.getElementById('login');
+        sc.style.transition = 'opacity .4s';
+        sc.style.opacity = '0';
+        setTimeout(function(){ sc.classList.add('gone'); }, 400);
     }
-    function pinPress(n){ if(pin.length>=4) return; pin+=n; dotUpdate(); if(pin.length===4) setTimeout(pinCheck,150); }
-    function pinDel(){ pin=pin.slice(0,-1); dotUpdate(); document.getElementById('lErr').classList.remove('show'); }
+    function pinFail() {
+        var dt = document.getElementById('ldots');
+        for (var i = 0; i < 4; i++) { var d = document.getElementById('d'+i); if(d) d.classList.add('er'); }
+        dt.classList.add('shake');
+        var er = document.getElementById('lerr'); if(er) er.classList.add('show');
+        setTimeout(function(){ pin=''; dotUp(); dt.classList.remove('shake'); }, 700);
+    }
+    function pinPress(n) { if(pin.length>=4) return; pin+=n; dotUp(); if(pin.length===4) setTimeout(function(){ pin===pwd ? pinOk() : pinFail(); },150); }
+    function pinDel()   { pin=pin.slice(0,-1); dotUp(); var er=document.getElementById('lerr'); if(er) er.classList.remove('show'); }
 
-    var pad = document.getElementById('lPad');
+    var pad = document.getElementById('lpad');
     if (pad) {
         pad.addEventListener('click', function(e){
             var el = e.target;
             while (el && el !== pad) {
                 var k = el.getAttribute('data-k');
-                if (k !== null) { if(k==='del') pinDel(); else if(k!=='') pinPress(k); return; }
+                if (k !== null) { k==='del' ? pinDel() : (k!=='' && pinPress(k)); return; }
                 el = el.parentElement;
             }
         });
@@ -1142,68 +534,124 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(e){
         if (document.getElementById('login').classList.contains('gone')) return;
         if (e.key>='0' && e.key<='9') pinPress(e.key);
-        if (e.key==='Backspace'){ e.preventDefault(); pinDel(); }
+        if (e.key==='Backspace') { e.preventDefault(); pinDel(); }
     });
 
-    /* ── SIDEBAR SUBMENU TOGGLE (Tríplice Constante) ── */
-    /* TC submenu always visible — no toggle needed */
-
-    /* ── SIDEBAR LINK ACTIVE STATE ── */
-    function setActiveSb(el) {
-        document.querySelectorAll('.sb-link, .sb-child').forEach(function(l){ l.classList.remove('active'); });
-        if (el) el.classList.add('active');
-    }
+    /* ── MOBILE SIDEBAR ── */
+    var hbg = document.getElementById('hbg');
+    var sbo = document.getElementById('sbo');
+    var sb  = document.getElementById('sidebar');
+    function openSb()  { sb.classList.add('mo'); sbo.classList.add('open'); hbg.classList.add('open'); }
+    function closeSb() { sb.classList.remove('mo'); sbo.classList.remove('open'); hbg.classList.remove('open'); }
+    if (hbg) hbg.addEventListener('click', function(){ sb.classList.contains('mo') ? closeSb() : openSb(); });
+    if (sbo) sbo.addEventListener('click', closeSb);
 
     /* ── MODAL ── */
     function openModal(key) {
-        var m = MODALS[key];
-        if (!m) return;
-        document.getElementById('modal-header').innerHTML =
-            '<div class="doc-cat">' + m.cat + '</div>' +
-            '<div class="doc-ttl">' + m.title + '</div>' +
-            '<div class="doc-bar"></div>' +
-            '<div class="doc-lead">' + m.lead + '</div>';
-        document.getElementById('modal-body').innerHTML = m.body;
-        var ov = document.getElementById('overlay');
-        ov.classList.add('open');
-        ov.scrollTop = 0;
-        // update topbar
-        var catParts = m.cat.split(' · ');
-        document.getElementById('tbSection').textContent = catParts[0] || 'Estratégia Noruega';
-        document.getElementById('tbPage').textContent = m.title.replace(/&amp;/g,'&');
+        var m = M[key]; if (!m) return;
+        document.getElementById('mhdr').innerHTML =
+            '<div class="dc">'+m.c+'</div><div class="dt">'+m.t+'</div><div class="db"></div><div class="dl">'+m.l+'</div>';
+        document.getElementById('mbdy').innerHTML = m.b;
+        var ov = document.getElementById('ov');
+        ov.classList.add('open'); ov.scrollTop = 0;
+        var s = m.c.split(' \u00b7 ');
+        document.getElementById('tbs').textContent = s[0] || 'Estrat\u00e9gia Noruega';
+        document.getElementById('tbp').textContent = m.t.replace(/&amp;/g,'&');
+        if (key === 'calculadora') {
+            setTimeout(calcUpdate, 80);
+            setTimeout(function(){
+                var b = document.getElementById('cxl');
+                if (b) { b.removeEventListener('click', calcExport); b.addEventListener('click', calcExport); }
+            }, 100);
+        }
     }
     function closeModal() {
-        document.getElementById('overlay').classList.remove('open');
-        document.getElementById('tbSection').textContent = 'Estratégia Noruega';
-        document.getElementById('tbPage').textContent = 'Documentação Completa';
+        document.getElementById('ov').classList.remove('open');
+        document.getElementById('tbs').textContent = 'Estrat\u00e9gia Noruega';
+        document.getElementById('tbp').textContent = 'Documenta\u00e7\u00e3o Completa';
     }
 
-    /* Cards click */
-    document.querySelectorAll('.card[data-modal]').forEach(function(card){
-        card.addEventListener('click', function(){ openModal(this.getAttribute('data-modal')); });
+    /* Cards */
+    document.querySelectorAll('.cd[data-modal]').forEach(function(el){
+        el.addEventListener('click', function(){ openModal(this.getAttribute('data-modal')); });
     });
-
-    /* Sidebar links that open modals */
-    document.querySelectorAll('.sb-link[data-modal], .sb-child[data-modal]').forEach(function(link){
-        link.addEventListener('click', function(){
-            var key = this.getAttribute('data-modal');
-            setActiveSb(this);
-            openModal(key);
-            /* Close sidebar on mobile AFTER modal is open */
-            if (window.innerWidth <= 900) {
-                setTimeout(closeSidebar, 180);
-            }
+    /* Sidebar links */
+    document.querySelectorAll('.sbl2[data-modal], .sbc2[data-modal]').forEach(function(el){
+        el.addEventListener('click', function(){
+            openModal(this.getAttribute('data-modal'));
+            if (window.innerWidth <= 900) setTimeout(closeSb, 200);
         });
     });
-
     /* Close */
-    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-    document.getElementById('modal-back').addEventListener('click', closeModal);
-    document.getElementById('modal-print').addEventListener('click', function(){ window.print(); });
-    document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+    document.getElementById('mcls').addEventListener('click', closeModal);
+    document.getElementById('mbk').addEventListener('click', closeModal);
+    document.getElementById('mpr').addEventListener('click', function(){ window.print(); });
+    document.getElementById('ov').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
-});
+    /* ── CALCULATOR ── */
+    var CO = { AS:{cap:2600,reg:2400,acc:2800,ti:1300}, NUF:{cap:0,reg:1800,acc:2800,ti:1300}, ASA:{cap:87000,reg:3500,acc:3500,ti:1300} };
+    var OF = { virtual:480, fisico:18000 };
+    var BN = { con:339000, opt:1040000 };
+
+    function gv(id){ var e=document.getElementById(id); return e?e.value:''; }
+    function sc(p){
+        var ty=gv(p+'_type')||'AS', sl=parseFloat(gv(p+'_sal'))||0, em=parseFloat(gv(p+'_emp'))||1;
+        var of=gv(p+'_off')||'virtual', yr=parseFloat(gv(p+'_yr'))||1, fx=parseFloat(gv(p+'_fx'))||11.5;
+        var c=CO[ty]||CO.AS, st=sl*em*1.141, oc=OF[of]||480;
+        var a1=c.cap+c.reg+st+oc+c.ti+c.acc, rc=st+oc+c.acc, tot=a1+rc*(yr-1);
+        return {ty:ty,sl:sl,em:em,of:of,yr:yr,fx:fx,cap:c.cap,reg:c.reg,st:st,oc:oc,ti:c.ti,acc:c.acc,a1:a1,tot:tot,
+                rc:tot>0?((BN.con*yr)/tot).toFixed(1):'0', ro:tot>0?((BN.opt*yr)/tot).toFixed(1):'0'};
+    }
+    function fe(n){ return '\u20ac'+Math.round(n).toLocaleString('pt-BR'); }
+
+    function calcUpdate(){
+        if (!document.getElementById('calcWrap')) return;
+        var A=sc('cA'), B=sc('cB'), C=sc('cC');
+        var rows=[
+            ['Tipo de empresa',A.ty,B.ty,C.ty],
+            ['Capital social',fe(A.cap),fe(B.cap),fe(C.cap)],
+            ['Registo + assessoria',fe(A.reg),fe(B.reg),fe(C.reg)],
+            ['Sal\u00e1rio + encargos/ano',fe(A.st),fe(B.st),fe(C.st)],
+            ['Escrit\u00f3rio/ano',fe(A.oc),fe(B.oc),fe(C.oc)],
+            ['TI + setup',fe(A.ti),fe(B.ti),fe(C.ti)],
+            ['Contabilidade/ano',fe(A.acc),fe(B.acc),fe(C.acc)],
+            ['TOTAL ANO 1',fe(A.a1),fe(B.a1),fe(C.a1)],
+            ['TOTAL PROJETO ('+A.yr+'/'+B.yr+'/'+C.yr+' anos)',fe(A.tot),fe(B.tot),fe(C.tot)]
+        ];
+        var tb=document.getElementById('ctb');
+        if(tb){ tb.innerHTML=''; rows.forEach(function(r,i){ var tr=document.createElement('tr'); if(i>=7)tr.className='rt'; r.forEach(function(v){var td=document.createElement('td');td.textContent=v;tr.appendChild(td);}); tb.appendChild(tr); }); }
+        var mx=Math.max(A.tot,B.tot,C.tot)||1;
+        var ch=document.getElementById('cch');
+        if(ch){ ch.innerHTML=[{v:A.tot,l:'A',cl:'#2563eb'},{v:B.tot,l:'B',cl:'#16a34a'},{v:C.tot,l:'C',cl:'#d97706'}].map(function(b){ var h=Math.max(4,Math.round((b.v/mx)*110)); return '<div class="cbw"><div class="cbar2" style="height:'+h+'px;background:'+b.cl+'"><span class="cbv">'+fe(b.v)+'</span></div><div class="cbl">Cen\u00e1rio '+b.l+'</div></div>'; }).join(''); }
+        var rg=document.getElementById('croi');
+        if(rg){ rg.innerHTML=[{s:A,c:'ra',l:'A'},{s:B,c:'rb',l:'B'},{s:C,c:'rc',l:'C'}].map(function(x){ return '<div class="crc '+x.c+'"><div class="crl">Cen\u00e1rio '+x.l+' \u00b7 ROI conservador</div><div class="crv">'+x.s.rc+'\u00d7</div><div class="crs">Otimista: '+x.s.ro+'\u00d7 \u00b7 '+x.s.yr+' ano(s)</div></div>'; }).join(''); }
+        window._cd={A:A,B:B,C:C,rows:rows};
+    }
+
+    function calcExport(){
+        var d=window._cd; if(!d||typeof XLSX==='undefined'){alert('Abra a calculadora primeiro.');return;}
+        var wb=XLSX.utils.book_new();
+        var hd=['Item','Cen\u00e1rio A ('+d.A.ty+')','Cen\u00e1rio B ('+d.B.ty+')','Cen\u00e1rio C ('+d.C.ty+')'];
+        var data=[hd]; d.rows.forEach(function(r){data.push(r);}); data.push([]);
+        data.push(['ROI Conservador',d.A.rc+'\u00d7',d.B.rc+'\u00d7',d.C.rc+'\u00d7']);
+        data.push(['ROI Otimista',d.A.ro+'\u00d7',d.B.ro+'\u00d7',d.C.ro+'\u00d7']);
+        data.push(['Dura\u00e7\u00e3o (anos)',d.A.yr,d.B.yr,d.C.yr]);
+        data.push(['C\u00e2mbio EUR/NOK',d.A.fx,d.B.fx,d.C.fx]);
+        var ws=XLSX.utils.aoa_to_sheet(data); ws['!cols']=[{wch:32},{wch:22},{wch:22},{wch:22}];
+        XLSX.utils.book_append_sheet(wb,ws,'Cen\u00e1rios APNOR');
+        XLSX.writeFile(wb,'APNOR_Cenarios_'+new Date().toISOString().slice(0,10)+'.xlsx');
+    }
+
+    /* Calculator event delegation — inputs/selects inside #calcWrap */
+    document.addEventListener('change', function(e){
+        if (e.target && e.target.closest && e.target.closest('#calcWrap')) calcUpdate();
+    });
+    document.addEventListener('input', function(e){
+        if (e.target && e.target.closest && e.target.closest('#calcWrap')) calcUpdate();
+    });
+
+}); /* end DOMContentLoaded */
 </script>
 </body>
 </html>
