@@ -112,12 +112,7 @@
     }
     if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
 
-    /* Close sidebar on nav link click (mobile) */
-    document.querySelectorAll('.sb-link[data-modal], .sb-child[data-modal]').forEach(function(l){
-        l.addEventListener('click', function(){
-            if (window.innerWidth <= 900) closeSidebar();
-        });
-    });
+
 
     /* ── WATERMARK ── */
         .wm-overlay{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
@@ -629,12 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
 
-    /* Close sidebar on nav link click (mobile) */
-    document.querySelectorAll('.sb-link[data-modal], .sb-child[data-modal]').forEach(function(l){
-        l.addEventListener('click', function(){
-            if (window.innerWidth <= 900) closeSidebar();
-        });
-    });
+
 
     /* ── WATERMARK ── */
     var ts = new Date();
@@ -753,8 +743,13 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Sidebar links that open modals */
     document.querySelectorAll('.sb-link[data-modal], .sb-child[data-modal]').forEach(function(link){
         link.addEventListener('click', function(){
+            var key = this.getAttribute('data-modal');
             setActiveSb(this);
-            openModal(this.getAttribute('data-modal'));
+            openModal(key);
+            /* Close sidebar on mobile AFTER modal is open */
+            if (window.innerWidth <= 900) {
+                setTimeout(closeSidebar, 180);
+            }
         });
     });
 
