@@ -237,6 +237,96 @@
         }
         .modal-nav-btn:hover { color:var(--blue-brand); }
 
+
+        /* ─── LOGIN SCREEN ─── */
+        #login-screen {
+            position: fixed; inset: 0; z-index: 999;
+            background: linear-gradient(135deg, #080f1a 0%, #0f1c2e 60%, #0b1622 100%);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        #login-screen.hidden { display: none; }
+
+        .login-orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+        }
+        .login-orb-1 { width:420px; height:420px; background:rgba(37,99,235,.12); top:-80px; right:-60px; }
+        .login-orb-2 { width:300px; height:300px; background:rgba(96,165,250,.07); bottom:-40px; left:-60px; }
+
+        .login-box {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; max-width: 380px; padding: 0 24px;
+        }
+        .login-logo {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--blue-brand), var(--blue-glow));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 24px; margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(37,99,235,.3);
+        }
+        .login-title {
+            font-size: 22px; font-weight: 700; color: var(--text-main);
+            letter-spacing: -.02em; margin-bottom: 4px; text-align: center;
+        }
+        .login-sub {
+            font-size: 12px; color: var(--text-dim);
+            font-family: 'DM Mono', monospace; letter-spacing: .08em;
+            text-transform: uppercase; margin-bottom: 36px; text-align: center;
+        }
+        .login-field-wrap {
+            width: 100%; position: relative; margin-bottom: 14px;
+        }
+        .login-field-wrap i {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: var(--text-dim); font-size: 13px;
+        }
+        #login-input {
+            width: 100%; padding: 14px 16px 14px 42px;
+            background: rgba(22,40,61,.8); border: 1px solid var(--border);
+            border-radius: 10px; color: var(--text-main);
+            font-size: 15px; font-family: 'DM Mono', monospace;
+            letter-spacing: .12em; outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        #login-input:focus {
+            border-color: var(--blue-brand);
+            box-shadow: 0 0 0 3px rgba(37,99,235,.18);
+        }
+        #login-input.shake {
+            animation: shake .35s ease;
+            border-color: #f87171;
+            box-shadow: 0 0 0 3px rgba(248,113,113,.18);
+        }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            20%{transform:translateX(-8px)}
+            40%{transform:translateX(8px)}
+            60%{transform:translateX(-5px)}
+            80%{transform:translateX(5px)}
+        }
+        #login-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--blue-brand), #1d4ed8);
+            border: none; border-radius: 10px; color: #fff;
+            font-size: 14px; font-weight: 600; font-family: 'Sora', sans-serif;
+            cursor: pointer; transition: opacity .2s, transform .15s;
+            letter-spacing: .01em;
+        }
+        #login-btn:hover { opacity: .88; transform: translateY(-1px); }
+        #login-btn:active { transform: translateY(0); }
+        #login-error {
+            margin-top: 12px; font-size: 12px; color: #f87171;
+            font-family: 'DM Mono', monospace; letter-spacing: .04em;
+            opacity: 0; transition: opacity .2s; text-align: center;
+        }
+        #login-error.show { opacity: 1; }
+        .login-badge {
+            margin-top: 32px; display: flex; align-items: center; gap: 6px;
+            font-size: 10px; font-family: 'DM Mono', monospace;
+            color: var(--text-dim); letter-spacing: .08em;
+        }
+        .login-dot { width:5px; height:5px; background:rgba(201,168,76,.5); border-radius:50%; }
         ::-webkit-scrollbar { width:5px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:var(--navy-light); border-radius:10px; }
@@ -244,6 +334,24 @@
     </style>
 </head>
 <body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+    <div class="login-orb login-orb-1"></div>
+    <div class="login-orb login-orb-2"></div>
+    <div class="login-box">
+        <div class="login-logo">🇳🇴</div>
+        <div class="login-title">APNO Estratégia</div>
+        <div class="login-sub">Escritório Regulatório · 2026 · Confidencial</div>
+        <div class="login-field-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input id="login-input" type="password" placeholder="Senha de acesso" autocomplete="off">
+        </div>
+        <button id="login-btn" onclick="doLogin()">Entrar</button>
+        <div id="login-error">Senha incorreta. Tente novamente.</div>
+        <div class="login-badge"><div class="login-dot"></div>Acesso restrito · barros.no</div>
+    </div>
+</div>
 
 <aside id="sidebar">
     <div class="sidebar-logo">
@@ -897,6 +1005,28 @@ const modals = {
             <div class="doc-note green">✅ Com aprovação hoje, o escritório pode estar operacional e fazendo seus primeiros contatos com o Helsedirektoratet dentro de 90 dias.</div>`
     }
 };
+
+
+function doLogin(){
+    const val = document.getElementById('login-input').value;
+    const inp = document.getElementById('login-input');
+    const err = document.getElementById('login-error');
+    if(val === '20262026'){
+        document.getElementById('login-screen').classList.add('hidden');
+    } else {
+        inp.classList.remove('shake');
+        void inp.offsetWidth; // reflow
+        inp.classList.add('shake');
+        err.classList.add('show');
+        inp.value='';
+        setTimeout(()=>inp.classList.remove('shake'),400);
+    }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('login-input').addEventListener('keydown',e=>{
+        if(e.key==='Enter') doLogin();
+    });
+});
 
 function openModal(key){
   const m=modals[key];if(!m)return;
