@@ -443,20 +443,20 @@ calculadora:{c:'FERRAMENTA · CALCULADORA DE CENÁRIOS',t:'Calculadora Interativ
   </div>
   <div class="ccol">
     <div class="cctl"><span class="sb2"></span> Cenário B</div>
-    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cB_type"><option value="AS">AS (Aksjeselskap)</option><option value="NUF">NUF (Filial)</option><option value="ASA">ASA (Pública)</option></select></div>
-    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cB_sal" type="number" value="96000"></div>
+    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cB_type"><option value="NUF">NUF (Filial)</option><option value="AS">AS (Aksjeselskap)</option><option value="ASA">ASA (Pública)</option></select></div>
+    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cB_sal" type="number" value="87000"></div>
     <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cB_emp" type="number" value="1" min="1" max="10"></div>
     <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cB_off"><option value="virtual">Virtual (€480/ano)</option><option value="fisico">Físico (€18.000/ano)</option></select></div>
-    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cB_yr" type="number" value="2" min="1" max="5"></div>
+    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cB_yr" type="number" value="1" min="1" max="5"></div>
     <div class="cf"><div class="cfl">Câmbio EUR/NOK</div><input class="cfi" id="cB_fx" type="number" value="11.5" step="0.1"></div>
   </div>
   <div class="ccol">
     <div class="cctl"><span class="sc2"></span> Cenário C</div>
-    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cC_type"><option value="NUF">NUF (Filial)</option><option value="AS">AS (Aksjeselskap)</option><option value="ASA">ASA (Pública)</option></select></div>
-    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cC_sal" type="number" value="78000"></div>
-    <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cC_emp" type="number" value="2" min="1" max="10"></div>
-    <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cC_off"><option value="fisico">Físico (€18.000/ano)</option><option value="virtual">Virtual (€480/ano)</option></select></div>
-    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cC_yr" type="number" value="3" min="1" max="5"></div>
+    <div class="cf"><div class="cfl">Tipo de Empresa</div><select class="cfs" id="cC_type"><option value="ASA">ASA (Pública)</option><option value="AS">AS (Aksjeselskap)</option><option value="NUF">NUF (Filial)</option></select></div>
+    <div class="cf"><div class="cfl">Salário PhD (€/ano)</div><input class="cfi" id="cC_sal" type="number" value="87000"></div>
+    <div class="cf"><div class="cfl">Nº Funcionários</div><input class="cfi" id="cC_emp" type="number" value="1" min="1" max="10"></div>
+    <div class="cf"><div class="cfl">Escritório</div><select class="cfs" id="cC_off"><option value="virtual">Virtual (€480/ano)</option><option value="fisico">Físico (€18.000/ano)</option></select></div>
+    <div class="cf"><div class="cfl">Duração (anos)</div><input class="cfi" id="cC_yr" type="number" value="1" min="1" max="5"></div>
     <div class="cf"><div class="cfl">Câmbio EUR/NOK</div><input class="cfi" id="cC_fx" type="number" value="11.5" step="0.1"></div>
   </div>
 </div>
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
     /* ── CALCULATOR ── */
-    var CO = { AS:{cap:2600,reg:2400,acc:2800,ti:1300}, NUF:{cap:0,reg:1800,acc:2800,ti:1300}, ASA:{cap:87000,reg:3500,acc:3500,ti:1300} };
+    var CO = { AS:{cap:2600,reg:600,acc:2800,ti:1300}, NUF:{cap:0,reg:340,acc:2400,ti:1300}, ASA:{cap:87000,reg:600,acc:3500,ti:1300} };
     var OF = { virtual:480, fisico:18000 };
     var BN = { con:339000, opt:1040000 };
 
