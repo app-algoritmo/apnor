@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- FAVICON BARROS -->
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content=“BARROS” />
-  <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#c44536" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estratégia Noruega 2026 | Escritório Regulatório</title>
@@ -115,29 +107,132 @@
         .tag-pt { background:rgba(37,99,235,.15); color:var(--blue-glow); border:1px solid rgba(37,99,235,.3); }
         .card-phase-badge { position:absolute; top:16px; right:16px; font-size:9.5px; font-family:'DM Mono',monospace; color:var(--text-dim); background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:5px; padding:2px 7px; letter-spacing:.06em; }
 
-        /* MODAL */
-        #modal-overlay { display:none; position:fixed; inset:0; background:rgba(5,10,20,.65); backdrop-filter:blur(6px); z-index:200; align-items:center; justify-content:center; }
+        /* MODAL — Document style */
+        #modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,20,40,.55); backdrop-filter:blur(4px); z-index:200; align-items:flex-start; justify-content:center; overflow-y:auto; padding:40px 20px 60px; }
         #modal-overlay.open { display:flex; }
-        #modal-box { background:#ffffff; border-radius:18px; width:92%; max-width:680px; max-height:85vh; overflow-y:auto; padding:36px; position:relative; box-shadow:0 32px 80px rgba(0,0,0,.4); animation:modal-in .25s ease; }
-        @keyframes modal-in { from{opacity:0;transform:scale(.95) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-        #modal-close { position:absolute; top:18px; right:18px; width:32px; height:32px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; color:#64748b; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; }
-        #modal-close:hover { background:#e2e8f0; color:#1e293b; }
-        #modal-body h2 { font-size:20px; font-weight:700; color:#0f172a; margin-bottom:8px; letter-spacing:-.02em; }
-        #modal-body .modal-desc { font-size:13.5px; color:#475569; line-height:1.7; margin-bottom:20px; }
-        #modal-body hr { border:none; border-top:1px solid #e2e8f0; margin:20px 0; }
-        #modal-body h3 { font-size:11px; font-weight:600; color:var(--blue-brand); margin-bottom:10px; text-transform:uppercase; letter-spacing:.08em; font-family:'DM Mono',monospace; }
-        #modal-body ul { list-style:none; display:flex; flex-direction:column; gap:7px; }
-        #modal-body ul li { display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:#334155; line-height:1.55; }
-        #modal-body ul li::before { content:'→'; color:var(--blue-brand); flex-shrink:0; margin-top:1px; }
-        #modal-body table { width:100%; border-collapse:collapse; margin-top:8px; }
-        #modal-body table th { background:#eff6ff; color:var(--blue-brand); font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em; padding:10px 14px; text-align:left; border-bottom:2px solid #bfdbfe; }
-        #modal-body table td { padding:10px 14px; font-size:12.5px; color:#475569; border-bottom:1px solid #f1f5f9; }
-        #modal-body table tr:hover td { background:#f8fafc; }
-        #modal-body .highlight-row td { color:#16a34a; font-weight:600; }
+        @keyframes modal-in { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+        /* Document wrapper */
+        #modal-box {
+            background:#ffffff;
+            border-radius:4px;
+            width:100%; max-width:720px;
+            position:relative;
+            box-shadow:0 8px 48px rgba(0,0,0,.22), 0 1px 0 rgba(0,0,0,.06);
+            animation:modal-in .28s ease;
+            font-family:'Sora',sans-serif;
+            overflow:hidden;
+        }
+
+        /* Top bar — close button */
+        #modal-topbar {
+            display:flex; align-items:center; justify-content:flex-end;
+            padding:10px 16px; background:#f8fafc;
+            border-bottom:1px solid #e9eef5;
+        }
+        #modal-close {
+            display:flex; align-items:center; gap:6px;
+            background:none; border:none; color:#94a3b8;
+            font-size:12px; cursor:pointer; font-family:'DM Mono',monospace;
+            letter-spacing:.04em; transition:color .15s;
+        }
+        #modal-close:hover { color:#334155; }
+        #modal-close::before { content:'×'; font-size:18px; line-height:1; }
+
+        /* Document header */
+        #modal-header {
+            padding:36px 48px 0;
+            background:#fff;
+        }
+        .doc-category {
+            font-size:10.5px; font-family:'DM Mono',monospace;
+            letter-spacing:.14em; text-transform:uppercase;
+            color:#94a3b8; margin-bottom:14px;
+        }
+        .doc-title {
+            font-size:26px; font-weight:700;
+            color:#0f172a; line-height:1.25;
+            letter-spacing:-.02em; margin-bottom:0;
+        }
+        .doc-title-bar {
+            height:3px; width:60px;
+            background:var(--blue-brand);
+            margin:14px 0 20px;
+            border-radius:2px;
+        }
+        .doc-lead {
+            font-size:14px; color:#475569; line-height:1.7;
+            padding-bottom:24px;
+            border-bottom:1px solid #e9eef5;
+        }
+
+        /* Info boxes */
+        .doc-note {
+            display:flex; align-items:flex-start; gap:10px;
+            background:#f8fafc; border:1px solid #e2e8f0;
+            border-left:3px solid #94a3b8;
+            border-radius:3px; padding:13px 16px;
+            font-size:13px; color:#475569; line-height:1.6;
+            margin:20px 0;
+        }
+        .doc-note.blue { background:#eff6ff; border-color:#bfdbfe; border-left-color:var(--blue-brand); color:#1e40af; }
+        .doc-note.green { background:#f0fdf4; border-color:#bbf7d0; border-left-color:#16a34a; color:#166534; }
+        .doc-note.amber { background:#fffbeb; border-color:#fde68a; border-left-color:#d97706; color:#92400e; }
+
+        /* Document body */
+        #modal-body {
+            padding:28px 48px 8px;
+        }
+
+        /* Sections */
+        .doc-section { margin-bottom:28px; }
+        .doc-section-title {
+            font-size:15.5px; font-weight:600;
+            color:var(--blue-brand); margin-bottom:12px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .doc-section-title .sec-num {
+            font-family:'DM Mono',monospace; font-size:13px;
+            color:#94a3b8; font-weight:400;
+        }
+
+        /* Lists */
+        #modal-body ul { list-style:none; display:flex; flex-direction:column; gap:0; margin:0; }
+        #modal-body ul li {
+            display:flex; align-items:flex-start; gap:10px;
+            font-size:13.5px; color:#334155; line-height:1.6;
+            padding:7px 0; border-bottom:1px solid #f1f5f9;
+        }
+        #modal-body ul li:last-child { border-bottom:none; }
+        #modal-body ul li::before { content:'•'; color:var(--blue-brand); flex-shrink:0; margin-top:2px; font-size:16px; line-height:1; }
+
+        /* Tables */
+        #modal-body table { width:100%; border-collapse:collapse; margin-top:8px; font-size:13px; }
+        #modal-body table thead tr { background:#f1f5f9; }
+        #modal-body table th { color:#475569; font-size:10.5px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.07em; padding:10px 14px; text-align:left; border-bottom:2px solid #e2e8f0; font-weight:500; }
+        #modal-body table td { padding:11px 14px; color:#334155; border-bottom:1px solid #f1f5f9; }
+        #modal-body table tr:hover td { background:#fafbfc; }
+        #modal-body .highlight-row td { color:#16a34a; font-weight:600; background:#f0fdf4; }
+        #modal-body .highlight-row:hover td { background:#dcfce7; }
+
+        /* Footer nav */
+        #modal-footer {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:20px 48px; margin-top:16px;
+            border-top:1px solid #e9eef5;
+            background:#fafbfc;
+        }
+        .modal-nav-btn {
+            font-size:12.5px; color:#64748b; cursor:pointer;
+            font-family:'DM Mono',monospace; letter-spacing:.02em;
+            background:none; border:none; transition:color .15s;
+        }
+        .modal-nav-btn:hover { color:var(--blue-brand); }
+
         ::-webkit-scrollbar { width:5px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:var(--navy-light); border-radius:10px; }
-        #modal-box::-webkit-scrollbar-thumb { background:#cbd5e1; }
+        #modal-overlay::-webkit-scrollbar-thumb { background:#cbd5e1; }
     </style>
 </head>
 <body>
@@ -346,30 +441,467 @@
 <!-- MODAL -->
 <div id="modal-overlay" onclick="closeModal(event)">
     <div id="modal-box">
-        <button id="modal-close" onclick="closeModalBtn()">✕</button>
+        <div id="modal-topbar">
+            <button id="modal-close" onclick="closeModalBtn()">Fechar documento</button>
+        </div>
+        <div id="modal-header"></div>
         <div id="modal-body"></div>
+        <div id="modal-footer">
+            <button class="modal-nav-btn" onclick="closeModalBtn()">← Voltar à Documentação</button>
+            <button class="modal-nav-btn" onclick="closeModalBtn()">Fechar ×</button>
+        </div>
     </div>
 </div>
 
 <script>
 const modals = {
-    resumo:{title:'📋 Resumo Executivo & Entendimento do Projeto',desc:'A empresa deseja entrar na Noruega exclusivamente com um escritório de representação focado em assuntos regulatórios e elevação de status de marca, sem atuar como fabricante, importador ou distribuidor.',content:`<h3>Contexto do Projeto</h3><ul><li>Objetivo principal: status e credibilidade como escritório norueguês</li><li>Fabricação 100% Brasil — sem importação ou distribuição na Noruega</li><li>Situação atual: 80% benefícios nacionais / 20% internacionais</li><li>Meta: ampliar share internacional via inteligência regulatória norueguesa</li><li>Liderança local: PhD em Regulatory Affairs já residente na Noruega</li></ul><hr><h3>Por que este escritório?</h3><ul><li>Eleva o status da marca ao demonstrar compromisso institucional</li><li>Posiciona a empresa como parceira técnica das autoridades norueguesas</li><li>Permite influência proativa em mudanças regulatórias futuras</li><li>Sem necessidade de bevilling (licença tabaqueira)</li></ul>`},
-    mercado:{title:'📊 Análise do Mercado Norueguês (2026)',desc:'Panorama completo do setor tabaqueiro norueguês com dados atualizados de maio de 2026.',content:`<h3>Dados do Mercado</h3><ul><li>Mercado de snus: ~NOK 10,67 bilhões em 2026</li><li>Usuários adultos de snus: ~880.000</li><li>Prevalência de uso diário de nicotina: 27,7% (maior dos países nórdicos)</li><li>Snus brun + hvit: 64% · Helhvit (traço mínimo): 34%</li><li>Crescimento CAGR 7% até 2030 (USD 35,5M → 56,8M)</li></ul><hr><h3>Proposta Regulatória 2025/2026</h3><ul><li>Limite proposto: 12 mg/g de nicotina em snus</li><li>Restrições de tamanho de pouch e aditivos em análise</li><li>Consulta pública encerrada em março/2026 — decisão pendente</li><li>TPD 2014/40/EU plenamente integrada desde 30 de março de 2026</li></ul>`},
-    regulatorio:{title:'⚖️ Ambiente Regulatório Atual (Março 2026)',desc:'A Tobaksskadeloven e a incorporação plena da TPD 2014/40/EU definem o cenário regulatório atual.',content:`<h3>Principais Exigências</h3><ul><li>Relatórios obrigatórios via EU-CEG até 1º de março de cada ano</li><li>Novas advertências de saúde: 65% da embalagem (fumáveis)</li><li>Advertência dupla face para snus + aviso específico para grávidas/jovens</li><li>Transição total exigida até 1º de janeiro de 2027</li><li>Proibição de vendas transfronteiriças online (desde jan/2026)</li><li>Isenção norueguesa ao banimento de tabaco oral (snus permitido)</li></ul><hr><h3>Não Aplicável ao Escritório Regulatório Puro</h3><ul><li>Licenças (bevilling) — exigidas apenas para produção/importação/distribuição</li><li>O escritório puro está isento de todas as licenças comerciais do setor</li></ul>`},
-    vantagens:{title:'🏆 Por que a Noruega? Vantagens Estratégicas',desc:'A Noruega é o mercado mais estratégico para posicionamento regulatório global em harm reduction.',content:`<h3>Vantagens Principais</h3><ul><li>Líder mundial em redução de danos — snus substitui cigarro de forma comprovada</li><li>Influência direta em políticas da UE e fóruns internacionais da OMS</li><li>Acesso privilegiado ao Helsedirektoratet e Ministério da Saúde</li><li>Presença no mesmo patamar de Swedish Match/PMI e BAT Norway</li><li>Networking com universidades e institutos de pesquisa nórdicos</li></ul><hr><h3>Comparativo vs. Concorrentes</h3><table><thead><tr><th>Empresa</th><th>Escritório Oslo</th><th>Status</th></tr></thead><tbody><tr><td>Swedish Match / PMI</td><td>✓ Ativo</td><td>Tier 1</td></tr><tr><td>BAT Norway</td><td>✓ Ativo</td><td>Tier 1</td></tr><tr class="highlight-row"><td>Nossa Empresa (AS)</td><td>A implementar</td><td>Tier 1</td></tr></tbody></table>`},
-    estrutura:{title:'🏛 Estrutura Recomendada: NUF vs. AS vs. ASA',desc:'Comparativo executivo das três formas societárias disponíveis para o escritório regulatório em Oslo.',content:`<h3>Tabela Comparativa</h3><table><thead><tr><th>Forma</th><th>Capital</th><th>Status</th><th>Custo Ano 1</th></tr></thead><tbody><tr><td>NUF</td><td>Zero</td><td>Filial estrangeira</td><td>1,2–1,6M NOK</td></tr><tr class="highlight-row"><td>AS ★ Recomendado</td><td>30.000 NOK</td><td>Empresa norueguesa</td><td>1,1–1,45M NOK</td></tr><tr><td>ASA</td><td>1.000.000 NOK</td><td>Empresa pública</td><td>2,15–2,5M NOK</td></tr></tbody></table><hr><h3>Por que AS é a Melhor Escolha</h3><ul><li>Personalidade jurídica norueguesa plena — maior credibilidade vs. NUF</li><li>Capital mínimo de apenas 30.000 NOK (equity, não despesa)</li><li>Registro 100% digital via Altinn em 2–4 semanas</li><li>Auditoria dispensável (fravalg av revisjon) para escritório de 1 pessoa</li><li>ASA exige 1 milhão NOK de capital — desnecessário para modelo lean</li></ul>`},
-    orcamento:{title:'💰 Orçamento Detalhado — Empresa AS (Ano 1)',desc:'Estimativa conservadora e completa de todos os custos de abertura e primeiro ano de operação.',content:`<h3>Itens de Custo</h3><table><thead><tr><th>Item</th><th>Custo (NOK)</th></tr></thead><tbody><tr><td>Capital social (equity)</td><td>30.000</td></tr><tr><td>Registro + assessoria jurídica</td><td>22.000–33.000</td></tr><tr><td>Salário PhD + encargos (14,1%)</td><td>1.027.000–1.300.000</td></tr><tr><td>Escritório virtual Oslo</td><td>3.000–8.000/ano</td></tr><tr><td>Equipamentos TI + setup</td><td>10.000–20.000</td></tr><tr><td>Contabilidade anual</td><td>25.000–40.000</td></tr><tr><td>VAT + outros iniciais</td><td>5.000–10.000</td></tr><tr class="highlight-row"><td>TOTAL ANO 1</td><td>1,1–1,45M NOK</td></tr></tbody></table><hr><h3>Observações</h3><ul><li>Ano 2+: redução de ~25–30% (sem custos de setup)</li><li>Escritório físico em Oslo adiciona +150–300K NOK/ano</li><li>Equivalente em EUR: ~€98.000–128.000</li></ul>`},
-    documentos:{title:'📁 Documentos Necessários para Registro',desc:'Com a PhD já documentada na Noruega, o processo é 100% digital via Altinn.',content:`<h3>Da Matriz (Empresa Estrangeira)</h3><ul><li>Certidão de Incorporação / Certificate of Registration</li><li>Estatuto social / Articles of Association</li><li>Extrato do registro comercial estrangeiro</li><li>Ata autorizando abertura da AS na Noruega</li><li>Procuração nomeando a PhD como diretora</li><li>Informações sobre UBOs (Ultimate Beneficial Owners)</li></ul><hr><h3>Da PhD (Diretora Local)</h3><ul><li>ID norueguês ou D-number (já possui)</li><li>Ata de fundação assinada digitalmente</li><li>Vedtekter (artigos de associação da AS)</li><li>Confirmação de integralização do capital (banco)</li></ul><hr><h3>Prazo Total</h3><ul><li>Registro digital via Altinn: 2–4 semanas</li><li>Documentos da matriz apostilados: +1–2 semanas adicionais</li></ul>`},
-    impostos:{title:'📊 Impostos e Obrigações Fiscais (2026)',desc:'Carga tributária mínima e previsível no modelo de escritório regulatório puro.',content:`<h3>Principais Impostos</h3><table><thead><tr><th>Imposto</th><th>Alíquota</th><th>Observação</th></tr></thead><tbody><tr><td>Corporate Income Tax</td><td>22%</td><td>Quase zero — custos PhD são dedutíveis</td></tr><tr><td>VAT (MVA)</td><td>25%</td><td>Registro apenas se faturamento >50K NOK/ano</td></tr><tr><td>Encargos empregador</td><td>14,1%</td><td>Sobre salário bruto da PhD (zona Oslo)</td></tr></tbody></table><hr><h3>Vantagens Fiscais do Modelo AS</h3><ul><li>Acesso à fritaksmetoden (isenção de participação) em dividendos</li><li>Declaração anual simplificada via contador</li><li>Todos os custos operacionais são dedutíveis do imposto de renda</li></ul>`},
-    roi:{title:'📈 Benefícios Econômicos Indiretos — ROI Detalhado',desc:'O escritório regulatório não é um centro de custo — é um investimento estratégico de alto retorno indireto.',content:`<h3>Benefícios Quantificados</h3><table><thead><tr><th>Benefício</th><th>NOK/ano (est.)</th></tr></thead><tbody><tr><td>Mitigação de riscos em exportações</td><td>800K–3M</td></tr><tr><td>Economia em compliance global</td><td>400K–1M</td></tr><tr><td>Valorização de marca internacional</td><td>1,5M–4,5M</td></tr><tr><td>Inteligência & novas oportunidades</td><td>1M–3M</td></tr><tr><td>Eficiências fiscais e operacionais</td><td>200K–400K</td></tr><tr class="highlight-row"><td>TOTAL ESTIMADO</td><td>3,9–11,9M NOK</td></tr></tbody></table><hr><h3>ROI por Perspectiva</h3><ul><li>ROI Ano 1: 2,5× a 6× o custo do escritório</li><li>Custo: 1,2–1,6M NOK vs. retorno estimado 3,9–11,9M NOK</li><li>Crescimento acelerado nos anos 2–3 com consolidação da presença</li><li>Swedish Match e BAT mantêm escritórios exatamente por esses retornos</li></ul>`},
-    internacionalizacao:{title:'🌍 Internacionalização — Shift 80/20 → 50/50',desc:'O escritório em Oslo amplifica os 20% internacionais atuais sem alterar a cadeia produtiva brasileira.',content:`<h3>Modelo Atual vs. Projeção</h3><table><thead><tr><th>Período</th><th>Nacional</th><th>Internacional</th></tr></thead><tbody><tr><td>Atual (2026)</td><td>80%</td><td>20%</td></tr><tr><td>Ano 1 (com escritório)</td><td>65%</td><td>35%</td></tr><tr class="highlight-row"><td>Ano 2–3 (projeção)</td><td>50%</td><td>50%+</td></tr></tbody></table><hr><h3>Como o Escritório Gera Internacionalização</h3><ul><li>"Regulado na Noruega" sinaliza compliance de alto nível globalmente</li><li>PhD centraliza relatórios EU-CEG para múltiplos mercados de exportação</li><li>Facilita contratos de exportação e parcerias internacionais</li><li>Posicionamento harm reduction abre portas na América Latina e Ásia</li><li>Mantém 100% da vantagem de custo com fabricação no Brasil</li></ul>`},
-    cronograma:{title:'📅 Cronograma de Implementação — 90 Dias',desc:'Plano detalhado de implementação do escritório regulatório AS em Oslo.',content:`<h3>Etapas</h3><table><thead><tr><th>Período</th><th>Ação</th></tr></thead><tbody><tr><td>Semanas 1–3</td><td>Preparação de vedtekter + registro AS via Altinn</td></tr><tr><td>Semanas 4–6</td><td>Abertura de conta bancária norueguesa e integralização do capital</td></tr><tr><td>Semanas 7–8</td><td>Contratação formal da PhD + setup TI e escritório virtual</td></tr><tr class="highlight-row"><td>Mês 3</td><td>Início das atividades regulatórias em Oslo</td></tr><tr><td>Mês 3+</td><td>Primeiro contato com Helsedirektoratet e mapeamento de stakeholders</td></tr></tbody></table><hr><h3>Pré-requisitos</h3><ul><li>Aprovação executiva do conceito AS pela diretoria</li><li>Documentos da matriz apostilados e traduzidos</li><li>PhD com ID norueguês disponível — processo 100% digital</li></ul>`},
-    phd:{title:'🎓 Perfil e Papel da Liderança Regulatória — PhD',desc:'A PhD será a face da marca na Noruega e o principal ativo estratégico do escritório.',content:`<h3>Responsabilidades</h3><ul><li>Submissões regulatórias e relatórios EU-CEG em nome da matriz</li><li>Interface direta com Helsedirektoratet e Ministério da Saúde</li><li>Participação em consultas públicas com posicionamentos científicos</li><li>Monitoramento diário de propostas regulatórias</li><li>Representação em fóruns nórdicos de redução de danos</li><li>Relatórios internos sobre riscos e oportunidades regulatórias</li></ul><hr><h3>Contratação e Remuneração</h3><ul><li>Salário bruto médio PhD Regulatory Affairs Oslo: 900K–1,1M NOK/ano</li><li>Encargos empregador: +14,1% (contribuição National Insurance)</li><li>Contrato via AS + suporte jurídico da matriz brasileira</li><li>Pode acumular funções de General Manager e diretora da AS</li></ul>`},
-    riscos:{title:'🛡 Gestão de Riscos e Mitigações',desc:'Análise dos principais riscos e estratégias de mitigação para o escritório regulatório em Oslo.',content:`<h3>Matriz de Riscos</h3><table><thead><tr><th>Risco</th><th>Mitigação</th></tr></thead><tbody><tr><td>Risco regulatório (Art. 5.3 FCTC)</td><td>Foco em ciência e transparência total</td></tr><tr><td>Custo elevado</td><td>Modelo lean: escritório virtual + 1 pessoa</td></tr><tr><td>Mudanças políticas</td><td>Monitoramento diário pela PhD</td></tr><tr><td>Risco reputacional</td><td>Posicionamento harm reduction baseado em evidências</td></tr><tr class="highlight-row"><td>Avaliação geral</td><td>BAIXO — sem atividade comercial ou importação</td></tr></tbody></table><hr><h3>Fatores de Segurança</h3><ul><li>Principais concorrentes (BAT, PMI) validaram este modelo há anos</li><li>Nenhuma exposição a sanções tabaqueiras por ser escritório puro</li><li>PhD local garante compliance em tempo real</li></ul>`},
-    conclusao:{title:'🏁 Conclusão — Próximos Passos para a Diretoria',desc:'O escritório na Noruega transforma a empresa brasileira em uma marca global de referência regulatória.',content:`<h3>Síntese Executiva</h3><ul><li>Investimento de baixo risco com altíssimo retorno de status e marca</li><li>ROI indireto de 2,5× a 6× no Ano 1</li><li>Mantém 100% da vantagem competitiva da fabricação brasileira</li><li>Shift projetado: 80/20 → 50/50 em 2–3 anos</li><li>PhD já documentada na Noruega — processo 100% digital e ágil</li></ul><hr><h3>Próximos Passos Imediatos</h3><ul><li>1. Aprovação executiva do conceito AS pela diretoria</li><li>2. Abertura de conta bancária norueguesa (PhD pode executar)</li><li>3. Preparação de vedtekter + ata (advogado ou via Altinn)</li><li>4. Registro digital via Altinn — prazo: 2–4 semanas</li><li>5. Início das atividades regulatórias em Oslo no Mês 3</li></ul>`}
+    resumo:{
+        category:'ANÁLISE E ESTRATÉGIA · F01-01',
+        title:'Resumo Executivo & Entendimento do Projeto',
+        desc:'A empresa deseja entrar na Noruega exclusivamente com um escritório de representação focado em assuntos regulatórios e elevação de status de marca, sem atuar como fabricante, importador ou distribuidor de produtos tabaqueiros ou nicotínicos.',
+        content:`
+            <div class="doc-note blue">📋 Documento base do projeto. Leitura recomendada antes de qualquer outra seção da documentação estratégica.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Contexto e Objetivos</div>
+                <ul>
+                    <li>Objetivo principal: status e credibilidade como escritório norueguês registrado</li>
+                    <li>Fabricação 100% Brasil — sem importação ou distribuição na Noruega</li>
+                    <li>Situação atual: 80% benefícios nacionais / 20% internacionais</li>
+                    <li>Meta: ampliar share internacional via inteligência regulatória norueguesa</li>
+                    <li>Liderança local: PhD em Regulatory Affairs já residente e documentada na Noruega</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Justificativa Estratégica</div>
+                <ul>
+                    <li>Eleva o status da marca ao demonstrar compromisso institucional de longo prazo</li>
+                    <li>Posiciona a empresa como parceira técnica das autoridades norueguesas</li>
+                    <li>Permite influência proativa em mudanças regulatórias antes de sua implementação</li>
+                    <li>Sem necessidade de bevilling (licença tabaqueira) — escritório puro de representação</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ Este modelo é validado pelos principais concorrentes globais: Swedish Match/PMI e BAT Norway operam escritórios equivalentes em Oslo.</div>`
+    },
+    mercado:{
+        category:'ANÁLISE E ESTRATÉGIA · F01-02',
+        title:'Análise do Mercado Norueguês (2026)',
+        desc:'Panorama completo do setor tabaqueiro norueguês com dados atualizados de maio de 2026, incluindo tendências de consumo, projeções de crescimento e o ambiente regulatório em evolução.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Tamanho e Estrutura do Mercado</div>
+                <ul>
+                    <li>Mercado de snus: ~NOK 10,67 bilhões em 2026</li>
+                    <li>Usuários adultos de snus: ~880.000 pessoas</li>
+                    <li>Prevalência de uso diário de nicotina: 27,7% — maior dos países nórdicos</li>
+                    <li>Snus brun + hvit: 64% do mercado · Helhvit (traço mínimo de tabaco): 34%</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Projeções de Crescimento</div>
+                <ul>
+                    <li>CAGR projetado: 7% até 2030</li>
+                    <li>Receita esperada: USD 35,5M (2023) → USD 56,8M (2030)</li>
+                    <li>Snus substitui cigarro de forma acelerada — cigarros em forte declínio</li>
+                    <li>Helhvit é o segmento de maior crescimento (produtos com traço mínimo de tabaco)</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">3.</span> Proposta Regulatória 2025/2026</div>
+                <ul>
+                    <li>Limite proposto: 12 mg/g de nicotina em snus (decisão pendente)</li>
+                    <li>Restrições de tamanho de pouch e aditivos em análise pelo Ministério da Saúde</li>
+                    <li>Consulta pública encerrada em março/2026 — resposta esperada para 2026/2027</li>
+                </ul>
+            </div>
+            <div class="doc-note amber">⚠️ A proposta de limite de nicotina a 12 mg/g pode impactar significativamente produtos de alta concentração. O escritório regulatório é o instrumento ideal para acompanhar e influenciar esta decisão.</div>`
+    },
+    regulatorio:{
+        category:'ANÁLISE E ESTRATÉGIA · F01-03',
+        title:'Ambiente Regulatório Atual (Março 2026)',
+        desc:'A Tobaksskadeloven e a incorporação plena da Diretiva de Produtos do Tabaco (TPD 2014/40/EU), desde 30 de março de 2026, definem o cenário regulatório que a empresa precisará navegar.',
+        content:`
+            <div class="doc-note blue">📋 A TPD 2014/40/EU foi plenamente incorporada ao ordenamento norueguês em 30 de março de 2026. Este é o marco regulatório central do setor.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Principais Exigências Vigentes</div>
+                <ul>
+                    <li>Relatórios obrigatórios via EU-CEG (ingredientes, emissões, toxicologia) até 1º de março de cada ano</li>
+                    <li>Novas advertências de saúde: 65% da embalagem (fumáveis)</li>
+                    <li>Advertência dupla face para snus com aviso específico para grávidas e jovens</li>
+                    <li>Transição total de embalagens exigida até 1º de janeiro de 2027</li>
+                    <li>Proibição de vendas transfronteiriças online em vigor desde janeiro de 2026</li>
+                    <li>Isenção norueguesa ao banimento de tabaco oral — snus permanece permitido</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> O que NÃO se Aplica ao Escritório Regulatório</div>
+                <ul>
+                    <li>Licenças bevilling — exigidas apenas para produção, importação e distribuição comercial</li>
+                    <li>Registro de produtos no mercado norueguês — sem importação, sem obrigação</li>
+                    <li>Contribuições de impostos especiais sobre tabaco (tobacco excise duties)</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ O escritório de representação regulatória puro está completamente isento de licenças comerciais do setor tabaqueiro norueguês.</div>`
+    },
+    vantagens:{
+        category:'ANÁLISE E ESTRATÉGIA · F01-04',
+        title:'Por que a Noruega? Vantagens Estratégicas',
+        desc:'A Noruega é o mercado mais estratégico do mundo para posicionamento regulatório em harm reduction. Sua influência extrapola fronteiras e impacta diretamente políticas da União Europeia e fóruns internacionais.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Liderança Global em Harm Reduction</div>
+                <ul>
+                    <li>Líder mundial na transição cigarro → snus: modelo adotado por organismos internacionais</li>
+                    <li>Influência direta em políticas da UE (via EEA) e fóruns da OMS</li>
+                    <li>Acesso privilegiado ao Helsedirektoratet e ao Ministério da Saúde norueguês</li>
+                    <li>Presença em Oslo equivale a estar no mesmo patamar de Swedish Match/PMI e BAT Norway</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Comparativo vs. Concorrentes em Oslo</div>
+                <table>
+                    <thead><tr><th>Empresa</th><th>Escritório Oslo</th><th>Posicionamento</th></tr></thead>
+                    <tbody>
+                        <tr><td>Swedish Match / PMI</td><td>✓ Ativo há anos</td><td>Tier 1 — influência máxima</td></tr>
+                        <tr><td>BAT Norway</td><td>✓ Ativo há anos</td><td>Tier 1 — influência máxima</td></tr>
+                        <tr class="highlight-row"><td>Nossa Empresa (AS)</td><td>A implementar — 90 dias</td><td>Tier 1 — meta do projeto</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">3.</span> Outros Benefícios Estratégicos</div>
+                <ul>
+                    <li>Networking com universidades norueguesas e institutos de pesquisa nórdicos</li>
+                    <li>Acesso a dados de mercado e consultas públicas antes da publicação oficial</li>
+                    <li>Inteligência regulatória transferível para todos os mercados de exportação da empresa</li>
+                </ul>
+            </div>
+            <div class="doc-note blue">📋 Empresas com presença regulatória em mercados líderes registram aumento de brand equity de 5–15% em setores altamente regulados (estudos de mercado 2024).</div>`
+    },
+    estrutura:{
+        category:'ESTRUTURA LEGAL E ORÇAMENTO · F02-01',
+        title:'Estrutura Recomendada: NUF vs. AS vs. ASA',
+        desc:'Comparativo executivo das três formas societárias disponíveis para o escritório regulatório em Oslo, com análise de custo, status institucional e adequação ao modelo de negócio proposto.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Comparativo das Formas Societárias</div>
+                <table>
+                    <thead><tr><th>Forma</th><th>Capital Mínimo</th><th>Status Jurídico</th><th>Custo Ano 1</th></tr></thead>
+                    <tbody>
+                        <tr><td>NUF</td><td>Zero</td><td>Filial estrangeira — sem personalidade jurídica própria</td><td>1,2–1,6M NOK</td></tr>
+                        <tr class="highlight-row"><td>AS ★ Recomendado</td><td>30.000 NOK</td><td>Empresa norueguesa — personalidade jurídica plena</td><td>1,1–1,45M NOK</td></tr>
+                        <tr><td>ASA</td><td>1.000.000 NOK</td><td>Empresa pública norueguesa — máxima formalidade</td><td>2,15–2,5M NOK</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Por que AS é a Melhor Escolha</div>
+                <ul>
+                    <li>Personalidade jurídica norueguesa plena — maior credibilidade institucional vs. NUF</li>
+                    <li>Capital mínimo de apenas 30.000 NOK (equity, não despesa operacional)</li>
+                    <li>Registro 100% digital via Altinn em 2–4 semanas (PhD já documentada localmente)</li>
+                    <li>Auditoria dispensável via fravalg av revisjon — escritório de 1 pessoa, receita mínima</li>
+                    <li>Custo Ano 1 levemente inferior ao NUF na prática</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">3.</span> Por que NÃO escolher ASA</div>
+                <ul>
+                    <li>Capital obrigatório de 1.000.000 NOK — excessivo para escritório regulatório lean</li>
+                    <li>Maior complexidade de governança e divulgação pública de informações</li>
+                    <li>Sem benefício regulatório adicional em relação à AS para este modelo de negócio</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ Recomendação final: Empresa AS — melhor equilíbrio entre status institucional, custo e simplicidade operacional.</div>`
+    },
+    orcamento:{
+        category:'ESTRUTURA LEGAL E ORÇAMENTO · F02-02',
+        title:'Orçamento Detalhado — Empresa AS (Ano 1)',
+        desc:'Estimativa conservadora e completa de todos os custos de abertura e primeiro ano de operação do escritório regulatório em Oslo, estruturado como empresa AS (Aksjeselskap).',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Itens de Custo — Ano 1</div>
+                <table>
+                    <thead><tr><th>Item</th><th>Estimativa (NOK)</th><th>Observação</th></tr></thead>
+                    <tbody>
+                        <tr><td>Capital social</td><td>30.000</td><td>Equity — permanece no caixa da empresa</td></tr>
+                        <tr><td>Registro + assessoria jurídica</td><td>22.000–33.000</td><td>Altinn + vedtekter + ata de fundação</td></tr>
+                        <tr><td>Salário PhD + encargos (14,1%)</td><td>1.027.000–1.300.000</td><td>Principal item de custo do modelo</td></tr>
+                        <tr><td>Escritório virtual em Oslo</td><td>3.000–8.000/ano</td><td>Aceito pelo Brreg para AS não-operacional</td></tr>
+                        <tr><td>Equipamentos TI + setup inicial</td><td>10.000–20.000</td><td>Laptop, celular corporativo, software</td></tr>
+                        <tr><td>Contabilidade anual obrigatória</td><td>25.000–40.000</td><td>Contador autorizado — declaração simplificada</td></tr>
+                        <tr><td>VAT + outros custos iniciais</td><td>5.000–10.000</td><td>Registro MVA se faturamento >50K NOK</td></tr>
+                        <tr class="highlight-row"><td>TOTAL ANO 1 (excl. capital)</td><td>1,1–1,45M NOK</td><td>≈ €98.000–128.000</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Projeção para Anos Seguintes</div>
+                <ul>
+                    <li>Ano 2 e seguintes: redução de ~25–30% (sem custos únicos de setup e registro)</li>
+                    <li>Custo recorrente estimado: ~1,1M NOK/ano (basicamente salário PhD + contabilidade)</li>
+                    <li>Escritório físico em Oslo, se desejado: adiciona +150.000–300.000 NOK/ano</li>
+                </ul>
+            </div>
+            <div class="doc-note amber">⚠️ O principal item de custo é o salário da PhD (>90% do total). A qualidade e a rede de contatos da profissional contratada determinam diretamente o retorno do investimento.</div>`
+    },
+    documentos:{
+        category:'ESTRUTURA LEGAL E ORÇAMENTO · F02-03',
+        title:'Documentos Necessários para Registro',
+        desc:'Lista completa de documentos exigidos pelo Brønnøysund Register Centre para registro de uma empresa AS em Oslo. Com a PhD já documentada localmente, o processo é 100% digital via Altinn.',
+        content:`
+            <div class="doc-note blue">📋 Com a PhD já portadora de ID norueguês, todo o processo de registro é feito digitalmente via Altinn (Samordnet registermelding) — sem envio de papel ao Brreg.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Da Matriz (Empresa Estrangeira)</div>
+                <ul>
+                    <li>Certidão de Incorporação / Certificate of Registration (recente)</li>
+                    <li>Estatuto social / Articles of Association / Memorandum</li>
+                    <li>Extrato do registro comercial estrangeiro (Certificate of Good Standing)</li>
+                    <li>Ata/resolução da matriz autorizando abertura da AS na Noruega</li>
+                    <li>Procuração (Power of Attorney) nomeando a PhD como diretora executiva</li>
+                    <li>Informações sobre UBOs (Ultimate Beneficial Owners) da empresa</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Da PhD (Diretora Local)</div>
+                <ul>
+                    <li>ID norueguês válido ou D-number (já possui)</li>
+                    <li>Ata de fundação da AS assinada digitalmente via Altinn</li>
+                    <li>Vedtekter (artigos de associação personalizados para a AS)</li>
+                    <li>Confirmação de integralização do capital — via banco norueguês</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">3.</span> Prazos Estimados</div>
+                <ul>
+                    <li>Registro digital via Altinn após documentação completa: 2–4 semanas</li>
+                    <li>Documentos da matriz apostilados e traduzidos (se necessário): +1–2 semanas</li>
+                    <li>Abertura de conta bancária corporativa norueguesa: 1–2 semanas adicionais</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ Taxa oficial de registro no Foretaksregisteret (Brreg): NOK 6.825 (via digital) — uma das mais baixas da Europa para constituição de empresa.</div>`
+    },
+    impostos:{
+        category:'ESTRUTURA LEGAL E ORÇAMENTO · F02-04',
+        title:'Impostos e Obrigações Fiscais (2026)',
+        desc:'Síntese das obrigações tributárias aplicáveis a uma empresa AS de representação regulatória pura em Oslo. A carga fiscal é mínima e previsível no modelo lean de escritório não-operacional.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Principais Impostos Aplicáveis</div>
+                <table>
+                    <thead><tr><th>Imposto</th><th>Alíquota</th><th>Impacto Prático</th></tr></thead>
+                    <tbody>
+                        <tr><td>Corporate Income Tax</td><td>22%</td><td>Quase zero — salário e custos operacionais são dedutíveis</td></tr>
+                        <tr><td>VAT — MVA (Merverdiavgift)</td><td>25%</td><td>Registro obrigatório apenas se faturamento >50.000 NOK/ano</td></tr>
+                        <tr><td>Encargos empregador (arbeidsgiveravgift)</td><td>14,1%</td><td>Sobre salário bruto da PhD — zona Oslo (Zona 1)</td></tr>
+                        <tr class="highlight-row"><td>Carga tributária efetiva</td><td>Mínima</td><td>Escritório lean sem receita comercial</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Vantagens Fiscais do Modelo AS</div>
+                <ul>
+                    <li>Acesso à fritaksmetoden — isenção de participação em dividendos recebidos de outras empresas norueguesas</li>
+                    <li>Todos os custos operacionais (salário, TI, escritório, contabilidade) são integralmente dedutíveis do IR</li>
+                    <li>Declaração anual simplificada via contador — sem auditoria obrigatória (fravalg av revisjon)</li>
+                    <li>Nenhuma exposição a impostos especiais sobre tabaco — escritório puro sem produtos</li>
+                </ul>
+            </div>
+            <div class="doc-note blue">📋 Estimativa de imposto corporativo efetivo Ano 1: próximo de zero, dado que o lucro tributável será mínimo ou inexistente (custos ≈ receitas de reembolso da matriz).</div>`
+    },
+    roi:{
+        category:'BENEFÍCIOS ECONÔMICOS E ROI · F03-01',
+        title:'Benefícios Econômicos Indiretos — ROI Detalhado',
+        desc:'O escritório regulatório não é um centro de custo — é um investimento estratégico de alto retorno indireto. A análise abaixo quantifica os benefícios econômicos que justificam o investimento anual de 1,2–1,6M NOK.',
+        content:`
+            <div class="doc-note blue">📈 ROI estimado Ano 1: 2,5× a 6× o custo do escritório — retorno predominantemente via benefícios econômicos indiretos e valorização de marca.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Benefícios Quantificados (NOK/ano)</div>
+                <table>
+                    <thead><tr><th>Benefício</th><th>Estimativa Conservadora</th><th>Estimativa Máxima</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mitigação de riscos em exportações</td><td>800K NOK</td><td>3,0M NOK</td></tr>
+                        <tr><td>Economia em compliance global</td><td>400K NOK</td><td>1,0M NOK</td></tr>
+                        <tr><td>Valorização de marca internacional</td><td>1,5M NOK</td><td>4,5M NOK</td></tr>
+                        <tr><td>Inteligência & novas oportunidades</td><td>1,0M NOK</td><td>3,0M NOK</td></tr>
+                        <tr><td>Eficiências fiscais e operacionais</td><td>200K NOK</td><td>400K NOK</td></tr>
+                        <tr class="highlight-row"><td>TOTAL ESTIMADO</td><td>3,9M NOK</td><td>11,9M NOK</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> ROI em Perspectiva</div>
+                <ul>
+                    <li>Custo anual: 1,2–1,6M NOK vs. benefícios estimados de 3,9–11,9M NOK</li>
+                    <li>ROI Ano 1: 2,5× (cenário conservador) a 6× (cenário otimista)</li>
+                    <li>Crescimento do retorno acelerado nos anos 2–3 com consolidação da presença</li>
+                    <li>Swedish Match e BAT mantêm escritórios em Oslo exatamente por esses retornos indiretos</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ A base de cálculo usa o mercado global de snus (USD 2,0–3,5 bilhões em 2026, CAGR 6–10%) e a influência norueguesa como "laboratório vivo" de harm reduction a nível internacional.</div>`
+    },
+    internacionalizacao:{
+        category:'BENEFÍCIOS ECONÔMICOS E ROI · F03-02',
+        title:'Internacionalização — Shift 80/20 → 50/50',
+        desc:'O escritório em Oslo amplifica exponencialmente os 20% de benefícios internacionais atuais sem qualquer alteração na cadeia produtiva brasileira. A fabricação permanece 100% no Brasil, mantendo a vantagem competitiva de custo.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Modelo Atual vs. Projeção com Escritório</div>
+                <table>
+                    <thead><tr><th>Período</th><th>Benefícios Nacionais</th><th>Benefícios Internacionais</th></tr></thead>
+                    <tbody>
+                        <tr><td>Atual — sem escritório (2026)</td><td>80%</td><td>20%</td></tr>
+                        <tr><td>Ano 1 — com escritório Oslo</td><td>65%</td><td>35%</td></tr>
+                        <tr class="highlight-row"><td>Ano 2–3 — consolidado</td><td>50%</td><td>50%+</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Mecanismos de Internacionalização</div>
+                <ul>
+                    <li>"Regulado na Noruega" sinaliza compliance de alto nível em todos os mercados globais</li>
+                    <li>PhD centraliza relatórios EU-CEG para múltiplos mercados de exportação brasileiros</li>
+                    <li>Facilita contratos de exportação e parcerias com distribuidores internacionais</li>
+                    <li>Posicionamento harm reduction abre portas na América Latina, Ásia e Europa não-UE</li>
+                    <li>Mantém 100% da vantagem competitiva de custo com fabricação concentrada no Brasil</li>
+                </ul>
+            </div>
+            <div class="doc-note blue">📋 O mercado global de snus cresce a CAGR 6–10% ao ano. A Noruega é a referência internacional de harm reduction — sua influência se estende a debates na UE, OMS e mercados emergentes.</div>`
+    },
+    cronograma:{
+        category:'IMPLEMENTAÇÃO E RISCOS · F04-01',
+        title:'Cronograma de Implementação — 90 Dias',
+        desc:'Plano detalhado de implementação do escritório regulatório como empresa AS em Oslo, desde a aprovação executiva até o início das atividades regulatórias junto ao Helsedirektoratet.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Linha do Tempo — 90 Dias</div>
+                <table>
+                    <thead><tr><th>Período</th><th>Ação</th><th>Responsável</th></tr></thead>
+                    <tbody>
+                        <tr><td>Semanas 1–3</td><td>Preparação de vedtekter + ata de fundação + registro AS via Altinn</td><td>PhD + advogado</td></tr>
+                        <tr><td>Semanas 4–6</td><td>Abertura de conta bancária norueguesa e integralização do capital (30K NOK)</td><td>PhD</td></tr>
+                        <tr><td>Semanas 7–8</td><td>Contratação formal da PhD pela AS + setup TI e escritório virtual em Oslo</td><td>PhD + matriz</td></tr>
+                        <tr><td>Semanas 8–10</td><td>Contratação de contador + registro no Skatteetaten + setup contabilidade</td><td>Contador</td></tr>
+                        <tr class="highlight-row"><td>Mês 3</td><td>Início oficial das atividades regulatórias em Oslo</td><td>PhD</td></tr>
+                        <tr><td>Mês 3+</td><td>Primeiro contato com Helsedirektoratet e mapeamento de stakeholders</td><td>PhD</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Pré-requisitos para Início Imediato</div>
+                <ul>
+                    <li>Aprovação executiva do conceito AS pela diretoria da empresa brasileira</li>
+                    <li>Documentos da matriz apostilados e traduzidos para inglês ou norueguês</li>
+                    <li>PhD com ID norueguês disponível — garante processo 100% digital e ágil</li>
+                    <li>Transferência inicial de capital da matriz para integralização (30.000 NOK)</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ Com a PhD já documentada localmente, o cronograma de 90 dias é conservador. Em cenário otimista, o escritório pode estar operacional em 60 dias.</div>`
+    },
+    phd:{
+        category:'IMPLEMENTAÇÃO E RISCOS · F04-02',
+        title:'Perfil e Papel da Liderança Regulatória — PhD',
+        desc:'A PhD em Assuntos Regulatórios será a face institucional da marca na Noruega e o principal ativo estratégico do escritório. Sua rede de contatos e expertise técnica determinam diretamente o retorno do investimento.',
+        content:`
+            <div class="doc-note blue">🎓 A PhD assume simultaneamente os papéis de General Manager, Regulatory Affairs Director e representante legal da AS perante as autoridades norueguesas.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Responsabilidades Principais</div>
+                <ul>
+                    <li>Submissões regulatórias e relatórios EU-CEG anuais em nome da matriz brasileira</li>
+                    <li>Interface direta com Helsedirektoratet, Ministério da Saúde e Skatteetaten</li>
+                    <li>Elaboração de posicionamentos científicos para participação em consultas públicas</li>
+                    <li>Monitoramento diário de propostas regulatórias (ex.: limite de nicotina, restrições de pouch)</li>
+                    <li>Representação em fóruns nórdicos de redução de danos e eventos do setor</li>
+                    <li>Relatórios mensais à diretoria sobre riscos, oportunidades e cenário regulatório</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Contratação e Remuneração</div>
+                <table>
+                    <thead><tr><th>Item</th><th>Estimativa</th></tr></thead>
+                    <tbody>
+                        <tr><td>Salário bruto médio — PhD Regulatory Affairs Oslo</td><td>900.000–1.100.000 NOK/ano</td></tr>
+                        <tr><td>Encargos empregador (National Insurance)</td><td>+14,1% sobre salário bruto</td></tr>
+                        <tr class="highlight-row"><td>Custo total para a AS</td><td>1.027.000–1.300.000 NOK/ano</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-note green">✅ PhD já residente e documentada na Noruega: elimina o processo de visto e residence permit (4–8 semanas adicionais), acelerando significativamente a implementação.</div>`
+    },
+    riscos:{
+        category:'IMPLEMENTAÇÃO E RISCOS · F04-03',
+        title:'Gestão de Riscos e Mitigações',
+        desc:'Análise estruturada dos principais riscos associados ao escritório regulatório em Oslo e as estratégias de mitigação recomendadas, com avaliação de impacto e probabilidade.',
+        content:`
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Matriz de Riscos</div>
+                <table>
+                    <thead><tr><th>Risco</th><th>Probabilidade</th><th>Mitigação</th></tr></thead>
+                    <tbody>
+                        <tr><td>Risco regulatório (Art. 5.3 FCTC — conflito de interesses)</td><td>Baixa</td><td>Foco exclusivo em ciência e transparência total nas submissões</td></tr>
+                        <tr><td>Custo elevado sem retorno visível no curto prazo</td><td>Média</td><td>Modelo lean com escritório virtual + apenas 1 funcionária</td></tr>
+                        <tr><td>Mudanças políticas desfavoráveis ao snus</td><td>Baixa–Média</td><td>Monitoramento diário pela PhD com alertas à diretoria</td></tr>
+                        <tr><td>Risco reputacional associado ao setor tabaqueiro</td><td>Baixa</td><td>Posicionamento exclusivo em harm reduction baseado em evidências</td></tr>
+                        <tr><td>Dificuldade de retenção da PhD</td><td>Média</td><td>Pacote competitivo + vínculo societário (participação na AS)</td></tr>
+                        <tr class="highlight-row"><td>Avaliação de risco geral</td><td>BAIXO</td><td>Escritório puro sem atividade comercial ou importação</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Fatores de Segurança Estrutural</div>
+                <ul>
+                    <li>Nenhuma exposição a sanções tabaqueiras — sem bevilling, sem produtos no mercado norueguês</li>
+                    <li>Modelo validado por anos de operação de BAT, PMI e Swedish Match em Oslo</li>
+                    <li>PhD local garante compliance em tempo real sem dependência de consultores externos</li>
+                    <li>Custo anual previsível e controlado (>90% é salário da PhD)</li>
+                </ul>
+            </div>
+            <div class="doc-note green">✅ O perfil de risco deste projeto é significativamente mais baixo que uma entrada comercial convencional. O maior risco é a inação — deixar concorrentes consolidarem sozinhos sua presença regulatória em Oslo.</div>`
+    },
+    conclusao:{
+        category:'IMPLEMENTAÇÃO E RISCOS · F04-04',
+        title:'Conclusão — Próximos Passos para a Diretoria',
+        desc:'O escritório regulatório na Noruega transforma a empresa brasileira em uma marca global de referência institucional. Este documento consolida as recomendações e os próximos passos para aprovação e implementação imediata.',
+        content:`
+            <div class="doc-note blue">📋 Documento de decisão executiva. Recomenda-se aprovação nesta reunião para início do processo de registro dentro da janela regulatória favorável de 2026.</div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">1.</span> Síntese Executiva</div>
+                <ul>
+                    <li>Investimento de baixo risco com altíssimo retorno de status, marca e inteligência regulatória</li>
+                    <li>ROI indireto estimado: 2,5× a 6× o custo anual já no primeiro ano</li>
+                    <li>Mantém 100% da vantagem competitiva de custo com fabricação concentrada no Brasil</li>
+                    <li>Shift projetado de benefícios: 80/20 nacional/internacional → 50/50 em 2–3 anos</li>
+                    <li>PhD já documentada na Noruega — processo 100% digital, prazo de 60–90 dias</li>
+                    <li>Modelo sem precedentes de risco comercial — escritório de representação puro</li>
+                </ul>
+            </div>
+            <div class="doc-section">
+                <div class="doc-section-title"><span class="sec-num">2.</span> Próximos Passos Imediatos</div>
+                <table>
+                    <thead><tr><th>#</th><th>Ação</th><th>Prazo</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Aprovação executiva do conceito AS pela diretoria</td><td>Esta reunião</td></tr>
+                        <tr><td>2</td><td>Abertura de conta bancária norueguesa (PhD executa)</td><td>Semana 1–2</td></tr>
+                        <tr><td>3</td><td>Preparação de vedtekter + ata de fundação</td><td>Semana 1–3</td></tr>
+                        <tr><td>4</td><td>Registro digital via Altinn</td><td>Semana 2–4</td></tr>
+                        <tr class="highlight-row"><td>5</td><td>Início das atividades regulatórias em Oslo</td><td>Mês 3</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="doc-note green">✅ Com aprovação hoje, o escritório pode estar operacional e fazendo seus primeiros contatos com o Helsedirektoratet dentro de 90 dias.</div>`
+    }
 };
 
-function openModal(key){const m=modals[key];if(!m)return;document.getElementById('modal-body').innerHTML=`<h2>${m.title}</h2><p class="modal-desc">${m.desc}</p><hr>${m.content}`;document.getElementById('modal-overlay').classList.add('open');}
+function openModal(key){
+  const m=modals[key];if(!m)return;
+  document.getElementById('modal-header').innerHTML=`
+    <div class="doc-category">${m.category}</div>
+    <div class="doc-title">${m.title}</div>
+    <div class="doc-title-bar"></div>
+    <div class="doc-lead">${m.desc}</div>`;
+  document.getElementById('modal-body').innerHTML=m.content;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-overlay').scrollTop=0;
+}
 function closeModal(e){if(e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.remove('open');}
 function closeModalBtn(){document.getElementById('modal-overlay').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modal-overlay').classList.remove('open');});
