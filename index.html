@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APNOR Estratégia 2026 | Escritório Regulatório</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -113,6 +114,141 @@
     if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
 
 
+
+
+    /* ── CALCULATOR ── */
+    var COMPANY = {
+        AS:  { capital:2600,  registo:2400, contab:2800, ti:1300 },
+        NUF: { capital:0,     registo:1800, contab:2800, ti:1300 },
+        ASA: { capital:87000, registo:3500, contab:3500, ti:1300 }
+    };
+    var OFFICE = { virtual:480, fisico:18000 };
+    var BENEFITS = { conservador:339000, otimista:1040000 };
+
+    function calcScenario(prefix) {
+        var type   = document.getElementById(prefix+'_type')   ? document.getElementById(prefix+'_type').value   : 'AS';
+        var sal    = parseFloat(document.getElementById(prefix+'_sal').value)   || 0;
+        var emp    = parseFloat(document.getElementById(prefix+'_emp').value)   || 1;
+        var office = document.getElementById(prefix+'_office') ? document.getElementById(prefix+'_office').value : 'virtual';
+        var years  = parseFloat(document.getElementById(prefix+'_years').value) || 1;
+        var fx     = parseFloat(document.getElementById(prefix+'_fx').value)    || 11.5;
+        var co     = COMPANY[type];
+        var salTotal   = sal * emp * 1.141;
+        var offCost    = OFFICE[office];
+        var ano1       = co.capital + co.registo + salTotal + offCost + co.ti + co.contab;
+        var recorrente = salTotal + offCost + co.contab;
+        var total      = ano1 + recorrente * (years - 1);
+        var roi_c      = years > 0 ? ((BENEFITS.conservador * years) / total).toFixed(1) : 0;
+        var roi_o      = years > 0 ? ((BENEFITS.otimista    * years) / total).toFixed(1) : 0;
+        return {
+            type:type, sal:sal, emp:emp, office:office, years:years, fx:fx,
+            capital:co.capital, registo:co.registo, salTotal:salTotal,
+            offCost:offCost, ti:co.ti, contab:co.contab,
+            ano1:ano1, recorrente:recorrente, total:total,
+            roi_c:roi_c, roi_o:roi_o
+        };
+    }
+
+    function fmt(n){ return '€' + Math.round(n).toLocaleString('pt-BR'); }
+
+    function calcUpdate() {
+        if (!document.getElementById('calcWrap')) return;
+        var A = calcScenario('cA');
+        var B = calcScenario('cB');
+        var C = calcScenario('cC');
+        var rows = [
+            ['Tipo de empresa',       A.type,      B.type,      C.type],
+            ['Capital social',        fmt(A.capital),   fmt(B.capital),   fmt(C.capital)],
+            ['Registo + assessoria',  fmt(A.registo),   fmt(B.registo),   fmt(C.registo)],
+            ['Salário + encargos/ano',fmt(A.salTotal),  fmt(B.salTotal),  fmt(C.salTotal)],
+            ['Escritório/ano',        fmt(A.offCost),   fmt(B.offCost),   fmt(C.offCost)],
+            ['TI + setup',            fmt(A.ti),        fmt(B.ti),        fmt(C.ti)],
+            ['Contabilidade/ano',     fmt(A.contab),    fmt(B.contab),    fmt(C.contab)],
+            ['─── ANO 1 ───',         fmt(A.ano1),      fmt(B.ano1),      fmt(C.ano1)],
+            ['Total projeto ('+A.years+'/'+(B.years)+'/'+(C.years)+' anos)', fmt(A.total), fmt(B.total), fmt(C.total)]
+        ];
+        var tbody = document.getElementById('calcTbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        rows.forEach(function(r,i){
+            var tr = document.createElement('tr');
+            if (i===7) tr.className='row-total';
+            if (i===8) tr.className='row-total';
+            [r[0],r[1],r[2],r[3]].forEach(function(v){
+                var td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+
+        /* Chart */
+        var maxV = Math.max(A.total, B.total, C.total) || 1;
+        var chart = document.getElementById('calcChart');
+        if (chart) {
+            var bars = [
+                {v:A.total, label:'Cenário A', color:'#2563eb'},
+                {v:B.total, label:'Cenário B', color:'#16a34a'},
+                {v:C.total, label:'Cenário C', color:'#d97706'}
+            ];
+            chart.innerHTML = bars.map(function(b){
+                var h = Math.max(4, Math.round((b.v/maxV)*110));
+                return '<div class="calc-bar-wrap">'+
+                    '<div class="calc-bar" style="height:'+h+'px;background:'+b.color+'">'+
+                    '<span class="calc-bar-val">'+fmt(b.v)+'</span></div>'+
+                    '<div class="calc-bar-label">'+b.label+'</div></div>';
+            }).join('');
+        }
+
+        /* ROI cards */
+        var roi = document.getElementById('calcRoi');
+        if (roi) {
+            var sc = [
+                {s:A, cls:'a', lbl:'Cenário A'},
+                {s:B, cls:'b', lbl:'Cenário B'},
+                {s:C, cls:'c', lbl:'Cenário C'}
+            ];
+            roi.innerHTML = sc.map(function(x){
+                return '<div class="calc-roi-card '+x.cls+'">'+
+                    '<div class="calc-roi-label">'+x.lbl+' · ROI (conservador)</div>'+
+                    '<div class="calc-roi-val">'+x.s.roi_c+'×</div>'+
+                    '<div class="calc-roi-sub">Otimista: '+x.s.roi_o+'× · '+x.s.years+' ano(s)</div>'+
+                    '</div>';
+            }).join('');
+        }
+
+        /* Store for export */
+        window._calcData = {A:A, B:B, C:C, rows:rows};
+    }
+
+    function calcExport() {
+        var d = window._calcData;
+        if (!d) return;
+        var wb = XLSX.utils.book_new();
+        var header = ['Item','Cenário A ('+d.A.type+')','Cenário B ('+d.B.type+')','Cenário C ('+d.C.type+')'];
+        var data = [header];
+        d.rows.forEach(function(r){ data.push(r); });
+        data.push([]);
+        data.push(['ROI Conservador', d.A.roi_c+'×', d.B.roi_c+'×', d.C.roi_c+'×']);
+        data.push(['ROI Otimista',    d.A.roi_o+'×', d.B.roi_o+'×', d.C.roi_o+'×']);
+        data.push(['Duração (anos)',  d.A.years, d.B.years, d.C.years]);
+        data.push(['Câmbio EUR/NOK', d.A.fx, d.B.fx, d.C.fx]);
+        var ws = XLSX.utils.aoa_to_sheet(data);
+        ws['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:22}];
+        XLSX.utils.book_append_sheet(wb, ws, 'Cenários APNOR');
+        XLSX.writeFile(wb, 'APNOR_Cenarios_'+new Date().toISOString().slice(0,10)+'.xlsx');
+    }
+
+    /* Init calculator when modal opens */
+    var _origOpenModal = openModal;
+    function openModal(key) {
+        _origOpenModal(key);
+        if (key === 'calculadora') {
+            setTimeout(function(){
+                calcUpdate();
+                var btn = document.getElementById('calcExportBtn');
+                if (btn) btn.addEventListener('click', calcExport);
+            }, 80);
+        }
+    }
 
     /* ── WATERMARK ── */
         .wm-overlay{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;}
@@ -360,6 +496,66 @@
             /* Make sure sidebar is always visible on desktop */
             #sidebar { transform: translateX(0) !important; }
         }
+
+        /* ── CALCULATOR ── */
+        .calc-wrap { font-family:'Sora',sans-serif; }
+        .calc-scenarios { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+        .calc-col { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+        .calc-col-title { font-size:11px; font-family:'DM Mono',monospace; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#2563eb; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+        .calc-col-title span { display:inline-block; width:8px; height:8px; border-radius:50%; }
+        .c-s-a { background:#2563eb; }
+        .c-s-b { background:#16a34a; }
+        .c-s-c { background:#d97706; }
+        .calc-field { margin-bottom:11px; }
+        .calc-label { font-size:10.5px; color:#64748b; margin-bottom:4px; font-family:'DM Mono',monospace; }
+        .calc-input { width:100%; padding:7px 10px; border:1px solid #e2e8f0; border-radius:7px; font-size:13px; font-family:'Sora',sans-serif; color:#0f172a; background:#fff; outline:none; transition:border-color .15s; }
+        .calc-input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+        .calc-select { width:100%; padding:7px 10px; border:1px solid #e2e8f0; border-radius:7px; font-size:12.5px; font-family:'Sora',sans-serif; color:#0f172a; background:#fff; outline:none; cursor:pointer; }
+        .calc-divider { border:none; border-top:1px dashed #e2e8f0; margin:12px 0; }
+
+        /* Results table */
+        .calc-results { overflow-x:auto; margin-bottom:20px; }
+        .calc-results table { width:100%; border-collapse:collapse; font-size:12.5px; }
+        .calc-results th { background:#1e293b; color:#e2e8f0; font-size:10px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.07em; padding:10px 12px; text-align:left; }
+        .calc-results th.col-a { background:#1e3a8a; }
+        .calc-results th.col-b { background:#14532d; }
+        .calc-results th.col-c { background:#78350f; }
+        .calc-results td { padding:9px 12px; color:#334155; border-bottom:1px solid #f1f5f9; font-size:12.5px; }
+        .calc-results tr:hover td { background:#f8fafc; }
+        .calc-results .row-total td { font-weight:700; color:#0f172a; background:#f1f5f9; border-top:2px solid #e2e8f0; }
+        .calc-results .row-roi { background:#f0fdf4; }
+        .calc-results .row-roi td { color:#15803d; font-weight:600; }
+
+        /* ROI dashboard */
+        .calc-roi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+        .calc-roi-card { border-radius:9px; padding:14px; text-align:center; }
+        .calc-roi-card.a { background:#eff6ff; border:1px solid #bfdbfe; }
+        .calc-roi-card.b { background:#f0fdf4; border:1px solid #bbf7d0; }
+        .calc-roi-card.c { background:#fffbeb; border:1px solid #fde68a; }
+        .calc-roi-label { font-size:9.5px; font-family:'DM Mono',monospace; color:#64748b; text-transform:uppercase; letter-spacing:.07em; margin-bottom:4px; }
+        .calc-roi-val { font-size:20px; font-weight:700; }
+        .calc-roi-card.a .calc-roi-val { color:#1d4ed8; }
+        .calc-roi-card.b .calc-roi-val { color:#15803d; }
+        .calc-roi-card.c .calc-roi-val { color:#b45309; }
+        .calc-roi-sub { font-size:10px; color:#94a3b8; margin-top:2px; }
+
+        /* Bar chart */
+        .calc-chart { margin-bottom:18px; }
+        .calc-chart-title { font-size:10.5px; font-family:'DM Mono',monospace; color:#64748b; text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; }
+        .calc-bar-group { display:flex; align-items:flex-end; gap:8px; height:120px; padding:0 4px; border-bottom:2px solid #e2e8f0; }
+        .calc-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+        .calc-bar { width:100%; border-radius:5px 5px 0 0; min-height:4px; transition:height .4s ease; position:relative; }
+        .calc-bar-label { font-size:9.5px; font-family:'DM Mono',monospace; color:#64748b; text-align:center; margin-top:6px; }
+        .calc-bar-val { font-size:9px; color:#fff; position:absolute; top:4px; left:0; right:0; text-align:center; font-family:'DM Mono',monospace; font-weight:600; }
+
+        /* Export btn */
+        .calc-export-btn { display:flex; align-items:center; gap:8px; background:#16a34a; border:none; color:#fff; font-size:13px; font-weight:600; font-family:'Sora',sans-serif; padding:11px 20px; border-radius:9px; cursor:pointer; transition:opacity .15s; }
+        .calc-export-btn:hover { opacity:.85; }
+
+        @media (max-width:700px) {
+            .calc-scenarios { grid-template-columns:1fr; }
+            .calc-roi-grid { grid-template-columns:1fr; }
+        }
         ::-webkit-scrollbar{width:5px;}
         ::-webkit-scrollbar-track{background:transparent;}
         ::-webkit-scrollbar-thumb{background:var(--navy-light);border-radius:10px;}
@@ -451,6 +647,8 @@
         <div class="sb-child" data-modal="tc_tradeoff"><i class="fa-solid fa-arrow-right-arrow-left"></i> Matriz de Trade-off</div>
         <div class="sb-child" data-modal="tc_kpis"><i class="fa-solid fa-gauge-high"></i> Dashboard KPIs</div>
     </div>
+
+    <div class="sb-link" data-modal="calculadora"><i class="ico fa-solid fa-table-cells"></i> Calculadora de Cenários</div>
 
     <div class="sb-sec">ROI</div>
     <div class="sb-link" data-modal="roi"><i class="ico fa-solid fa-arrow-trend-up"></i> Benefícios &amp; ROI</div>
@@ -545,6 +743,18 @@
             <div class="card" data-modal="tc_tradeoff"><span class="c-phase">TC-04</span><div class="c-icon i-purple"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><div class="c-title">Matriz de Trade-off — Impactos entre Restrições</div><div class="c-desc">Como alterações num dos vértices do triângulo afetam os outros dois. Ferramenta de decisão executiva para ajustes ao longo do projeto.</div><span class="c-tag">PT</span></div>
             <div class="card" data-modal="tc_kpis"><span class="c-phase">TC-05</span><div class="c-icon i-amber"><i class="fa-solid fa-gauge-high"></i></div><div class="c-title">Dashboard KPIs &amp; Plano de Monitoramento</div><div class="c-desc">KPIs do projeto: % de escopo concluído, desvio de prazo (SPI), desvio orçamentário (CPI/CV). Weekly PM Review e relatório mensal para a diretoria.</div><span class="c-tag">PT</span></div>
         </div>
+
+        <!-- CALCULADORA -->
+        <div class="phase"><span>Ferramenta · Calculadora de Cenários</span></div>
+        <div class="grid">
+            <div class="card gold-card" data-modal="calculadora" style="grid-column:1/-1;">
+                <span class="c-phase">TOOL</span>
+                <div class="c-icon i-green"><i class="fa-solid fa-table-cells"></i></div>
+                <div class="c-title">Calculadora Interativa de Cenários — NUF / AS / ASA</div>
+                <div class="c-desc">Compare até 3 cenários de gastos lado a lado. Escolha o tipo de empresa, ajuste salário da PhD, escritório, número de funcionários e duração. Dashboard com ROI calculado e exportação para Excel.</div>
+                <span class="c-tag">PT</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -597,6 +807,111 @@ var MODALS = {
     tc_tradeoff:{cat:'TRÍPLICE CONSTANTE · TC-04',title:'Matriz de Trade-off — Impactos entre Restrições',lead:'O Triângulo de Ferro estabelece que alterar uma das restrições impacta obrigatoriamente pelo menos uma das outras duas. Esta matriz é a ferramenta de decisão executiva para ajustes ao longo do projeto.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> Matriz de Impactos</div><table><thead><tr><th>Se aumentar...</th><th>Impacto no Escopo</th><th>Impacto no Tempo</th><th>Impacto no Custo</th></tr></thead><tbody><tr><td>Escopo (ex: escritório físico)</td><td>—</td><td>Aumenta</td><td>Aumenta muito</td></tr><tr><td>Tempo (ex: acelerar para 60 dias)</td><td>Reduz ligeiramente</td><td>—</td><td>Aumenta</td></tr><tr class="hl"><td>Custo (ex: orçamento +20%)</td><td>Pode expandir</td><td>Reduz</td><td>—</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Cenários de Decisão Executiva</div><ul><li>Escritório físico em Oslo: +€13K–26K/ano ao custo, +2–3 semanas ao tempo de setup</li><li>Acelerar para 60 dias: requer assessoria jurídica premium +€5K e PhD disponível imediatamente</li><li>Reduzir custo em 15%: possível cortando assessoria jurídica (risco: erros no registo)</li><li>Expansão para 2 funcionários no Ano 2: +€78K–96K de custo, sem impacto no escopo base</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Recomendação Atual do PM</div><ul><li>Manter Escopo fixo — prioridade máxima, sem alterações</li><li>Manter Custo controlado — modelo lean, deduções fiscais máximas</li><li>Ter flexibilidade moderada no Tempo — até +20 dias de contingência</li></ul></div><div class="doc-note blue">📋 Qualquer alteração ao triângulo deve ser formalizada como Change Request com aprovação da diretoria e nova análise de impacto.</div>`},
 
     tc_kpis:{cat:'TRÍPLICE CONSTANTE · TC-05',title:'Dashboard KPIs &amp; Plano de Monitoramento',lead:'Sistema de monitoramento contínuo das três restrições do projeto APNOR, com KPIs, ferramentas e cadência de revisão para garantir entrega dentro do triângulo definido.',body:`<div class="doc-sec"><div class="doc-sec-title"><span class="n">1.</span> KPIs do Projeto</div><table><thead><tr><th>KPI</th><th>Fórmula</th><th>Meta</th><th>Alerta</th></tr></thead><tbody><tr><td>% Escopo concluído</td><td>Entregas realizadas / Total planejado</td><td>100% no Mês 3</td><td>&lt;80% no Mês 2</td></tr><tr><td>SPI — Schedule Performance Index</td><td>EV / PV</td><td>&gt;1,0</td><td>&lt;0,85</td></tr><tr><td>CPI — Cost Performance Index</td><td>EV / AC</td><td>&gt;1,0</td><td>&lt;0,90</td></tr><tr><td>CV — Cost Variance</td><td>EV - AC</td><td>≥ 0</td><td>&lt; -€10K</td></tr><tr class="hl"><td>ROI Indireto Ano 1</td><td>Benefícios estimados / Custo real</td><td>&gt;2,5×</td><td>&lt;2×</td></tr></tbody></table></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">2.</span> Ferramentas e Cadência</div><ul><li>Kanban board para acompanhamento de tarefas por fase</li><li>Weekly PM Review — toda segunda-feira, 30 minutos</li><li>Relatório mensal para a diretoria — status das 3 restrições + KPIs</li><li>Dashboard Excel atualizado semanalmente com variações de custo e prazo</li></ul></div><div class="doc-sec"><div class="doc-sec-title"><span class="n">3.</span> Stakeholders e Responsabilidades</div><ul><li>Diretoria — aprovação de Change Requests e relatório mensal</li><li>PhD Regulatory Affairs — execução e relatórios regulatórios semanais</li><li>PM (Paulo Barros) — monitoramento da Tríplice Constante e coordenação</li><li>Helsedirektoratet — stakeholder externo de alta influência</li></ul></div><div class="doc-note green">✅ Com este sistema de monitoramento, o projeto APNOR está preparado para identificar e corrigir desvios antes que se tornem problemas irreversíveis.</div>`}
+
+    calculadora:{cat:'FERRAMENTA · CALCULADORA DE CENÁRIOS',title:'Calculadora Interativa de Cenários',lead:'Compare até 3 cenários de custos lado a lado. Selecione o tipo de empresa, ajuste as variáveis e obtenha automaticamente o orçamento total, ROI estimado e gráfico comparativo. Exporte para Excel com um clique.',body:`
+<div class="calc-wrap" id="calcWrap">
+
+  <!-- INPUTS -->
+  <div class="calc-scenarios">
+    <!-- CENÁRIO A -->
+    <div class="calc-col">
+      <div class="calc-col-title"><span class="c-s-a"></span> Cenário A</div>
+      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
+        <select class="calc-select" id="cA_type" onchange="calcUpdate()">
+          <option value="AS">AS (Aksjeselskap)</option>
+          <option value="NUF">NUF (Filial)</option>
+          <option value="ASA">ASA (Pública)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
+        <input class="calc-input" id="cA_sal" type="number" value="87000" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
+        <input class="calc-input" id="cA_emp" type="number" value="1" min="1" max="10" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Escritório</div>
+        <select class="calc-select" id="cA_office" onchange="calcUpdate()">
+          <option value="virtual">Virtual (€480/ano)</option>
+          <option value="fisico">Físico (€18000/ano)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
+        <input class="calc-input" id="cA_years" type="number" value="1" min="1" max="5" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
+        <input class="calc-input" id="cA_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
+    </div>
+    <!-- CENÁRIO B -->
+    <div class="calc-col">
+      <div class="calc-col-title"><span class="c-s-b"></span> Cenário B</div>
+      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
+        <select class="calc-select" id="cB_type" onchange="calcUpdate()">
+          <option value="AS">AS (Aksjeselskap)</option>
+          <option value="NUF">NUF (Filial)</option>
+          <option value="ASA">ASA (Pública)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
+        <input class="calc-input" id="cB_sal" type="number" value="96000" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
+        <input class="calc-input" id="cB_emp" type="number" value="1" min="1" max="10" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Escritório</div>
+        <select class="calc-select" id="cB_office" onchange="calcUpdate()">
+          <option value="virtual">Virtual (€480/ano)</option>
+          <option value="fisico">Físico (€18000/ano)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
+        <input class="calc-input" id="cB_years" type="number" value="2" min="1" max="5" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
+        <input class="calc-input" id="cB_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
+    </div>
+    <!-- CENÁRIO C -->
+    <div class="calc-col">
+      <div class="calc-col-title"><span class="c-s-c"></span> Cenário C</div>
+      <div class="calc-field"><div class="calc-label">Tipo de Empresa</div>
+        <select class="calc-select" id="cC_type" onchange="calcUpdate()">
+          <option value="NUF">NUF (Filial)</option>
+          <option value="AS">AS (Aksjeselskap)</option>
+          <option value="ASA">ASA (Pública)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Salário PhD (€/ano)</div>
+        <input class="calc-input" id="cC_sal" type="number" value="78000" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Nº de Funcionários</div>
+        <input class="calc-input" id="cC_emp" type="number" value="2" min="1" max="10" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Escritório</div>
+        <select class="calc-select" id="cC_office" onchange="calcUpdate()">
+          <option value="fisico">Físico (€18000/ano)</option>
+          <option value="virtual">Virtual (€480/ano)</option>
+        </select></div>
+      <div class="calc-field"><div class="calc-label">Duração (anos)</div>
+        <input class="calc-input" id="cC_years" type="number" value="3" min="1" max="5" oninput="calcUpdate()"></div>
+      <div class="calc-field"><div class="calc-label">Câmbio EUR/NOK</div>
+        <input class="calc-input" id="cC_fx" type="number" value="11.5" step="0.1" oninput="calcUpdate()"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS TABLE -->
+  <div class="calc-results">
+    <table id="calcTable">
+      <thead><tr>
+        <th>Item</th>
+        <th class="col-a">Cenário A</th>
+        <th class="col-b">Cenário B</th>
+        <th class="col-c">Cenário C</th>
+      </tr></thead>
+      <tbody id="calcTbody"></tbody>
+    </table>
+  </div>
+
+  <!-- CHART -->
+  <div class="calc-chart">
+    <div class="calc-chart-title">Custo Total do Projeto (€)</div>
+    <div class="calc-bar-group" id="calcChart"></div>
+  </div>
+
+  <!-- ROI DASHBOARD -->
+  <div class="calc-roi-grid" id="calcRoi"></div>
+
+  <!-- EXPORT -->
+  <button class="calc-export-btn" id="calcExportBtn">
+    <i class="fa-solid fa-file-excel"></i> Exportar para Excel (.xlsx)
+  </button>
+
+</div>`}
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -625,6 +940,141 @@ document.addEventListener('DOMContentLoaded', function () {
     if (sbOverlay) sbOverlay.addEventListener('click', closeSidebar);
 
 
+
+
+    /* ── CALCULATOR ── */
+    var COMPANY = {
+        AS:  { capital:2600,  registo:2400, contab:2800, ti:1300 },
+        NUF: { capital:0,     registo:1800, contab:2800, ti:1300 },
+        ASA: { capital:87000, registo:3500, contab:3500, ti:1300 }
+    };
+    var OFFICE = { virtual:480, fisico:18000 };
+    var BENEFITS = { conservador:339000, otimista:1040000 };
+
+    function calcScenario(prefix) {
+        var type   = document.getElementById(prefix+'_type')   ? document.getElementById(prefix+'_type').value   : 'AS';
+        var sal    = parseFloat(document.getElementById(prefix+'_sal').value)   || 0;
+        var emp    = parseFloat(document.getElementById(prefix+'_emp').value)   || 1;
+        var office = document.getElementById(prefix+'_office') ? document.getElementById(prefix+'_office').value : 'virtual';
+        var years  = parseFloat(document.getElementById(prefix+'_years').value) || 1;
+        var fx     = parseFloat(document.getElementById(prefix+'_fx').value)    || 11.5;
+        var co     = COMPANY[type];
+        var salTotal   = sal * emp * 1.141;
+        var offCost    = OFFICE[office];
+        var ano1       = co.capital + co.registo + salTotal + offCost + co.ti + co.contab;
+        var recorrente = salTotal + offCost + co.contab;
+        var total      = ano1 + recorrente * (years - 1);
+        var roi_c      = years > 0 ? ((BENEFITS.conservador * years) / total).toFixed(1) : 0;
+        var roi_o      = years > 0 ? ((BENEFITS.otimista    * years) / total).toFixed(1) : 0;
+        return {
+            type:type, sal:sal, emp:emp, office:office, years:years, fx:fx,
+            capital:co.capital, registo:co.registo, salTotal:salTotal,
+            offCost:offCost, ti:co.ti, contab:co.contab,
+            ano1:ano1, recorrente:recorrente, total:total,
+            roi_c:roi_c, roi_o:roi_o
+        };
+    }
+
+    function fmt(n){ return '€' + Math.round(n).toLocaleString('pt-BR'); }
+
+    function calcUpdate() {
+        if (!document.getElementById('calcWrap')) return;
+        var A = calcScenario('cA');
+        var B = calcScenario('cB');
+        var C = calcScenario('cC');
+        var rows = [
+            ['Tipo de empresa',       A.type,      B.type,      C.type],
+            ['Capital social',        fmt(A.capital),   fmt(B.capital),   fmt(C.capital)],
+            ['Registo + assessoria',  fmt(A.registo),   fmt(B.registo),   fmt(C.registo)],
+            ['Salário + encargos/ano',fmt(A.salTotal),  fmt(B.salTotal),  fmt(C.salTotal)],
+            ['Escritório/ano',        fmt(A.offCost),   fmt(B.offCost),   fmt(C.offCost)],
+            ['TI + setup',            fmt(A.ti),        fmt(B.ti),        fmt(C.ti)],
+            ['Contabilidade/ano',     fmt(A.contab),    fmt(B.contab),    fmt(C.contab)],
+            ['─── ANO 1 ───',         fmt(A.ano1),      fmt(B.ano1),      fmt(C.ano1)],
+            ['Total projeto ('+A.years+'/'+(B.years)+'/'+(C.years)+' anos)', fmt(A.total), fmt(B.total), fmt(C.total)]
+        ];
+        var tbody = document.getElementById('calcTbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        rows.forEach(function(r,i){
+            var tr = document.createElement('tr');
+            if (i===7) tr.className='row-total';
+            if (i===8) tr.className='row-total';
+            [r[0],r[1],r[2],r[3]].forEach(function(v){
+                var td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+
+        /* Chart */
+        var maxV = Math.max(A.total, B.total, C.total) || 1;
+        var chart = document.getElementById('calcChart');
+        if (chart) {
+            var bars = [
+                {v:A.total, label:'Cenário A', color:'#2563eb'},
+                {v:B.total, label:'Cenário B', color:'#16a34a'},
+                {v:C.total, label:'Cenário C', color:'#d97706'}
+            ];
+            chart.innerHTML = bars.map(function(b){
+                var h = Math.max(4, Math.round((b.v/maxV)*110));
+                return '<div class="calc-bar-wrap">'+
+                    '<div class="calc-bar" style="height:'+h+'px;background:'+b.color+'">'+
+                    '<span class="calc-bar-val">'+fmt(b.v)+'</span></div>'+
+                    '<div class="calc-bar-label">'+b.label+'</div></div>';
+            }).join('');
+        }
+
+        /* ROI cards */
+        var roi = document.getElementById('calcRoi');
+        if (roi) {
+            var sc = [
+                {s:A, cls:'a', lbl:'Cenário A'},
+                {s:B, cls:'b', lbl:'Cenário B'},
+                {s:C, cls:'c', lbl:'Cenário C'}
+            ];
+            roi.innerHTML = sc.map(function(x){
+                return '<div class="calc-roi-card '+x.cls+'">'+
+                    '<div class="calc-roi-label">'+x.lbl+' · ROI (conservador)</div>'+
+                    '<div class="calc-roi-val">'+x.s.roi_c+'×</div>'+
+                    '<div class="calc-roi-sub">Otimista: '+x.s.roi_o+'× · '+x.s.years+' ano(s)</div>'+
+                    '</div>';
+            }).join('');
+        }
+
+        /* Store for export */
+        window._calcData = {A:A, B:B, C:C, rows:rows};
+    }
+
+    function calcExport() {
+        var d = window._calcData;
+        if (!d) return;
+        var wb = XLSX.utils.book_new();
+        var header = ['Item','Cenário A ('+d.A.type+')','Cenário B ('+d.B.type+')','Cenário C ('+d.C.type+')'];
+        var data = [header];
+        d.rows.forEach(function(r){ data.push(r); });
+        data.push([]);
+        data.push(['ROI Conservador', d.A.roi_c+'×', d.B.roi_c+'×', d.C.roi_c+'×']);
+        data.push(['ROI Otimista',    d.A.roi_o+'×', d.B.roi_o+'×', d.C.roi_o+'×']);
+        data.push(['Duração (anos)',  d.A.years, d.B.years, d.C.years]);
+        data.push(['Câmbio EUR/NOK', d.A.fx, d.B.fx, d.C.fx]);
+        var ws = XLSX.utils.aoa_to_sheet(data);
+        ws['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:22}];
+        XLSX.utils.book_append_sheet(wb, ws, 'Cenários APNOR');
+        XLSX.writeFile(wb, 'APNOR_Cenarios_'+new Date().toISOString().slice(0,10)+'.xlsx');
+    }
+
+    /* Init calculator when modal opens */
+    var _origOpenModal = openModal;
+    function openModal(key) {
+        _origOpenModal(key);
+        if (key === 'calculadora') {
+            setTimeout(function(){
+                calcUpdate();
+                var btn = document.getElementById('calcExportBtn');
+                if (btn) btn.addEventListener('click', calcExport);
+            }, 80);
+        }
+    }
 
     /* ── WATERMARK ── */
     var ts = new Date();
