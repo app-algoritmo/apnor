@@ -387,18 +387,18 @@
             <div class="l-dot" id="d6"></div>
             <div class="l-dot" id="d7"></div>
         </div>
-        <div class="l-keypad">
-            <div class="l-key" onclick="lPress('1')">1</div>
-            <div class="l-key" onclick="lPress('2')">2</div>
-            <div class="l-key" onclick="lPress('3')">3</div>
-            <div class="l-key" onclick="lPress('4')">4</div>
-            <div class="l-key" onclick="lPress('5')">5</div>
-            <div class="l-key" onclick="lPress('6')">6</div>
-            <div class="l-key" onclick="lPress('7')">7</div>
-            <div class="l-key" onclick="lPress('8')">8</div>
-            <div class="l-key" onclick="lPress('9')">9</div>
-            <div class="l-key zero" onclick="lPress('0')">0</div>
-            <div class="l-key del" onclick="lDel()">⌫</div>
+        <div class="l-keypad" id="lKeypad">
+            <div class="l-key" data-key="1">1</div>
+            <div class="l-key" data-key="2">2</div>
+            <div class="l-key" data-key="3">3</div>
+            <div class="l-key" data-key="4">4</div>
+            <div class="l-key" data-key="5">5</div>
+            <div class="l-key" data-key="6">6</div>
+            <div class="l-key" data-key="7">7</div>
+            <div class="l-key" data-key="8">8</div>
+            <div class="l-key" data-key="9">9</div>
+            <div class="l-key zero" data-key="0">0</div>
+            <div class="l-key del" data-key="del">⌫</div>
         </div>
         <div class="l-error-msg" id="lErr">Senha incorreta</div>
         <div class="l-footer">apno.barros.no</div>
@@ -1062,46 +1062,71 @@ const modals = {
 });
 
 /* ── PIN Login ── */
-let lPin = '';
-const CORRECT = '20262026';
-function lPress(n){
-    if(lPin.length >= 8) return;
-    lPin += n;
-    lUpdateDots();
-    if(lPin.length === 8) setTimeout(lCheck, 120);
-}
-function lDel(){
-    lPin = lPin.slice(0,-1);
-    lUpdateDots();
-    document.getElementById('lErr').classList.remove('show');
-}
-function lUpdateDots(){
-    for(let i=0;i<8;i++){
-        const d = document.getElementById('d'+i);
-        d.classList.toggle('filled', i < lPin.length);
-        d.classList.remove('error');
+(function(){
+    var pin = '';
+    var pwd = '20262026';
+
+    function updateDots(){
+        for(var i=0;i<8;i++){
+            var d = document.getElementById('d'+i);
+            if(!d) return;
+            if(i < pin.length){ d.classList.add('filled'); } else { d.classList.remove('filled'); }
+            d.classList.remove('error');
+        }
     }
-}
-function lCheck(){
-    if(lPin === CORRECT){
-        document.getElementById('login-screen').classList.add('hidden');
-    } else {
-        const dots = document.getElementById('lDots');
-        for(let i=0;i<8;i++) document.getElementById('d'+i).classList.add('error');
-        dots.classList.add('shake');
-        document.getElementById('lErr').classList.add('show');
-        setTimeout(()=>{
-            lPin='';
-            lUpdateDots();
-            dots.classList.remove('shake');
-        }, 700);
+
+    function check(){
+        if(pin === pwd){
+            var s = document.getElementById('login-screen');
+            if(s) s.classList.add('hidden');
+        } else {
+            var dots = document.getElementById('lDots');
+            for(var i=0;i<8;i++){
+                var d = document.getElementById('d'+i);
+                if(d) d.classList.add('error');
+            }
+            if(dots) dots.classList.add('shake');
+            var err = document.getElementById('lErr');
+            if(err) err.classList.add('show');
+            setTimeout(function(){
+                pin='';
+                updateDots();
+                if(dots) dots.classList.remove('shake');
+            }, 700);
+        }
     }
-}
-document.addEventListener('keydown', e => {
-    if(document.getElementById('login-screen').classList.contains('hidden')) return;
-    if(e.key>='0'&&e.key<='9') lPress(e.key);
-    if(e.key==='Backspace') lDel();
-});
+
+    function press(n){
+        if(pin.length >= 8) return;
+        pin += n;
+        updateDots();
+        if(pin.length === 8) setTimeout(check, 150);
+    }
+
+    function del(){
+        pin = pin.slice(0,-1);
+        updateDots();
+        var err = document.getElementById('lErr');
+        if(err) err.classList.remove('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        var kp = document.getElementById('lKeypad');
+        if(kp){
+            kp.addEventListener('click', function(e){
+                var key = e.target.getAttribute('data-key');
+                if(!key) return;
+                if(key === 'del'){ del(); } else { press(key); }
+            });
+        }
+        document.addEventListener('keydown', function(e){
+            var s = document.getElementById('login-screen');
+            if(s && s.classList.contains('hidden')) return;
+            if(e.key >= '0' && e.key <= '9') press(e.key);
+            if(e.key === 'Backspace'){ e.preventDefault(); del(); }
+        });
+    });
+})();
 
 
 function openModal(key){
