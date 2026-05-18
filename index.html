@@ -250,6 +250,36 @@
         ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}
         ::-webkit-scrollbar-thumb{background:var(--nl);border-radius:10px;}
         #sidebar::-webkit-scrollbar{width:3px;}
+
+        /* ── MODAL MOBILE OVERFLOW FIX ── */
+        @media (max-width: 900px) {
+            #ov { padding: 0; align-items: flex-end; }
+            #modal {
+                border-radius: 18px 18px 0 0;
+                max-height: 88vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+            }
+            #mhdr { padding: 20px 16px 0; }
+            .dt   { font-size: 17px; }
+            .dl   { font-size: 12px; }
+            #mbdy { padding: 16px 16px 8px; }
+            #mbdy table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 11px; }
+            #mbdy table th { padding: 7px 8px; font-size: 9px; }
+            #mbdy table td { padding: 7px 8px; font-size: 11px; }
+            #mbdy ul li   { font-size: 12px; }
+            .dn           { font-size: 11.5px; padding: 10px 12px; }
+            .dst          { font-size: 13px; }
+            #mftr         { padding: 12px 16px; }
+            .cbar         { padding: 8px 16px; font-size: 9.5px; flex-direction: column; gap: 2px; text-align: center; }
+            #mtop         { padding: 8px 12px; }
+            /* Calculator on mobile */
+            .csc  { grid-template-columns: 1fr; }
+            .crg  { grid-template-columns: 1fr; }
+            .crt table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .tc-img img { max-height: 180px; }
+        }
     </style>
 </head>
 <body>
